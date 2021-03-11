@@ -50,12 +50,12 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-cog"></i></div>
                     Configuration
                 </a>
+                -->
                 <a class="nav-link <?php print basename($_SERVER["SCRIPT_FILENAME"]) === 'update.php' ? 'active' : ''; ?>"
                    href="<?php print $config->get('base', 'server.baseUrl') . '/beyond/update.php' ?>">
                     <div class="sb-nav-link-icon"><i class="fas fa-sync"></i></div>
                     Update
                 </a>
-                -->
                 <a class="nav-link <?php print basename($_SERVER["SCRIPT_FILENAME"]) === 'plugins.php' ? 'active' : ''; ?>"
                    href="<?php print $config->get('base', 'server.baseUrl') . '/beyond/plugins.php' ?>">
                     <div class="sb-nav-link-icon"><i class="fas fa-puzzle-piece"></i></div>

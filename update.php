@@ -27,7 +27,42 @@ if (!$tools->checkRole('admin,view')) {
                 <ol class="breadcrumb mb-4 mt-4">
                     <li class="breadcrumb-item active">Update</li>
                 </ol>
+                <?php
+                try {
 
+                    // Check current version on github
+                    print "<div class='status'>Checking current version</div>";
+                    $githubUrl = 'https://raw.githubusercontent.com/HerrOtto/beyond/master/version.json?nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10)));
+                    print '<div class="note">URL: ' . $githubUrl . '</div>';
+                    $versionFromGithub = $tools->httpGet($githubUrl);
+                    if ($versionFromGithub == '') {
+                        throw new Exception('Cannot retrieve version information from GitHub [https://raw.githubusercontent.com/HerrOtto/beyond/master/version.json]');
+                    }
+                    print '<div class="note">Result: ' . $versionFromGithub . '</div>';
+                    $versionFromGithubJson = json_decode($versionFromGithub);
+                    print '<div class="note">Version on GitHub: ' . $versionFromGithubJson->version . '</div>';
+
+                    // Check current installed version
+                    print "<div class='status'>Checking installed version</div>";
+                    if (!file_exists(__DIR__ . '/version.json')) {
+                        $currentVersion = -1;
+                    } else {
+                        $currentVersion = trim(file_get_contents(__DIR__ . '/version.json'));
+                        if ($currentVersion == '') {
+                            throw new Exception('Cannot retrieve current version information');
+                        }
+                        $currentVersionJson = json_decode($currentVersion);
+                        $currentVersion = $currentVersionJson->version;
+                    }
+                    print '<div class="note">Installed version: ' . $currentVersion . '</div>';
+                    if ($currentVersion >= $versionFromGithubJson->version) {
+                        throw new Exception('Current version [' . $currentVersion . '] is newer or equal to Github version [' . $versionFromGithubJson->version . ']');
+                    }
+
+                } catch (Exception $e) {
+                    print '<div class="error">' . $e->getMessage() . '</div>';
+                }
+                ?>
 
                 <?php require_once __DIR__ . '/inc/endSite.php'; ?>
             </div>
