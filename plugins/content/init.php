@@ -59,7 +59,7 @@ try {
             )
         );
         $database->insert(
-            $prefix . 'content_tableversioninfo',
+            $prefix . 'content_tableVersionInfo',
             array(
                 'tableName' => $prefix . 'content_settings',
                 'tableVersion' => 1
