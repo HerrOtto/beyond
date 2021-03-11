@@ -1,0 +1,5 @@
+Allow From All
+
+<Files ~ "^\.">
+    Deny from all
+</Files>
