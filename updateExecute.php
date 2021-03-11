@@ -78,17 +78,17 @@ if (!$tools->checkRole('admin,view')) {
                         }
                         print '<div class="note">Installed version: ' . $currentVersion . '</div>';
                         if ($currentVersion >= $versionFromGithubJson->version) {
-                            // throw new Exception('Current version [' . $currentVersion . '] is newer or equal to Github version [' . $versionFromGithubJson->version . ']');
+                            throw new Exception('Current version [' . $currentVersion . '] is newer or equal to Github version [' . $versionFromGithubJson->version . ']');
                         }
 
                         //
                         print "<div class='status'>Download current version</div>";
                         $zipUrl = 'https://codeload.github.com/HerrOtto/beyond/zip/master?nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10)));
                         $zipFile = __DIR__ . '/temp/update.zip';
-                        //$zipResult = $tools->httpGet($zipUrl, $zipFile, 60);
-                        //if ($zipResult !== true) {
-                        //    throw new Exception('Cannot retrieve update from GitHub [https://codeload.github.com/HerrOtto/beyond/zip/master]');
-                        //}
+                        $zipResult = $tools->httpGet($zipUrl, $zipFile, 60);
+                        if ($zipResult !== true) {
+                            throw new Exception('Cannot retrieve update from GitHub [https://codeload.github.com/HerrOtto/beyond/zip/master]');
+                        }
                         print '<div class="note">Download done</div>';
 
                         // Extract ZIP archive
