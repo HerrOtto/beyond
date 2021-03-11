@@ -35,8 +35,7 @@ if (!$tools->checkRole('admin,view')) {
 
                         // Check current version on github
                         $githubUrl = 'https://raw.githubusercontent.com/HerrOtto/beyond/master/version.json?nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10)));
-                        $versionFromGithub = file_get_contents($githubUrl);
-                        print $versionFromGithub;
+                        $versionFromGithub = $tools->httpGet($githubUrl);
                         if ($versionFromGithub == '') {
                             throw new Exception('Cannot retrieve version information from GitHub');
                         }
@@ -51,10 +50,10 @@ if (!$tools->checkRole('admin,view')) {
                                 throw new Exception('Cannot retrieve current version information');
                             }
                             $currentVersionJson = json_decode($currentVersion);
+                            $currentVersion = $currentVersionJson->version;
                         }
-                        if ($currentVersionJson->version >= $versionFromGithubJson->version) {
-                            print_r($versionFromGithubJson);
-                            throw new Exception('Current version [' . $currentVersion . '] is up to date. (Github version: ' . $versionFromGithubJson->version . ')');
+                        if ($currentVersion >= $versionFromGithubJson->version) {
+                            // throw new Exception('Current version [' . $currentVersion . '] is newer or equal to Github version [' . $versionFromGithubJson->version . ']');
                         }
 
                         //

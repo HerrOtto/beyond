@@ -49,10 +49,12 @@ class tools
      * HTTP GET request
      *
      * @param string $url URL
-     * @result string Result
+     * @param string $outputFile File name where to put http output
+     * @param string $timeoutSec Timeout value in seconds
+     * @result string Result if $outputFile is defined this function returns true
      */
 
-    public function httpGet($url, $timeoutSec = 10)
+    public function httpGet($url, $outputFile = false, $timeoutSec = 10)
     {
         $curl = curl_init();
 
@@ -60,8 +62,18 @@ class tools
         curl_setopt($curl, CURLOPT_TIMEOUT, $timeoutSec);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeoutSec);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+
+        if ($outputFile !== false) {
+            $fp = fopen ($outputFile, 'w+');
+            curl_setopt($curl, CURLOPT_FILE, $fp);
+        }
 
         $result = curl_exec($curl);
+
+        if ($outputFile !== false) {
+            fclose($fp);
+        }
 
         if (curl_error($curl)) {
             throw new Exception(curl_error($curl));
@@ -69,7 +81,11 @@ class tools
 
         curl_close($curl);
 
-        return $result;
+        if ($outputFile === false) {
+            return $result;
+        } else {
+            return true;
+        }
     }
 
 }
