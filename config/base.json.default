@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "site": {
+    "debug": "false",
+    "prefix": "beyond_",
+    "title": "beyond phpCMS",
+    "session": {
+      "name": "beyondSession",
+      "domain": ".your-domain-name.com",
+      "path": "/",
+      "liefeTimeSec": 86400
+    },
+    "permissions": {
+      "directory": 755,
+      "file": 644
+    }
+  },
+  "php": {
+    "timeZone": "Europe/Berlin",
+    "errorReporting": 0
+  },
+  "server": {
+    "baseUrl": "https://www.your-domain-name.com",
+    "absPath": "/var/www/your-domain-name.com"
+  },
+  "api": {
+    "accessOrigin": "*"
+  },
+  "mail": {
+    "host": "mail.your-domain-name.com",
+    "port": 25,
+    "auth": false,
+    "user": "",
+    "pass": "",
+    "secure": "tls",
+    "from": "info@your-domain-name.com",
+    "replyTo": ""
+  },
+  "languages": {
+    "default": "English",
+    "de": "Deutsch"
+  }
+}

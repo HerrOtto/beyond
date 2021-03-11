@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "defaultDatabase": "local",
+  "items": {
+    "local": {
+      "info": "Local SQLite database",
+      "kind": "sqlite3",
+      "file": "local.sqlite3",
+      "busyTimeoutMS": 1000
+    }
+  }
+}

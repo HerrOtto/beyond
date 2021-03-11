@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "apperence": {
+    "width": 200,
+    "height": 70
+  },
+  "security": {
+    "minLength": 5,
+    "maxLength": 8,
+    "maxRotation": 8
+  }
+}
