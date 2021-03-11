@@ -42,7 +42,6 @@ The software is based on the following other OpenSource projects:
 
 ## TODO
 
-* Updates 
 * Plugin: Content
 * Plugin: SEO
 * Plugin: Menu builder
