@@ -15,8 +15,8 @@ Installation:
 
 * Add a directory "beyond" to your webroot
 * Download all files from her into the "beyond" directory
-* Rename beyond/db/main.json.default to main.json
-* Rename beyond/db/database.json.default to database.json
+* Rename beyond/db/main.json.default to main.json (and mondify)
+* Rename beyond/db/database.json.default to database.json (and mondify)
 * Open "https://www.your-domain-name.com/beyond/" within your browser and enter "admin" and "password" as credentials
 
 # OpenSource
