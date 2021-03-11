@@ -1,0 +1,4 @@
+Deny from all
+<FilesMatch "^captcha\.php$">
+Allow From All
+</FilesMatch>
