@@ -9,7 +9,7 @@
 try {
 
     // Get configured database
-    $configJson = file_get_contents(__DIR__ . '/config/settings.json');
+    $configJson = file_get_contents(__DIR__ . '/../../config/content_settings.json');
     $configObj = json_decode($configJson); // , JSON_OBJECT_AS_ARRAY);
 
     if ((property_exists($configObj, 'database')) && (array_key_exists($configObj->database, $db->databases))) {
