@@ -82,7 +82,7 @@ try {
             )
         );
         $database->insert(
-            $prefix . 'tableVersionInfo',
+            $prefix . 'content_tableVersionInfo',
             array(
                 'tableName' => $prefix . 'content_data',
                 'tableVersion' => 1
