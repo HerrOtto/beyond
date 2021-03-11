@@ -34,19 +34,25 @@ if (!$tools->checkRole('admin,view')) {
                     try {
 
                         // Check current version on github
-                        $versionFromGithub = trim(file_get_contents('https://raw.githubusercontent.com/HerrOtto/beyond/master/version.json'));
+                        $githubUrl = 'https://raw.githubusercontent.com/HerrOtto/beyond/master/version.json?nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10)));
+                        $versionFromGithub = file_get_contents($githubUrl);
+                        print $versionFromGithub;
                         if ($versionFromGithub == '') {
                             throw new Exception('Cannot retrieve version information from GitHub');
                         }
                         $versionFromGithubJson = json_decode($versionFromGithub);
 
                         // Check current installed version
-                        if (!file_exists(__DIR__ . '/config/version.json')) {
+                        if (!file_exists(__DIR__ . '/version.json')) {
                             $currentVersion = 1;
                         } else {
-                            $currentVersion = $config->get('version', 'current', 1);
+                            $currentVersion = trim(file_get_contents(__DIR__ . '/version.json'));
+                            if ($currentVersion == '') {
+                                throw new Exception('Cannot retrieve current version information');
+                            }
+                            $currentVersionJson = json_decode($currentVersion);
                         }
-                        if ($currentVersion >= $versionFromGithubJson->version) {
+                        if ($currentVersionJson->version >= $versionFromGithubJson->version) {
                             print_r($versionFromGithubJson);
                             throw new Exception('Current version [' . $currentVersion . '] is up to date. (Github version: ' . $versionFromGithubJson->version . ')');
                         }
@@ -58,7 +64,7 @@ if (!$tools->checkRole('admin,view')) {
 
 
                     } catch (Exception $e) {
-print 'Exception: ' . $e->getMessage();
+                        print 'Exception: ' . $e->getMessage();
                     }
                     ?>
 

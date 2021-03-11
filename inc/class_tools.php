@@ -15,7 +15,6 @@ class tools
         $this->prefix = $prefix;
     }
 
-
     /*
      * Check if current user has the required role
      *
@@ -44,6 +43,33 @@ class tools
         }
 
         return false;
+    }
+
+    /*
+     * HTTP GET request
+     *
+     * @param string $url URL
+     * @result string Result
+     */
+
+    public function httpGet($url, $timeoutSec = 10)
+    {
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeoutSec);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeoutSec);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $result = curl_exec($curl);
+
+        if (curl_error($curl)) {
+            throw new Exception(curl_error($curl));
+        };
+
+        curl_close($curl);
+
+        return $result;
     }
 
 }
