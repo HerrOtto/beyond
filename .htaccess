@@ -3,3 +3,7 @@ Allow From All
 <Files ~ "^\.">
     Deny from all
 </Files>
+
+<Files ~ "^version.json">
+    Deny from all
+</Files>
