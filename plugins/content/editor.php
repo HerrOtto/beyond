@@ -35,7 +35,7 @@ $database = $beyond->db->databases[$configObj->database];
                 field += '<input class="form-control py-4" id="contentFieldItem_' + fieldName + '_' + lang + '" type="text" />';
             } else if (fieldConfig.kind == 'longtext') {
                 field += '<label class="small" for="contentFieldItem_' + fieldName + '_' + lang + '">' + languages[lang] + '</label>';
-                field += '<textarea rows=4 class="form-control" id="concontentFieldItem_' + fieldName + '_' + languages[lang] + '"></textarea>';
+                field += '<textarea rows=4 class="form-control" id="contentFieldItem_' + fieldName + '_' + languages[lang] + '"></textarea>';
             } else if (fieldConfig.kind == 'html') {
                 field += '<label class="small" for="contentFieldItem_' + fieldName + '_' + lang + '">' + languages[lang] + '</label>';
                 field += '<textarea rows=4 class="form-control" id="contentFieldItem_' + fieldName + '_' + languages[lang] + '"></textarea>';
