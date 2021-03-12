@@ -59,7 +59,7 @@ class apis extends beyondApiBaseClass
                 '' . PHP_EOL .
                 'require_once __DIR__ . \'/../../api/apiBaseClass.php\';' . PHP_EOL .
                 '' . PHP_EOL .
-                'class ' . $apiName . ' extends apiBaseClass' . PHP_EOL .
+                'class ' . $apiName . ' extends beyondApiBaseClass' . PHP_EOL .
                 '{' . PHP_EOL .
                 '' . PHP_EOL .
                 '  // Add your API calls here:' . PHP_EOL .
