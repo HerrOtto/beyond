@@ -81,7 +81,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                         }
 
                         print '<div class="note">Update ready</div>';
-                        print '<button onclick="location.href=\'' . $beyond->config->get('base', 'server.baseUrl') . '/updateExecure.php\';">Install update now!</button>';
+                        print '<button onclick="location.href=\'' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/updateExecute.php\';">Install update now!</button>';
 
                     } catch (Exception $e) {
                         print '<div class="error">' . $e->getMessage() . '</div>';
