@@ -110,7 +110,7 @@ class content_config extends beyondApiBaseClass
             }
 
             $databaseNew = $this->db->databases[$data->database];
-            $contentDatabase = new class_contentDatabase($this->prefix);
+            $contentDatabase = new contentDatabase($this->prefix);
             $contentDatabase->init($databaseNew);
 
             // From now on: Rollback on failure
