@@ -347,7 +347,7 @@ $height = 225;
                 print '    <div class="row">' . PHP_EOL;
 
                 if ($editorPluginsInstalled) {
-                    print '      <div id="plugins" class="col-xl-6 col-lg-12 col-md-12 col-sm-12 m-0 p-0">' . PHP_EOL;
+                    print '      <div id="plugins" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 m-0 p-0">' . PHP_EOL;
                     print '        <div id="pluginsContent">' . PHP_EOL;
                     foreach (glob(__DIR__ . '/plugins/*') as $pluginDir) {
                         if (!is_dir($pluginDir)) {
@@ -367,7 +367,7 @@ $height = 225;
                 }
 
                 if ($editorPluginsInstalled) {
-                    print '<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 m-0 p-0" id="aceEditor" style="border:1px solid silver;">' . PHP_EOL;
+                    print '<div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 m-0 p-0" id="aceEditor" style="border:1px solid silver;">' . PHP_EOL;
                     print '</div>' . PHP_EOL; # /col full width (no plugins)
                 } else {
                     print '<div class="col-12 m-0 p-0" id="aceEditor" style="border:1px solid silver;">' . PHP_EOL;
