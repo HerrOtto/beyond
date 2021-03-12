@@ -124,6 +124,8 @@ if (!$beyond->tools->checkRole('admin,view')) {
                             throw new Exception('Not all files were written successfully');
                         }
 
+                        // TODO: Cleanup (Ignore: db, config, plugins not from git)
+
                         print "<div class='status'>Done!</div>";
 
                     } catch (Exception $e) {

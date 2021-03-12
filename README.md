@@ -42,7 +42,7 @@ The software is based on the following other OpenSource projects:
 
 ## TODO
 
-* Plugin: Content
+* Plugin: Content delete content when file is getting deleted
 * Plugin: Send mail (with db storage)
 * Plugin: SEO
 * Plugin: Menu builder
@@ -50,3 +50,6 @@ The software is based on the following other OpenSource projects:
 * Plugin: customer login (used by shop)
 * Plugin: htaccess
 * Install/Update plugins from repository
+* Update cleanup
+* System compatibility check, permission check
+* Installer
