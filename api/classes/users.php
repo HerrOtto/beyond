@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../apiBaseClass.php';
 
-class users extends apiBaseClass
+class users extends beyondApiBaseClass
 {
 
     /**

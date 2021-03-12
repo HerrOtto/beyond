@@ -4,7 +4,7 @@
  * Configuration class
  * @author     Tim David Saxen <info@netzmal.de>
  */
-class config
+class beyondConfig
 {
 
     private $data = array();
@@ -14,7 +14,7 @@ class config
      */
     function __construct()
     {
-        foreach (glob(__DIR__ . "/../config/*.json") as $fileName) {
+        foreach (glob(__DIR__ . "/../../config/*.json") as $fileName) {
             $fileJson = file_get_contents($fileName);
             $this->data[basename($fileName, '.json')] = json_decode($fileJson, true);
         }

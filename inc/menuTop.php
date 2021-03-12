@@ -1,13 +1,13 @@
 <script>
     function logout() {
-        <?php print $prefix; ?>api.auth.logout({
+        <?php print $beyond->prefix; ?>api.auth.logout({
             //
         }, function (error, data) {
             if (error !== false) {
                 message('Error: ' + error)
             } else {
                 if (data.logoutDone) {
-                    location.href = '<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/login.php';
+                    location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/login.php';
                 } else {
                     message('Logout failed');
                 }
@@ -16,7 +16,7 @@
     }
 </script>
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    <span class="navbar-brand"><?php print $config->get('base', 'site.title', ''); ?></span>
+    <span class="navbar-brand"><?php print $beyond->config->get('base', 'site.title', ''); ?></span>
     <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i>
     </button>
     <!-- Navbar Search-->
@@ -38,7 +38,7 @@
             <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/users.php?edit=<?php print urlencode($_SESSION[$prefix . 'data']['auth']['userName']); ?>">Account</a>
+                <a class="dropdown-item" href="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/users.php?edit=<?php print urlencode($_SESSION[$beyond->prefix . 'data']['auth']['userName']); ?>">Account</a>
                 <!--
                 <a class="dropdown-item" href="#">Activity Log</a>
                 <div class="dropdown-divider"></div>

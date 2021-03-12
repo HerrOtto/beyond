@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/inc/init.php';
-if (!$tools->checkRole('admin')) {
+if (!$beyond->tools->checkRole('admin')) {
     print json_encode(
         array(
             'error' => 'Permission denied'
@@ -14,7 +14,7 @@ if (!$tools->checkRole('admin')) {
 header('Content-type: application/javascript; Charset=UTF-8');
 
 // Check login
-if (!array_key_exists('auth', $_SESSION[$prefix . 'data'])) {
+if (!array_key_exists('auth', $_SESSION[$beyond->prefix . 'data'])) {
     print json_encode(
         array(
             'error' => 'Not authorized'
@@ -24,12 +24,8 @@ if (!array_key_exists('auth', $_SESSION[$prefix . 'data'])) {
 }
 
 // Check current working directory and file name from browser
-require_once __DIR__ . '/api/classes/files.php';
-$files = new files($config, $variable, $db, $prefix);
-$dir = $files->checkDirectory((object)array(
-    'directory' => $variable->get('dir', '')
-));
-$fileName = $files->filterFilename($variable->get('fileName'));
+$dir = $beyond->tools->checkDirectory($beyond->variable->get('dir', ''));
+$fileName = $beyond->tools->filterFilename($beyond->variable->get('fileName'));
 
 // Upload
 if (!move_uploaded_file($_FILES['file']['tmp_name'], $dir['absPath'] . '/' . $fileName)) {
@@ -40,6 +36,9 @@ if (!move_uploaded_file($_FILES['file']['tmp_name'], $dir['absPath'] . '/' . $fi
     );
     exit;
 }
+
+unset($dir);
+unser($fileName);
 
 // Done
 print json_encode(

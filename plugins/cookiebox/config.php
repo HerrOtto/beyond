@@ -36,25 +36,25 @@
             '  <input type="checkbox" id="cookieRequired_' + cookieName + '" ' + (cookieObj.required === true ? 'checked' : '') + '/>\n' +
             '</div>';
 
-        for (language in <?php print $prefix; ?>languages) {
+        for (language in <?php print $beyond->prefix; ?>languages) {
             cookie +=
                 '<div class="mb-1">' +
-                '<strong>' + <?php print $prefix; ?>languages[language] + '</strong>' +
+                '<strong>' + <?php print $beyond->prefix; ?>languages[language] + '</strong>' +
                 '</div>';
             cookie +=
                 '<div class="form-group">\n' +
                 '  <label class="small mb-1" for="title_' + cookieName + '_' + language + '">Title</label>\n' +
-                '  <input type="text" class="form-control py-4" id="title_' + cookieName + '_' + language + '" type="text" placeholder="Enter title for language ' + <?php print $prefix; ?>languages[language] + '" value="' + (cookieObj.title ? cookieObj.title[language] : '') + '"/>\n' +
+                '  <input type="text" class="form-control py-4" id="title_' + cookieName + '_' + language + '" type="text" placeholder="Enter title for language ' + <?php print $beyond->prefix; ?>languages[language] + '" value="' + (cookieObj.title ? cookieObj.title[language] : '') + '"/>\n' +
                 '</div>';
             cookie +=
                 '<div class="form-group">\n' +
                 '  <label class="small mb-1" for="info_' + cookieName + '_' + language + '">Info</label>\n' +
-                '  <textarea rows=4 class="form-control" id="info_' + cookieName + '_' + language + '" type="text" placeholder="Enter info for language ' + <?php print $prefix; ?>languages[language] + '">' + cookieObj.info[language] + '</textarea>\n' +
+                '  <textarea rows=4 class="form-control" id="info_' + cookieName + '_' + language + '" type="text" placeholder="Enter info for language ' + <?php print $beyond->prefix; ?>languages[language] + '">' + cookieObj.info[language] + '</textarea>\n' +
                 '</div>';
             cookie +=
                 '<div class="form-group">\n' +
                 '  <label class="small mb-1" for="privacyURL_' + cookieName + '_' + language + '">Privacy URL</label>\n' +
-                '  <input type="text" class="form-control py-4" id="privacyURL_' + cookieName + '_' + language + '" type="text" placeholder="Enter privacy url for language ' + <?php print $prefix; ?>languages[language] + '" value="' + cookieObj.privacyURL[language] + '"/>\n' +
+                '  <input type="text" class="form-control py-4" id="privacyURL_' + cookieName + '_' + language + '" type="text" placeholder="Enter privacy url for language ' + <?php print $beyond->prefix; ?>languages[language] + '" value="' + cookieObj.privacyURL[language] + '"/>\n' +
                 '</div>';
         }
 
@@ -68,7 +68,7 @@
     }
 
     function load() {
-        <?php print $prefix; ?>api.cookiebox_config.load({}, function (error, data) {
+        <?php print $beyond->prefix; ?>api.cookiebox_config.load({}, function (error, data) {
             if (error !== false) {
                 message('Error: ' + error);
             } else {
@@ -168,21 +168,21 @@
             data.cookies[cookieName] = {};
             data.cookies[cookieName].required = $('#cookieRequired_' + cookieName + ':checked').val() != undefined;
             data.cookies[cookieName].title = {};
-            for (language in <?php print $prefix; ?>languages) {
+            for (language in <?php print $beyond->prefix; ?>languages) {
                 data.cookies[cookieName].title[language] = $('#title_' + cookieName + '_' + language).val();
             }
             data.cookies[cookieName].info = {};
-            for (language in <?php print $prefix; ?>languages) {
+            for (language in <?php print $beyond->prefix; ?>languages) {
                 data.cookies[cookieName].info[language] = $('#info_' + cookieName + '_' + language).val();
             }
             data.cookies[cookieName].privacyURL = {};
-            for (language in <?php print $prefix; ?>languages) {
+            for (language in <?php print $beyond->prefix; ?>languages) {
                 data.cookies[cookieName].privacyURL[language] = $('#privacyURL_' + cookieName + '_' + language).val();
             }
         });
 
         // Send
-        <?php print $prefix; ?>api.cookiebox_config.save(
+        <?php print $beyond->prefix; ?>api.cookiebox_config.save(
             data, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
@@ -212,25 +212,25 @@
                 '  <input type="checkbox" checked id="cookieRequired"/>\n' +
                 '</div>';
 
-            for (language in <?php print $prefix; ?>languages) {
+            for (language in <?php print $beyond->prefix; ?>languages) {
                 fields +=
                     '<div class="mb-1">' +
-                    '<strong>' + <?php print $prefix; ?>languages[language] + '</strong>' +
+                    '<strong>' + <?php print $beyond->prefix; ?>languages[language] + '</strong>' +
                     '</div>';
                 fields +=
                     '<div class="form-group">\n' +
                     '  <label class="small mb-1" for="title_' + language + '">Title</label>\n' +
-                    '  <input type="text" class="form-control py-4" id="title_' + language + '" type="text" placeholder="Enter title for language ' + <?php print $prefix; ?>languages[language] + '" />\n' +
+                    '  <input type="text" class="form-control py-4" id="title_' + language + '" type="text" placeholder="Enter title for language ' + <?php print $beyond->prefix; ?>languages[language] + '" />\n' +
                     '</div>';
                 fields +=
                     '<div class="form-group">\n' +
                     '  <label class="small mb-1" for="info_' + language + '">Info</label>\n' +
-                    '  <textarea rows=4 class="form-control" id="info_' + language + '" type="text" placeholder="Enter info for language ' + <?php print $prefix; ?>languages[language] + '"></textarea>\n' +
+                    '  <textarea rows=4 class="form-control" id="info_' + language + '" type="text" placeholder="Enter info for language ' + <?php print $beyond->prefix; ?>languages[language] + '"></textarea>\n' +
                     '</div>';
                 fields +=
                     '<div class="form-group">\n' +
                     '  <label class="small mb-1" for="privacyURL_' + language + '">Privacy URL</label>\n' +
-                    '  <input type="text" class="form-control py-4" id="privacyURL_' + language + '" type="text" placeholder="Enter privacy url for language ' + <?php print $prefix; ?>languages[language] + '" />\n' +
+                    '  <input type="text" class="form-control py-4" id="privacyURL_' + language + '" type="text" placeholder="Enter privacy url for language ' + <?php print $beyond->prefix; ?>languages[language] + '" />\n' +
                     '</div>';
 
             }
@@ -244,15 +244,15 @@
         var cookieName = $('#cookieName').val();
         cookie.required = $('#cookieRequired:checked').val() != undefined;
         cookie.title = {};
-        for (language in <?php print $prefix; ?>languages) {
+        for (language in <?php print $beyond->prefix; ?>languages) {
             cookie.title[language] = $('#title_' + language).val();
         }
         cookie.info = {};
-        for (language in <?php print $prefix; ?>languages) {
+        for (language in <?php print $beyond->prefix; ?>languages) {
             cookie.info[language] = $('#info_' + language).val();
         }
         cookie.privacyURL = {};
-        for (language in <?php print $prefix; ?>languages) {
+        for (language in <?php print $beyond->prefix; ?>languages) {
             cookie.privacyURL[language] = $('#privacyURL_' + language).val();
         }
 

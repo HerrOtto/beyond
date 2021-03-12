@@ -12,7 +12,7 @@ require_once __DIR__ . '/../../inc/init.php';
 /* <style> */
 
     /* Mobile */
-    .<?php print $prefix; ?>cookieboxWrap {
+    .<?php print $beyond->prefix; ?>cookieboxWrap {
 
         z-index: 9999;
         position: fixed;
@@ -26,7 +26,7 @@ require_once __DIR__ . '/../../inc/init.php';
 
     /* PC */
     @media only screen and (min-width: 767px) {
-        .<?php print $prefix; ?>cookieboxWrap {
+        .<?php print $beyond->prefix; ?>cookieboxWrap {
             left: 50%;
             top: 50%;
             -webkit-transform: translate(-50%, -50%);
@@ -38,7 +38,7 @@ require_once __DIR__ . '/../../inc/init.php';
     }
 
     /* Fit IFrame into Wrapper */
-    .<?php print $prefix; ?>cookieboxFrame {
+    .<?php print $beyond->prefix; ?>cookieboxFrame {
 
         position: absolute;
         top: 0;

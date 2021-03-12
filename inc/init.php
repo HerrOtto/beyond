@@ -12,13 +12,16 @@ error_reporting(E_ALL);
  * Initialize global variables
  */
 
-foreach (glob(__DIR__ . '/class_*.php') as $classFileName) {
+foreach (glob(__DIR__ . '/classes/class_*.php') as $classFileName) {
     require_once $classFileName;
 }
+unset($classFileName);
 
-$config = new config();
-$exceptionHandler = new exceptionHandler($config);
-$variable = new variable();
+$beyond = new stdClass();
+$beyond->config = new beyondConfig();
+$beyond->exceptionHandler = new beyondExceptionHandler($beyond->config);
+$beyond->variable = new beyondVariable();
+$beyond->plugins = new stdClass();
 
 /*
  * Startup
@@ -27,51 +30,52 @@ $variable = new variable();
 try {
 
     // Configure PHP
-    error_reporting($config->get('base', 'php.errorReporting'));
-    date_default_timezone_set($config->get('base', 'php.timeZone'));
+    error_reporting($beyond->config->get('base', 'php.errorReporting'));
+    date_default_timezone_set($beyond->config->get('base', 'php.timeZone'));
     ini_set('default_charset', 'UTF-8');
 
     // Get cookie, field, session and db prefix
-    $prefix = $config->get('base', 'site.prefix', 'nm_');
+    $beyond->prefix = $beyond->config->get('base', 'site.prefix', 'nm_');
 
     // Init global used functions class
-    $tools = new tools($prefix);
+    $beyond->tools = new beyondTools($beyond->prefix, $beyond->config);
 
     // Start session
     if (session_set_cookie_params(
-            $config->get('base', 'site.session.lifeTimeSec', 86400),
-            $config->get('base', 'site.session.path', '/'),
-            $config->get('base', 'site.session.domain', null),
+            $beyond->config->get('base', 'site.session.lifeTimeSec', 86400),
+            $beyond->config->get('base', 'site.session.path', '/'),
+            $beyond->config->get('base', 'site.session.domain', null),
     ) === false) {
         throw new Exception('Can not configure session cookie');
     }
-    $sid = $variable->get('sid', '');
-    if ($sid !== '') {
-        session_id($sid);
+    $beyond->sid = $beyond->variable->get('beyondSid', '');
+    if ($beyond->sid !== '') {
+        session_id($beyond->sid);
     }
-    session_name($config->get('base', 'site.session.name', 'nmSession'));
+    session_name($beyond->config->get('base', 'site.session.name', 'nmSession'));
     if (session_start() === false) {
         throw new Exception('Can not start session');
     }
-    if (!array_key_exists($prefix . 'data', $_SESSION)) {
-        $_SESSION[$prefix . 'data'] = array();
+    $beyond->sid = session_id();
+    if (!array_key_exists($beyond->prefix . 'data', $_SESSION)) {
+        $_SESSION[$beyond->prefix . 'data'] = array();
     }
 
     // Get language configuration
-    $languages = $config->get('base', 'languages', false);
-    if ($languages === false) {
-        $languages = array(
+    $beyond->languages = $beyond->config->get('base', 'languages', false);
+    if ($beyond->languages === false) {
+        $beyond->languages = array(
             'default' => 'English'
         );
     }
-    if (!array_key_exists('language', $_SESSION[$prefix . 'data'])) {
-        $_SESSION[$prefix . 'data']['language'] = 'default';
+    if (!array_key_exists('language', $_SESSION[$beyond->prefix . 'data'])) {
+        $_SESSION[$beyond->prefix . 'data']['language'] = 'default';
     }
 
     // Initialize Database connections
-    $db = new db($config, $prefix);
+    $beyond->db = new beyondDatabaseConnection($beyond->config, $beyond->prefix);
 } catch (Exception $e) {
-    $exceptionHandler->add($e);
+    $beyond->exceptionHandler->add($e);
 }
 
 /*
@@ -81,9 +85,9 @@ try {
 try {
 
     // Check the table tableVersionInfo holding the table versions
-    if (!$db->defaultDatabase->tableExists($prefix . 'tableVersionInfo')) {
-        $db->defaultDatabase->tableCreate(
-            $prefix . 'tableVersionInfo',
+    if (!$beyond->db->defaultDatabase->tableExists($beyond->prefix . 'tableVersionInfo')) {
+        $beyond->db->defaultDatabase->tableCreate(
+            $beyond->prefix . 'tableVersionInfo',
             array(
                 'tableName' => array(
                     'kind' => 'string',
@@ -97,19 +101,20 @@ try {
     }
 
     // Store table versions to key/value array
-    $query = $db->defaultDatabase->select($prefix . 'tableVersionInfo', array('tableName', 'tableVersion'), array());
+    $query = $beyond->db->defaultDatabase->select($beyond->prefix . 'tableVersionInfo', array('tableName', 'tableVersion'), array());
     if ($query === false) {
-        throw new Exception('Can not query table [' . $prefix . 'tableVersionInfo]');
+        throw new Exception('Can not query table [' . $beyond->prefix . 'tableVersionInfo]');
     }
     $tableVersions = array();
     while ($row = $query->fetch()) {
         $tableVersions[$row['tableName']] = intval($row['tableVersion']);
     }
+    unset($query);
 
     // Init "users" table
-    if (!array_key_exists($prefix . 'users', $tableVersions)) {
-        $db->defaultDatabase->tableCreate(
-            $prefix . 'users',
+    if (!array_key_exists($beyond->prefix . 'users', $tableVersions)) {
+        $beyond->db->defaultDatabase->tableCreate(
+            $beyond->prefix . 'users',
             array(
                 'userName' => array(
                     'kind' => 'string',
@@ -123,15 +128,15 @@ try {
                 )
             )
         );
-        $db->defaultDatabase->insert(
-            $prefix . 'tableVersionInfo',
+        $beyond->db->defaultDatabase->insert(
+            $beyond->prefix . 'tableVersionInfo',
             array(
-                'tableName' => $prefix . 'users',
+                'tableName' => $beyond->prefix . 'users',
                 'tableVersion' => 1
             )
         );
-        $db->defaultDatabase->insert(
-            $prefix . 'users',
+        $beyond->db->defaultDatabase->insert(
+            $beyond->prefix . 'users',
             array(
                 'userName' => 'admin',
                 'password' => password_hash('password', PASSWORD_DEFAULT, array('cost' => 11)),
@@ -139,9 +144,10 @@ try {
             )
         );
     }
+    unset($tableVersions);
 
 } catch (Exception $e) {
-    $exceptionHandler->add($e);
+    $beyond->exceptionHandler->add($e);
 }
 
 /*
@@ -156,7 +162,8 @@ foreach (glob(__DIR__ . '/../plugins/*') as $pluginDir) {
         try {
             require_once $pluginDir . '/init.php';
         } catch (Exception $e) {
-            $exceptionHandler->add($e);
+            $beyond->exceptionHandler->add($e);
         }
     }
 }
+unset($pluginDir);

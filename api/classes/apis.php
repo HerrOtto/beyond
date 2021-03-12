@@ -4,7 +4,7 @@
 
 require_once __DIR__ . '/../apiBaseClass.php';
 
-class apis extends apiBaseClass
+class apis extends beyondApiBaseClass
 {
 
     /**
@@ -12,14 +12,8 @@ class apis extends apiBaseClass
      * @param string $apiName Name to check
      * @return string Clean API name
      */
-    public function filterApiName($apiName)
+    private function filterApiName($apiName)
     {
-        // Check permission
-        if ($this->tools->checkRole('admin') === false) {
-            throw new Exception('Permission denied');
-        }
-
-        //
         $apiName = preg_replace("/\.php$/", '', $apiName);
         $apiName = preg_replace("/[^A-Za-z]/", '', $apiName);
         $apiName = substr($apiName, 0, 50);
@@ -44,8 +38,11 @@ class apis extends apiBaseClass
 
         //
         $apiName = $this->filterApiName($data->apiName);
-        if ($data->apiName === '') {
+        if ($apiName === '') {
             throw new Exception('Empty API name not allowed');
+        }
+        if (class_exists($apiName)) {
+            throw new Exception('API class with name [' . $apiName . '] exists');
         }
 
         // Check if internal API with that name exists

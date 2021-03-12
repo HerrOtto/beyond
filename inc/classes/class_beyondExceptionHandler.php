@@ -4,7 +4,7 @@
  * Output exception message
  * @author     Tim David Saxen <info@netzmal.de>
  */
-class exceptionHandler
+class beyondExceptionHandler
 {
 
     private $exceptions = array();

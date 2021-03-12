@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../../../api/apiBaseClass.php';
 
-class cookiebox_config extends apiBaseClass
+class cookiebox_config extends beyondApiBaseClass
 {
 
     /**

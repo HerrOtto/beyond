@@ -11,10 +11,10 @@ $result = false;
 
 try {
 
-    header('Access-Control-Allow-Origin: ' . $config->get('base', 'api.accessOrigin'));
+    header('Access-Control-Allow-Origin: ' . $beyond->config->get('base', 'api.accessOrigin'));
 
     // Get called class and load
-    $class = $variable->get('class');
+    $class = $beyond->variable->get('class');
     $plugin = false;
     if (preg_match('/^([a-zA-Z]+)_([a-zA-Z]+)$/', $class, $matches)) {
         $plugin = $matches[1];
@@ -45,16 +45,16 @@ try {
         throw new Exception('API class [' . $classObjectName . '] does not exist');
     }
     $classObj = new $classObjectName(
-        $config,
-        $variable,
-        $db,
-        $prefix,
-        $languages,
-        $tools
+        $beyond->config,
+        $beyond->variable,
+        $beyond->db,
+        $beyond->prefix,
+        $beyond->languages,
+        $beyond->tools
     );
 
     // Get function name from browser
-    $call = $variable->get('call');
+    $call = $beyond->variable->get('call');
 
     // Do not allow to call functions beginning with underscore (like __construc)
     if (preg_match('/^_/', $call)) {
@@ -73,7 +73,7 @@ try {
     }
 
     // Get called parameter
-    $data = json_decode($variable->get('data'));
+    $data = json_decode($beyond->variable->get('data'));
     if (!is_object($data)) {
         throw new Exception('API parameter [data] is not a valid JSON object');
     }
@@ -94,12 +94,12 @@ try {
     $classObj = null;
 
 } catch (Exception $e) {
-    $exceptionHandler->add($e);
+    $beyond->exceptionHandler->add($e);
 
 }
 
 // Output result to browser
-$exceptionArray = $exceptionHandler->arr();
+$exceptionArray = $beyond->exceptionHandler->arr();
 if ($exceptionArray !== false) {
     print json_encode(array(
         'error' => $exceptionArray[0]['message']
@@ -110,3 +110,4 @@ if ($exceptionArray !== false) {
         $callResult
     );
 }
+unset($exceptionArray);

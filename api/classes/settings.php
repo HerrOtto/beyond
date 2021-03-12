@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../apiBaseClass.php';
 
-class settings extends apiBaseClass
+class settings extends beyondApiBaseClass
 {
 
     // TODO: List config files

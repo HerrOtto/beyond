@@ -3,8 +3,8 @@
 header('Content-type: text/html; Charset=UTF-8');
 
 require_once __DIR__ . '/inc/init.php';
-if (!$tools->checkRole('admin,view')) {
-    header('Location: ' . $config->get('base', 'server.baseUrl') . '/beyond/login.php');
+if (!$beyond->tools->checkRole('admin,view')) {
+    header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
     exit;
 }
 
@@ -56,7 +56,7 @@ if (!$tools->checkRole('admin,view')) {
                         print "<div class='status'>Checking current version</div>";
                         $githubUrl = 'https://raw.githubusercontent.com/HerrOtto/beyond/master/version.json?nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10)));
                         print '<div class="note">URL: ' . $githubUrl . '</div>';
-                        $versionFromGithub = $tools->httpGet($githubUrl);
+                        $versionFromGithub = $beyond->tools->httpGet($githubUrl);
                         if ($versionFromGithub == '') {
                             throw new Exception('Cannot retrieve version information from GitHub [https://raw.githubusercontent.com/HerrOtto/beyond/master/version.json]');
                         }
@@ -85,7 +85,7 @@ if (!$tools->checkRole('admin,view')) {
                         print "<div class='status'>Download current version</div>";
                         $zipUrl = 'https://codeload.github.com/HerrOtto/beyond/zip/master?nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10)));
                         $zipFile = __DIR__ . '/temp/update.zip';
-                        $zipResult = $tools->httpGet($zipUrl, $zipFile, 60);
+                        $zipResult = $beyond->tools->httpGet($zipUrl, $zipFile, 60);
                         if ($zipResult !== true) {
                             throw new Exception('Cannot retrieve update from GitHub [https://codeload.github.com/HerrOtto/beyond/zip/master]');
                         }

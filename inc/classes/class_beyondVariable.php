@@ -4,7 +4,7 @@
  * Get HTTP GET or POST variables
  * @author     Tim David Saxen <info@netzmal.de>
  */
-class variable
+class beyondVariable
 {
 
     /**

@@ -11,7 +11,7 @@ require_once __DIR__ . '/../../inc/init.php';
      * Add IFrame to body
      */
 
-    function <?php print $prefix; ?>cookieboxInit() {
+    function <?php print $beyond->prefix; ?>cookieboxInit() {
         beyond_api.cookiebox_config.load({}, function (error, data) {
             if (error !== false) {
                 alert('Error loading cookiebox: ' + error);
@@ -19,8 +19,8 @@ require_once __DIR__ . '/../../inc/init.php';
             }
 
             document.body.innerHTML =
-                '<div class="<?php print $prefix; ?>cookieboxWrap">' +
-                '<iframe class="<?php print $prefix; ?>cookieboxFrame" id="<?php print $prefix; ?>cookiebox" src="<?php print $config->get('base', 'server.baseUrl') . '/beyond/plugins/cookiebox/cookieboxFrame.php'; ?>"></iframe>' +
+                '<div class="<?php print $beyond->prefix; ?>cookieboxWrap">' +
+                '<iframe class="<?php print $beyond->prefix; ?>cookieboxFrame" id="<?php print $beyond->prefix; ?>cookiebox" src="<?php print $beyond->config->get('base', 'server.baseUrl') . '/beyond/plugins/cookiebox/cookieboxFrame.php'; ?>"></iframe>' +
                 '</div>' +
                 document.body.innerHTML;
 
@@ -28,6 +28,6 @@ require_once __DIR__ . '/../../inc/init.php';
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        <?php print $prefix; ?>cookieboxInit();
+        <?php print $beyond->prefix; ?>cookieboxInit();
     });
 

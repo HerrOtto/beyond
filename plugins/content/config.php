@@ -6,7 +6,7 @@
 <script>
 
     function load() {
-        <?php print $prefix; ?>api.content_config.load({}, function (error, data) {
+        <?php print $beyond->prefix; ?>api.content_config.load({}, function (error, data) {
             if (error !== false) {
                 message('Error: ' + error);
             } else {
@@ -23,25 +23,20 @@
     }
 
     function save() {
-
-        // Apperence
-        var data = {
-            'database': $('#contentDatabase').val()
-        };
-
         // Send
-        <?php print $prefix; ?>api.content_config.save(
-            data, function (error, data) {
-                if (error !== false) {
-                    message('Error: ' + error);
+        <?php print $beyond->prefix; ?>api.content_config.save({
+            'database': $('#contentDatabase').val()
+        }, function (error, data) {
+            if (error !== false) {
+                message('Error: ' + error);
+            } else {
+                if (data.save === true) {
+                    load();
                 } else {
-                    if (data.save === true) {
-                        load();
-                    } else {
-                        message('Save configuration failed: ' + data.save);
-                    }
+                    message('Save configuration failed: ' + data.save);
                 }
-            });
+            }
+        });
     }
 
     //
@@ -77,7 +72,7 @@
             <select class="form-control" id="contentDatabase">
                 <?php
                 print '<option value="" selected disabled></option>';
-                foreach ($config->get('database', 'items', array()) as $databaseName => $databaseConfig) {
+                foreach ($beyond->config->get('database', 'items', array()) as $databaseName => $databaseConfig) {
                     print '<option value="' . $databaseName . '">' . $databaseName . '</option>';
                 }
                 ?>

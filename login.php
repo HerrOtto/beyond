@@ -16,7 +16,7 @@ require_once __DIR__ . '/inc/init.php';
         }
 
         body {
-            background: url(<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/images/login/background.jpg) no-repeat center center fixed;
+            background: url(<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/images/login/background.jpg) no-repeat center center fixed;
             background-size: cover;
         }
 
@@ -24,7 +24,7 @@ require_once __DIR__ . '/inc/init.php';
 
     <script>
         function login() {
-            <?php print $prefix; ?>api.auth.login({
+            <?php print $beyond->prefix; ?>api.auth.login({
                 'userName': $('#userName').val(),
                 'password': $('#password').val()
             }, function (error, data) {
@@ -32,7 +32,7 @@ require_once __DIR__ . '/inc/init.php';
                     message('Error: ' + error)
                 } else {
                     if (data.loginValid) {
-                        location.href = '<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/files.php';
+                        location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/files.php';
                     } else {
                         $('#loginResult').text('Login failed');
                         if ($('#userName').val() === '') {

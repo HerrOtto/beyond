@@ -2,14 +2,10 @@
 
 header('Content-type: text/html; Charset=UTF-8');
 require_once __DIR__ . '/inc/init.php';
-if (!$tools->checkRole('admin,view')) {
-    header('Location: ' . $config->get('base', 'server.baseUrl') . '/beyond/login.php');
+if (!$beyond->tools->checkRole('admin,view')) {
+    header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
     exit;
 }
-
-require_once __DIR__ . '/api/classes/apis.php';
-$apis = new apis($config, $variable, $db, $prefix, $languages, $tools);
-
 ?>
 <html>
 <head>
@@ -17,29 +13,29 @@ $apis = new apis($config, $variable, $db, $prefix, $languages, $tools);
     <?php require_once __DIR__ . '/inc/head.php'; ?>
 
     <!-- ace editor -->
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/ace.js"
+    <script src="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/ace.js"
             type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/theme-chrome.js"
+    <script src="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/theme-chrome.js"
             type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-javascript.js"
+    <script src="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-javascript.js"
             type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-php.js"
+    <script src="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-php.js"
             type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-css.js"
+    <script src="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-css.js"
             type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-perl.js"
+    <script src="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-perl.js"
             type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-python.js"
+    <script src="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-python.js"
             type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-html.js"
+    <script src="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-html.js"
             type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-ruby.js"
+    <script src="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-ruby.js"
             type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-sql.js"
+    <script src="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-sql.js"
             type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-sh.js"
+    <script src="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-sh.js"
             type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-xml.js"
+    <script src="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-xml.js"
             type="text/javascript" charset="utf-8"></script>
 
     <style>
@@ -81,14 +77,14 @@ $apis = new apis($config, $variable, $db, $prefix, $languages, $tools);
     <script>
 
         function apiCreate(apiName) {
-            <?php print $prefix; ?>api.apis.apiCreate({
+            <?php print $beyond->prefix; ?>api.apis.apiCreate({
                 'apiName': apiName
             }, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
                 } else {
                     if (data.apiCreate === true) {
-                        location.href = '<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/apis.php?edit=' + encodeURIComponent(apiName) + '&dir=<?php print urlencode($dir['relPath']) . '&nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
+                        location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/apis.php?edit=' + encodeURIComponent(apiName) + '&dir=<?php print urlencode($dir['relPath']) . '&nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
                     } else {
                         message('API file [' + apiName + '] creation failed');
                     }
@@ -102,14 +98,14 @@ $apis = new apis($config, $variable, $db, $prefix, $languages, $tools);
                 $('#dialogApiDelete').data('apiName', atob(apiNameBase64)).modal('show');
                 return false;
             }
-            <?php print $prefix; ?>api.apis.apiDelete({
+            <?php print $beyond->prefix; ?>api.apis.apiDelete({
                 'apiName': atob(apiNameBase64)
             }, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
                 } else {
                     if (data.apiDelete === true) {
-                        location.href = '<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/apis.php<?php print urlencode($dir) . '?nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
+                        location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/apis.php<?php print urlencode($dir) . '?nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
                     } else {
                         message('API file [' + atob(apiNameBase64) + '] deletion failed');
                     }
@@ -121,7 +117,7 @@ $apis = new apis($config, $variable, $db, $prefix, $languages, $tools);
         var editorApiName = '';
 
         function apiEdit(apiNameBase64, kind) {
-            <?php print $prefix; ?>api.apis.apiLoad({
+            <?php print $beyond->prefix; ?>api.apis.apiLoad({
                 'apiName': atob(apiNameBase64),
                 'kind': kind
             }, function (error, data) {
@@ -173,7 +169,7 @@ $apis = new apis($config, $variable, $db, $prefix, $languages, $tools);
                 message('Editor not initialized');
                 return false;
             }
-            <?php print $prefix; ?>api.apis.apiSave({
+            <?php print $beyond->prefix; ?>api.apis.apiSave({
                 'apiName': editorApiName,
                 'content': editor.getValue()
             }, function (error, data) {
@@ -240,7 +236,7 @@ $apis = new apis($config, $variable, $db, $prefix, $languages, $tools);
 
             // Open editor on file creation
             <?php
-            $editApiName = $variable->get('edit', '');
+            $editApiName = $beyond->variable->get('edit', '');
             print 'var editApiName = ' . json_encode($editApiName) . ';' . PHP_EOL;
             ?>
             if (editApiName != '') {
@@ -313,7 +309,7 @@ $apis = new apis($config, $variable, $db, $prefix, $languages, $tools);
                 $outputSite = '';
 
                 // List classes files
-                $dirs = scandir($config->get('base', 'server.absPath', '') . '/beyond/config/siteClasses', SCANDIR_SORT_ASCENDING);
+                $dirs = scandir($beyond->config->get('base', 'server.absPath', '') . '/beyond/config/siteClasses', SCANDIR_SORT_ASCENDING);
                 foreach ($dirs as $dirIndex => $dirItem) {
                     if (in_array(pathinfo($dirItem, PATHINFO_EXTENSION), array('php'))) {
                         $icon = "fa-file-code";
@@ -339,7 +335,7 @@ $apis = new apis($config, $variable, $db, $prefix, $languages, $tools);
                 $output = '';
 
                 // List classes files
-                $dirs = scandir($config->get('base', 'server.absPath', '') . '/beyond/api/classes', SCANDIR_SORT_ASCENDING);
+                $dirs = scandir($beyond->config->get('base', 'server.absPath', '') . '/beyond/api/classes', SCANDIR_SORT_ASCENDING);
                 foreach ($dirs as $dirIndex => $dirItem) {
                     if (in_array(pathinfo($dirItem, PATHINFO_EXTENSION), array('php'))) {
                         $icon = "fa-file-code";
@@ -369,7 +365,7 @@ $apis = new apis($config, $variable, $db, $prefix, $languages, $tools);
                     if (!is_dir($pluginDir)) {
                         continue;
                     }
-                    $dirs = scandir($config->get('base', 'server.absPath', '') . '/beyond/plugins/' . basename($pluginDir) . '/apiClasses', SCANDIR_SORT_ASCENDING);
+                    $dirs = scandir($beyond->config->get('base', 'server.absPath', '') . '/beyond/plugins/' . basename($pluginDir) . '/apiClasses', SCANDIR_SORT_ASCENDING);
                     foreach ($dirs as $dirIndex => $dirItem) {
                         if (in_array(pathinfo($dirItem, PATHINFO_EXTENSION), array('php'))) {
                             $icon = "fa-file-code";

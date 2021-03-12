@@ -4,14 +4,6 @@
  * Incuded on all pages directly after opening body tag
  */
 
-try {
-
-    // ...
-
-} catch (Exception $e) {
-    $exceptionHandler->add($e);
-}
-
 // Include plugins
 foreach (glob(__DIR__ . '/../plugins/*') as $pluginDir) {
     if (!is_dir($pluginDir)) {
@@ -21,9 +13,10 @@ foreach (glob(__DIR__ . '/../plugins/*') as $pluginDir) {
         try {
             require_once $pluginDir . '/begin.php';
         } catch (Exception $e) {
-            $exceptionHandler->add($e);
+            $beyond->exceptionHandler->add($e);
         }
     }
 }
+unset($pluginDir);
 
 ?>

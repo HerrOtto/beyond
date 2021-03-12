@@ -4,14 +4,14 @@
  * API base class
  * @author     Tim David Saxen <info@netzmal.de>
  */
-abstract class apiBaseClass
+abstract class beyondApiBaseClass
 {
-    protected config $config;
-    protected variable $variable;
-    protected db $db;
+    protected beyondConfig $config;
+    protected beyondVariable $variable;
+    protected beyondDatabaseConnection $db;
     protected string $prefix;
     protected array $languages;
-    protected tools $tools;
+    protected beyondTools $tools;
 
     /**
      * Constructor
@@ -39,9 +39,8 @@ abstract class apiBaseClass
      * @param int $min Min. allowed value
      * @param int $max Max. alowed value
      * @param int $allowFalse Allow boolean value "false" as value
-     * @return int Value as an integer
      */
-    protected function checkInteger($object, $propertyName, $min = false, $max = false, $allowFalse = false)
+    protected function checkInteger(&$object, $propertyName, $min = false, $max = false, $allowFalse = false)
     {
         if (!property_exists($object, $propertyName)) {
             throw new Exception('Property [' . $propertyName . '] not defined');
@@ -68,7 +67,7 @@ abstract class apiBaseClass
             throw new Exception('Parameter [' . $propertyName . '] value [' . $value . '] exceeds expected min. value [' . $max . ']');
         }
 
-        return intval($value);
+        $object->{$propertyName} = intval($value);
     }
 
     /**
@@ -77,9 +76,8 @@ abstract class apiBaseClass
      * @param string $propertyName Variable
      * @param bool $trim Trim string
      * @param bool $allowEmpty Allow empty string
-     * @return int Value as a string
      */
-    protected function checkString($object, $propertyName, $trim = true, $allowEmpty = true)
+    protected function checkString(&$object, $propertyName, $trim = true, $allowEmpty = true)
     {
         if (!property_exists($object, $propertyName)) {
             throw new Exception('Property [' . $propertyName . '] not defined');
@@ -104,16 +102,15 @@ abstract class apiBaseClass
             throw new Exception('Parameter [' . $propertyName . '] empty value not allowed');
         }
 
-        return intval($value);
+        $object->{$propertyName} = $value;
     }
 
     /**
      * Check if variable is an array
      * @param object $object Variable
      * @param string $propertyName Variable
-     * @return int Value as array
      */
-    protected function checkArray($object, $propertyName)
+    protected function checkArray(&$object, $propertyName)
     {
         if (!property_exists($object, $propertyName)) {
             throw new Exception('Property [' . $propertyName . '] not defined');
@@ -124,16 +121,15 @@ abstract class apiBaseClass
             throw new Exception('Parameter [' . $propertyName . '] value [' . $value . '] is not an array');
         }
 
-        return $value;
+        $object->{$propertyName} = $value;
     }
 
     /**
      * Check if variable is an object
      * @param object $object Variable
      * @param string $propertyName Variable
-     * @return int Value as object
      */
-    protected function checkObject($object, $propertyName)
+    protected function checkObject(&$object, $propertyName)
     {
         if (!property_exists($object, $propertyName)) {
             throw new Exception('Property [' . $propertyName . '] not defined');
@@ -144,16 +140,15 @@ abstract class apiBaseClass
             throw new Exception('Parameter [' . $propertyName . '] value [' . $value . '] is not an object');
         }
 
-        return $value;
+        $object->{$propertyName} = $value;
     }
 
     /**
      * Check if variable is a boolean
      * @param object $object Variable
      * @param string $propertyName Variable
-     * @return int Value as boolean
      */
-    protected function checkBoolean($object, $propertyName)
+    protected function checkBoolean(&$object, $propertyName)
     {
         if (!property_exists($object, $propertyName)) {
             throw new Exception('Property [' . $propertyName . '] not defined');
@@ -164,7 +159,7 @@ abstract class apiBaseClass
             throw new Exception('Property [' . $propertyName . '] is not a boolean value');
         }
 
-        return $value;
+        $object->{$propertyName} = $value;
     }
 
 }

@@ -3,8 +3,8 @@
 header('Content-type: text/html; Charset=UTF-8');
 
 require_once __DIR__ . '/inc/init.php';
-if (!$tools->checkRole('admin,view')) {
-    header('Location: ' . $config->get('base', 'server.baseUrl') . '/beyond/login.php');
+if (!$beyond->tools->checkRole('admin,view')) {
+    header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
     exit;
 }
 
@@ -72,7 +72,6 @@ if (!$tools->checkRole('admin,view')) {
                         if (!is_dir($pluginDir)) {
                             continue;
                         }
-
                         print '<div class="pluginItem">';
                         print '<span class="pluginItemIcon">';
                         print '<i class="fas fa-puzzle-piece"></i>';
@@ -84,6 +83,7 @@ if (!$tools->checkRole('admin,view')) {
                         print '</span>';
                         print '</div>';
                     }
+                    unset($pluginDir);
                     ?>
                 </div>
 

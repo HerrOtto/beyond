@@ -6,7 +6,7 @@
 <script>
 
     function load() {
-        <?php print $prefix; ?>api.captcha_config.load({}, function (error, data) {
+        <?php print $beyond->prefix; ?>api.captcha_config.load({}, function (error, data) {
             if (error !== false) {
                 message('Error: ' + error);
             } else {
@@ -32,7 +32,7 @@
     }
 
     function save() {
-        <?php print $prefix; ?>api.captcha_config.save({
+        <?php print $beyond->prefix; ?>api.captcha_config.save({
             'apperence': {
                 'width': $('#captchaWidth').val(),
                 'height': $('#captchaHeight').val()
@@ -60,7 +60,7 @@
     //
 
     function getCaptcha() {
-        <?php print $prefix; ?>api.captcha_base.init({}, function (error, data) {
+        <?php print $beyond->prefix; ?>api.captcha_base.init({}, function (error, data) {
             if (error !== false) {
                 message('Error: ' + error);
             } else {

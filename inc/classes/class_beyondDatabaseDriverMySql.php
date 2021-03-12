@@ -1,14 +1,14 @@
 <?php
 
-class dbMySql extends dbBaseClass
+class beyondDatabaseDriverMySql extends beyondDatabaseDriver
 {
 
     // Connection settings
-    private $host = "";
-    private $port = "";
-    private $user = "";
-    private $pass = "";
-    private $base = "";
+    private string $host = "";
+    private string $port = "";
+    private string $user = "";
+    private string $pass = "";
+    private string $base = "";
 
     // Constructor
     public function __construct($host, $port = 3389, $user, $pass, $base)
@@ -38,6 +38,7 @@ class dbMySql extends dbBaseClass
         if ($this->connection->query("SET NAMES 'utf8'") === false) {
             throw new Exception('Could not change names charset on database [' . $this->host . ':' . $this->port . '/' . $this->base . ']');
         }
+
     }
 
     // Destructor
@@ -128,7 +129,7 @@ class dbMySql extends dbBaseClass
         $sql = 'SELECT COUNT(*) AS rowCount FROM ' . $this->escape($tableName) . ' ' . $this->internalParseWhere($whereArray);
         $query = $this->query($sql);
         if (($query !== false) && ($row = $query->fetch())) {
-          $result = $row['rowCount'];
+            $result = $row['rowCount'];
         }
 
         return $result;

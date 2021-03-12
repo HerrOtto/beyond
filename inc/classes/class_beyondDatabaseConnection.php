@@ -4,13 +4,13 @@
  * Handle database connections (configured within database.json)
  * @author     Tim David Saxen <info@netzmal.de>
  */
-class db
+class beyondDatabaseConnection
 {
 
-    private $config;
-    public $prefix;
-    public $databases = array();
-    public dbBaseClass $defaultDatabase;
+    private beyondConfig $config;
+    public string $prefix;
+    public array $databases = array();
+    public beyondDatabaseDriver $defaultDatabase;
 
     /**
      * Constructor
@@ -28,7 +28,7 @@ class db
 
             // Connect to database
             if ($databaseItem['kind'] === 'mysql') {
-                $this->databases[$databaseIndex] = new dbMySql(
+                $this->databases[$databaseIndex] = new beyondDatabaseDriverMySql(
                     $databaseItem['host'],
                     $databaseItem['port'],
                     $databaseItem['user'],
@@ -36,9 +36,9 @@ class db
                     $databaseItem['base']
                 );
             } else if ($databaseItem['kind'] === 'sqlite3') {
-                $this->databases[$databaseIndex] = new dbSqlite3(
+                $this->databases[$databaseIndex] = new beyondDatabaseDriverSqlite3(
                     $databaseItem['file'],
-                    $databaseItem['busyTimeoutMS']
+                    intval($databaseItem['busyTimeoutMS'])
                 );
             }
 

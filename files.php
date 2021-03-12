@@ -2,17 +2,13 @@
 
 header('Content-type: text/html; Charset=UTF-8');
 require_once __DIR__ . '/inc/init.php';
-if (!$tools->checkRole('admin,view')) {
-    header('Location: ' . $config->get('base', 'server.baseUrl') . '/beyond/login.php');
+if (!$beyond->tools->checkRole('admin,view')) {
+    header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
     exit;
 }
 
 // Check current working directory from browser
-require_once __DIR__ . '/api/classes/files.php';
-$files = new files($config, $variable, $db, $prefix, $languages, $tools);
-$dir = $files->checkDirectory((object)array(
-    'directory' => $variable->get('dir', '')
-));
+$dir = $beyond->tools->checkDirectory($beyond->variable->get('dir', ''));
 
 // Code/Text - Edit in editor
 $extCode = array(
@@ -35,26 +31,6 @@ $height = 225;
 <head>
     <title>Files</title>
     <?php require_once __DIR__ . '/inc/head.php'; ?>
-
-    <!-- ace editor -->
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/ace.js"
-            type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/theme-chrome.js"
-            type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-javascript.js"
-            type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-php.js"
-            type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-css.js"
-            type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-html.js"
-            type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-sql.js"
-            type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-sh.js"
-            type="text/javascript" charset="utf-8"></script>
-    <script src="<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/mode-xml.js"
-            type="text/javascript" charset="utf-8"></script>
 
     <style>
 
@@ -158,7 +134,7 @@ $height = 225;
     <script>
 
         function directoryCreate(dir) {
-            <?php print $prefix; ?>api.files.directoryCreate({
+            <?php print $beyond->prefix; ?>api.files.directoryCreate({
                 'directory': dir,
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {
@@ -166,7 +142,9 @@ $height = 225;
                     message('Error: ' + error);
                 } else {
                     if (data.directoryCreate === true) {
-                        location.href = '<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/files.php?dir=<?php print urlencode($dir) . '&nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
+                        location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/files.php' +
+                            '?dir=<?php print urlencode($dir['relPath']); ?>' +
+                            '&nocache=<?php print urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
                     } else {
                         message('Directory [' + dir + '] creation failed');
                     }
@@ -180,7 +158,7 @@ $height = 225;
                 $('#dialogDirectoryDelete').data('directory', atob(dirBase64)).modal('show');
                 return false;
             }
-            <?php print $prefix; ?>api.files.directoryDelete({
+            <?php print $beyond->prefix; ?>api.files.directoryDelete({
                 'directory': atob(dirBase64),
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {
@@ -188,7 +166,9 @@ $height = 225;
                     message('Error: ' + error);
                 } else {
                     if (data.directoryDelete === true) {
-                        location.href = '<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/files.php?dir=<?php print urlencode($dir) . '&nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
+                        location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/files.php' +
+                            '?dir=<?php print urlencode($dir['relPath']); ?>' +
+                            '&nocache=<?php print urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
                     } else {
                         $('#dialogDirectoryDelete').modal('hide');
                         message('Directory [' + atob(dirBase64) + '] deletion failed');
@@ -198,7 +178,7 @@ $height = 225;
         }
 
         function fileCreate(fileName) {
-            <?php print $prefix; ?>api.files.fileCreate({
+            <?php print $beyond->prefix; ?>api.files.fileCreate({
                 'file': fileName,
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {
@@ -206,7 +186,7 @@ $height = 225;
                     message('Error: ' + error);
                 } else {
                     if (data.fileCreate === true) {
-                        location.href = '<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/files.php?edit=' + encodeURIComponent(fileName) + '&dir=<?php print urlencode($dir['relPath']) . '&nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
+                        location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/editor.php?file=' + encodeURIComponent(fileName) + '&dir=<?php print urlencode($dir['relPath']) . '&nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
                     } else {
                         message('File [' + fileName + '] creation in directory [<?php print json_encode($dir['relPath']); ?>] failed');
                     }
@@ -220,7 +200,7 @@ $height = 225;
                 $('#dialogFileDelete').data('fileName', atob(fileBase64)).modal('show');
                 return false;
             }
-            <?php print $prefix; ?>api.files.fileDelete({
+            <?php print $beyond->prefix; ?>api.files.fileDelete({
                 'file': atob(fileBase64),
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {
@@ -228,123 +208,12 @@ $height = 225;
                     message('Error: ' + error);
                 } else {
                     if (data.fileDelete === true) {
-                        location.href = '<?php print $config->get('base', 'server.baseUrl'); ?>/beyond/files.php?dir=<?php print urlencode($dir['relPath']) . '&nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
+                        location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/files.php?dir=<?php print urlencode($dir['relPath']) . '&nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
                     } else {
                         message('File [' + atob(fileBase64) + '] deletion failed');
                     }
                 }
             });
-        }
-
-        var editor = false;
-        var editorFileName = '';
-
-        function fileEdit(fileBase64, fileExtensionBase64) {
-
-            <?php print $prefix; ?>api.files.fileLoad({
-                'file': atob(fileBase64),
-                'currentPath': <?php print json_encode($dir['relPath']); ?>
-            }, function (error, data) {
-                if (error !== false) {
-                    message('Error: ' + error);
-                } else {
-                    if (data.fileLoad === true) {
-                        $('#list').hide();
-                        $('#editor').show();
-
-                        editorFileName = atob(fileBase64);
-
-                        editor = editor = ace.edit("aceEditor");
-                        editor.setTheme("ace/theme/chrome");
-                        editor.setOptions({
-                            autoScrollEditorIntoView: true,
-                            //copyWithEmptySelection: true,
-                            mergeUndoDeltas: "always"
-                        });
-
-                        if (atob(fileExtensionBase64) === 'js') {
-                            var javascriptMode = ace.require("ace/mode/javascript").Mode;
-                            editor.session.setMode(new javascriptMode());
-                        } else if (atob(fileExtensionBase64) === 'php') {
-                            var phpMode = ace.require("ace/mode/php").Mode;
-                            editor.session.setMode(new phpMode());
-                        } else if (atob(fileExtensionBase64) === 'css') {
-                            var cssMode = ace.require("ace/mode/css").Mode;
-                            editor.session.setMode(new cssMode());
-                        } else if (atob(fileExtensionBase64) === 'html') {
-                            var htmlMode = ace.require("ace/mode/html").Mode;
-                            editor.session.setMode(new htmlMode());
-                        } else if (atob(fileExtensionBase64) === 'htm') {
-                            var htmlMode = ace.require("ace/mode/html").Mode;
-                            editor.session.setMode(new htmlMode());
-                        } else if (atob(fileExtensionBase64) === 'sql') {
-                            var sqlMode = ace.require("ace/mode/sql").Mode;
-                            editor.session.setMode(new sqlMode());
-                        } else if (atob(fileExtensionBase64) === 'sh') {
-                            var shMode = ace.require("ace/mode/sh").Mode;
-                            editor.session.setMode(new shMode());
-                        } else if (atob(fileExtensionBase64) == 'xml') {
-                            var xmlMode = ace.require("ace/mode/xml").Mode;
-                            editor.session.setMode(new xmlMode());
-                        }
-
-                        editor.setValue(data.fileContent);
-                        editor.gotoLine(0);
-                        editor.session.setTabSize(4);
-                        editor.session.setUseSoftTabs(true);
-                        editor.setHighlightActiveLine(true);
-                        document.getElementById('aceEditor').style.fontSize = '12pt';
-
-                        editorResize();
-                    } else {
-                        message('Loading file [' + atob(fileBase64) + '] failed');
-                    }
-                }
-            });
-        }
-
-        function fileSave() {
-            if (editor === false) {
-                message('Editor not initialized');
-                return false;
-            }
-            <?php print $prefix; ?>api.files.fileSave({
-                'file': editorFileName,
-                'content': editor.getValue(),
-                'currentPath': <?php print json_encode($dir['relPath']); ?>
-            }, function (error, data) {
-                if (error !== false) {
-                    message('Error: ' + error);
-                } else {
-                    if (data.fileSave === true) {
-
-                        $('#saveButton').html('File saved :-)');
-                        setTimeout(function () {
-                            $('#saveButton').html('Save file (Ctrl+S)');
-                        }, 2000);
-
-                    } else {
-                        message('File [' + editorFileName + '] save failed');
-                    }
-                }
-            });
-        }
-
-        function fileClose() {
-            $('#editor').hide();
-            $('#list').show();
-
-            if (editor !== false) {
-                editor.destroy();
-                editor = false;
-                editorFileName = '';
-                $('#aceEditor').empty();
-            }
-        }
-
-        function editorResize() {
-            $('#editor').css('height', (window.innerHeight - 180).toString() + 'px');
-            editor.resize();
         }
 
         function resizeImages() {
@@ -361,27 +230,6 @@ $height = 225;
             });
             resizeImages();
 
-            // Resize editor on browser resize
-            $(window).on('resize', function () {
-                if (editor !== false) {
-                    editorResize();
-                }
-            });
-
-            // Ctrl+S -> Save file
-            $(window).bind('keydown', function (event) {
-                if (event.ctrlKey || event.metaKey) {
-                    switch (String.fromCharCode(event.which).toLowerCase()) {
-                        case 's':
-                            event.preventDefault();
-                            if (editor !== false) {
-                                fileSave();
-                            }
-                            break;
-                    }
-                }
-            });
-
             // Modal: New file (On show)
             $('#dialogFileAdd').on('shown.bs.modal', function (e) {
                 $('#fileName').focus();
@@ -391,16 +239,6 @@ $height = 225;
             $('#dialogDirectoryAdd').on('shown.bs.modal', function (e) {
                 $('#directoryName').focus();
             });
-
-            <?php
-            // Open editor on file creation
-            $editFile = $variable->get('edit', '');
-            print 'var editFile = ' . json_encode($editFile) . ';' . PHP_EOL;
-            print 'var editExtension = ' . json_encode(strtolower(pathinfo($editFile, PATHINFO_EXTENSION))) . ';' . PHP_EOL;
-            ?>
-            if (editFile != '') {
-                fileEdit(btoa(editFile), btoa(editExtension));
-            }
 
         });
 
@@ -415,9 +253,6 @@ $height = 225;
                 function (e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (editor !== false) {
-                        return;
-                    }
                     if (uploading !== false) {
                         return;
                     }
@@ -430,9 +265,6 @@ $height = 225;
                 function (e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (editor !== false) {
-                        return;
-                    }
                     if (uploading !== false) {
                         return;
                     }
@@ -448,9 +280,6 @@ $height = 225;
                 function (e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (editor !== false) {
-                        return;
-                    }
                     if (uploading !== false) {
                         return;
                     }
@@ -470,9 +299,6 @@ $height = 225;
                 function (e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    if (editor !== false) {
-                        return;
-                    }
                     if (uploading !== false) {
                         return;
                     }
@@ -500,7 +326,7 @@ $height = 225;
                     success: function (response) {
                         if (response.error === false) {
                             $('#uploadStatus').html('Done');
-                            location.href = '<?php print $config->get('base', 'server.baseUrl'); ?>' +
+                            location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>' +
                                 '/beyond/files.php' +
                                 '?dir=<?php print urlencode($dir['relPath'] . '/' . $dirItem); ?>' +
                                 '&nocache=<?php print urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
@@ -623,7 +449,7 @@ $height = 225;
                     } else if ($dir['relPath'] === '') {
                         print '<li class="breadcrumb-item">Files</li>'; // Base directory
                     } else {
-                        print '<li class="breadcrumb-item"><a href="' . $config->get('base', 'server.baseUrl') . '/beyond/files.php?dir=">Files</a></li>';
+                        print '<li class="breadcrumb-item"><a href="' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/files.php?dir=">Files</a></li>';
 
                         $dirParts = explode('/', $dir['relPath']);
                         $dirCurrent = '';
@@ -632,9 +458,13 @@ $height = 225;
                             if (count($dirParts) - 1 == $dirPartIndex) {
                                 print '<li class="breadcrumb-item active">' . $dirPartItem . '</li>';
                             } else {
-                                print '<li class="breadcrumb-item"><a href="' . $config->get('base', 'server.baseUrl') . '/beyond/files.php?dir=' . urlencode($dirCurrent) . '">' . $dirPartItem . '</a></li>';
+                                print '<li class="breadcrumb-item"><a href="' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/files.php?dir=' . urlencode($dirCurrent) . '">' . $dirPartItem . '</a></li>';
                             }
                         }
+                        unset($dirParts);
+                        unset($dirCurrent);
+                        unset($dirPartIndex);
+                        unset($dirPartItem);
                     }
                     ?>
                 </ol>
@@ -665,7 +495,7 @@ $height = 225;
                             }
 
                             $location =
-                                $config->get('base', 'server.baseUrl') .
+                                $beyond->config->get('base', 'server.baseUrl') .
                                 '/beyond/files.php' .
                                 '?dir=' . urlencode($dir['relPath'] . '/' . $dirItem) .
                                 '&nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10)));
@@ -711,10 +541,17 @@ $height = 225;
 
                             if (($dirItem == '.htaccess') || (in_array(pathinfo($dirItem, PATHINFO_EXTENSION), $extCode))) {
                                 // Edit
-                                $output .= '<span class="fileItemIcon" onclick="fileEdit(\'' . base64_encode($dirItem) . '\', \'' . base64_encode(strtolower(pathinfo($dirItem, PATHINFO_EXTENSION))) . '\');">';
+                                $editUrl =
+                                    $beyond->config->get('base', 'server.baseUrl') .
+                                    '/beyond/editor.php' .
+                                    '?file=' . urlencode($dirItem) .
+                                    '&dir=' . urlencode($dir['relPath']) .
+                                    '&nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10)));
+
+                                $output .= '<span class="fileItemIcon" onclick="location.href = \'' . $editUrl . '\';">';
                                 $output .= '<i class="fas ' . $icon . '"></i>';
                                 $output .= '</span>';
-                                $output .= '<span class="fileItemName" onclick="fileEdit(\'' . base64_encode($dirItem) . '\', \'' . base64_encode(strtolower(pathinfo($dirItem, PATHINFO_EXTENSION))) . '\');">';
+                                $output .= '<span class="fileItemName" onclick="location.href = \'' . $editUrl . '\';">';
                                 $output .= $dirItem;
                                 $output .= '</span>';
 
@@ -725,7 +562,7 @@ $height = 225;
                                 $output .= '</span>';
                                 $output .= '<span class="fileItemName" onclick="$(\'#download-file-' . $itemNo . '\').get(0).click();">';
                                 $output .= $dirItem;
-                                $output .= '<a style="display:none;" id="download-file-' . $itemNo . '" href="' . $config->get('base', 'server.baseUrl') . '/' . $dir['relPath'] . '/' . $dirItem . '" download="' . $dirItem . '">Download</a>';
+                                $output .= '<a style="display:none;" id="download-file-' . $itemNo . '" href="' . $beyond->config->get('base', 'server.baseUrl') . '/' . $dir['relPath'] . '/' . $dirItem . '" download="' . $dirItem . '">Download</a>';
                                 $output .= '</span>';
 
                             }
@@ -793,7 +630,6 @@ $height = 225;
                         imagedestroy($image);
 
                         $outputImage .= '<div class="imageItemOuter" style="width: ' . $width . ';">';
-//                        $outputImage .= '  <div class="imageItemWrapper" style="width: ' . $width . ';">';
                         $outputImage .= '    <div class="imageItemImage">';
                         $outputImage .= '      <img src="' . 'data:image/png;base64,' . base64_encode($pngFile) . '" />';
                         $outputImage .= '    </div>';
@@ -801,12 +637,11 @@ $height = 225;
                         $outputImage .= '      ' . $dirItem;
                         $outputImage .= '    </div>';
                         $outputImage .= '    <div class="imageItemDownload">';
-                        $outputImage .= '      <a href="' . $config->get('base', 'server.baseUrl') . '/' . $dir['relPath'] . '/' . $dirItem . '" download="' . $dirItem . '"><i class="fas fa-download"></i></a>';
+                        $outputImage .= '      <a href="' . $beyond->config->get('base', 'server.baseUrl') . '/' . $dir['relPath'] . '/' . $dirItem . '" download="' . $dirItem . '"><i class="fas fa-download"></i></a>';
                         $outputImage .= '    </div>';
                         $outputImage .= '    <div class="imageItemDelete" onclick="fileDelete(\'' . base64_encode($dirItem) . '\');">';
                         $outputImage .= '      <i class="fas fa-trash"></i>';
                         $outputImage .= '    </div>';
-//                        $outputImage .= '  </div>';
                         $outputImage .= '</div>' . PHP_EOL;
                     }
                 }
@@ -831,14 +666,8 @@ $height = 225;
                 print '</div>' . PHP_EOL;
                 print '</div>' . PHP_EOL;
 
-                // Editor
-                print '<div id="editor" class="card mb-4 ml-4 mr-4" style="display:none; border:0px;">' . PHP_EOL;
-                print '<div class="card-title text-right">' . PHP_EOL;
-                print '<button id="saveButton" class="btn btn-success" type="button" onclick="fileSave();">Save file (Ctrl+S)</button>' . PHP_EOL;
-                print '<button class="btn btn-danger" type="button" onclick="fileClose();">Close file</button>' . PHP_EOL;
-                print '</div>' . PHP_EOL;
-                print '<div class="card-body p-0" style="border:1px solid silver;" id="aceEditor">' . PHP_EOL;
-                print '</div>' . PHP_EOL;
+                unset($output);
+                unset($outputImage);
 
                 ?>
                 <?php require_once __DIR__ . '/inc/endSite.php'; ?>

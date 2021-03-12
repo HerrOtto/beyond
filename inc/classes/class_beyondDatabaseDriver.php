@@ -4,7 +4,7 @@
  * Database base connection class used by database classes
  */
 
-abstract class dbBaseClass
+abstract class beyondDatabaseDriver
 {
 
     protected $connection;

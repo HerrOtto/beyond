@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../apiBaseClass.php';
 
-class tables extends apiBaseClass
+class tables extends beyondApiBaseClass
 {
 
     private $internalTables = array(

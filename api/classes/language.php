@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../apiBaseClass.php';
 
-class language extends apiBaseClass
+class language extends beyondApiBaseClass
 {
 
     /**

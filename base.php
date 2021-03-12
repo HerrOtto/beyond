@@ -12,19 +12,19 @@
 require_once __DIR__ . '/inc/init.php';
 
 header('Content-type: application/javascript; Charset=UTF-8');
-header('Access-Control-Allow-Origin: ' . $config->get('base', 'api.accessOrigin'));
+header('Access-Control-Allow-Origin: ' . $beyond->config->get('base', 'api.accessOrigin'));
 
 // -----------------------------------------------------------------------------------------------------------------
 
-print 'var ' . $prefix . 'languages = ' . json_encode($languages) . ';' . PHP_EOL;
-print 'var ' . $prefix . 'language = "' . $_SESSION[$prefix . 'data']['language'] . '";' . PHP_EOL;
+print 'var ' . $beyond->prefix . 'languages = ' . json_encode($beyond->languages) . ';' . PHP_EOL;
+print 'var ' . $beyond->prefix . 'language = "' . $_SESSION[$beyond->prefix . 'data']['language'] . '";' . PHP_EOL;
 print PHP_EOL;
 
 // -----------------------------------------------------------------------------------------------------------------
 
 try {
 
-    print 'function ' . $prefix . 'apiAjax(request, callBack) {' . PHP_EOL;
+    print 'function ' . $beyond->prefix . 'apiAjax(request, callBack) {' . PHP_EOL;
     print '    var parameters = \'\';' . PHP_EOL;
     print '    for (key in request.data) {' . PHP_EOL;
     print '        parameters +=' . PHP_EOL;
@@ -71,10 +71,10 @@ try {
     $script = '';
 
     // API handler
-    $script = 'var ' . $prefix . 'apiAjaxHandlerUrl = \'' . $config->get('base', 'server.baseUrl') . '/beyond/api/apiHandler.php\';' . PHP_EOL . PHP_EOL;
+    $script = 'var ' . $beyond->prefix . 'apiAjaxHandlerUrl = \'' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/api/apiHandler.php\';' . PHP_EOL . PHP_EOL;
 
     // API
-    $script .= 'var ' . $prefix . 'api = {' . PHP_EOL . PHP_EOL;
+    $script .= 'var ' . $beyond->prefix . 'api = {' . PHP_EOL . PHP_EOL;
 
     // Enumerate classes
     foreach (glob(__DIR__ . '/api/classes/*.php') as $classFileName) {
@@ -87,7 +87,7 @@ try {
         $functions = get_class_methods(basename($classFileName, '.php'));
         foreach ($functions as $functionIndex => $functionItem) {
             if (preg_match('/^_/', $functionItem)) { continue; }
-            $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $prefix . 'apiAjax({\'url\': ' . $prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
+            $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
         }
 
         // End class
@@ -108,7 +108,7 @@ try {
             $functions = get_class_methods(basename($pluginDir) . '_' . basename($classFileName, '.php'));
             foreach ($functions as $functionIndex => $functionItem) {
                 if (preg_match('/^_/', $functionItem)) { continue; }
-                $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $prefix . 'apiAjax({\'url\': ' . $prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($pluginDir) . '_' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
+                $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($pluginDir) . '_' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
             }
             // End class
             $script .= '  },' . PHP_EOL . PHP_EOL;
@@ -126,7 +126,7 @@ try {
             $functions = get_class_methods(basename($pluginDir) . '_' . basename($classFileName, '.php'));
             foreach ($functions as $functionIndex => $functionItem) {
                 if (preg_match('/^_/', $functionItem)) { continue; }
-                $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $prefix . 'apiAjax({\'url\': ' . $prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($pluginDir) . '_' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
+                $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($pluginDir) . '_' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
             }
             // End class
             $script .= '  },' . PHP_EOL . PHP_EOL;
@@ -134,6 +134,7 @@ try {
             print '// ' . $e->getMessage() . PHP_EOL;
         }
     }
+    unset($classFileName);
 
     // End API
     $script .= '};' . PHP_EOL;
@@ -141,14 +142,18 @@ try {
     // -----------------------------------------------------------------------------------------------------------------
 
 } catch (Exception $e) {
-    $exceptionHandler->add($e);
+    $beyond->exceptionHandler->add($e);
 }
 
-$exceptionArray = $exceptionHandler->arr();
+$exceptionArray = $beyond->exceptionHandler->arr();
 if ($exceptionArray === false) {
     print $script;
 } else {
     foreach ($exceptionArray as $exceptionIndex => $exceptionItem) {
         print 'console.log("API exception message: ' . addslashes($exceptionItem['message']) . '");' . PHP_EOL;
     }
+    unset($exceptionItem);
+    unset($exceptionIndex);
 }
+unset($exceptionArray);
+unset($script);

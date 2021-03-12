@@ -65,15 +65,15 @@ if (!property_exists($configObj, 'cookies')) {
         /* ---------------------------------------------------------------------------------------------------------- */
 
         /* Into top */
-        .<?php print $prefix; ?>cookieboxIntro {
+        .<?php print $beyond->prefix; ?>cookieboxIntro {
         }
 
         /* Into bottom */
-        .<?php print $prefix; ?>cookieboxIntroButtons {
+        .<?php print $beyond->prefix; ?>cookieboxIntroButtons {
         }
 
         /* Into text */
-        .<?php print $prefix; ?>cookieboxIntro {
+        .<?php print $beyond->prefix; ?>cookieboxIntro {
             margin-bottom: 20px;
             font-weight: lighter;
             font-size: 16pt;
@@ -85,13 +85,13 @@ if (!property_exists($configObj, 'cookies')) {
             overflow-wrap: break-word;
         }
 
-        .<?php print $prefix; ?>cookieboxIntro a {
+        .<?php print $beyond->prefix; ?>cookieboxIntro a {
             font-weight: lighter;
             font-size: 16pt;
         }
 
         /* Button */
-        .<?php print $prefix; ?>cookieboxButton {
+        .<?php print $beyond->prefix; ?>cookieboxButton {
             cursor: pointer;
             background-color: <?php print $configObj->apperence->button->backgroundColor; ?>;;
             padding: 5px;
@@ -104,7 +104,7 @@ if (!property_exists($configObj, 'cookies')) {
         }
 
         /* Prefered button */
-        .<?php print $prefix; ?>cookieboxPreferedButton {
+        .<?php print $beyond->prefix; ?>cookieboxPreferedButton {
             cursor: pointer;
             background-color: <?php print $configObj->apperence->preferedButton->backgroundColor; ?>;
             padding: 5px;
@@ -120,7 +120,7 @@ if (!property_exists($configObj, 'cookies')) {
         /* ---------------------------------------------------------------------------------------------------------- */
 
         /* Settings into top */
-        .<?php print $prefix; ?>cookieboxSettingsIntro {
+        .<?php print $beyond->prefix; ?>cookieboxSettingsIntro {
             margin-bottom: 20px;
             text-align: justify;
             font-weight: lighter;
@@ -129,13 +129,13 @@ if (!property_exists($configObj, 'cookies')) {
             overflow-y: auto;
         }
 
-        .<?php print $prefix; ?>cookieboxSettingsIntro a {
+        .<?php print $beyond->prefix; ?>cookieboxSettingsIntro a {
             font-weight: lighter;
             font-size: 16pt;
         }
 
         /* Settings text */
-        .<?php print $prefix; ?>cookieboxSettings {
+        .<?php print $beyond->prefix; ?>cookieboxSettings {
             cursor: pointer;
             padding: 5px;
             margin-bottom: 5px;
@@ -147,16 +147,16 @@ if (!property_exists($configObj, 'cookies')) {
         }
 
         /* Link to privacy policy of a cookie */
-        .<?php print $prefix; ?>cookieBoxDetails {
+        .<?php print $beyond->prefix; ?>cookieBoxDetails {
             font-size: 12pt;
         }
 
-        .<?php print $prefix; ?>cookieBoxDetails strong {
+        .<?php print $beyond->prefix; ?>cookieBoxDetails strong {
             font-size: 16pt;
             padding-top: 7px;
         }
 
-        .<?php print $prefix; ?>cookieBoxLink {
+        .<?php print $beyond->prefix; ?>cookieBoxLink {
             font-size: 10pt;
         }
 
@@ -233,7 +233,7 @@ if (!property_exists($configObj, 'cookies')) {
          * Cookie functions
          */
 
-        function <?php print $prefix; ?>cookieboxSetCookie(name, value, days) {
+        function <?php print $beyond->prefix; ?>cookieboxSetCookie(name, value, days) {
             var expires = "";
             if (days) {
                 var date = new Date();
@@ -243,7 +243,7 @@ if (!property_exists($configObj, 'cookies')) {
             document.cookie = name + "=" + (value || "") + expires + "; path=/";
         }
 
-        function <?php print $prefix; ?>cookieboxGetCookie(name) {
+        function <?php print $beyond->prefix; ?>cookieboxGetCookie(name) {
             var nameEQ = name + "=";
             var ca = document.cookie.split(';');
             for (var i = 0; i < ca.length; i++) {
@@ -254,7 +254,7 @@ if (!property_exists($configObj, 'cookies')) {
             return null;
         }
 
-        function <?php print $prefix; ?>cookieboxEraseCookie(name) {
+        function <?php print $beyond->prefix; ?>cookieboxEraseCookie(name) {
             document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
 
@@ -262,10 +262,10 @@ if (!property_exists($configObj, 'cookies')) {
          * Intro on resize
          */
 
-        function <?php print $prefix; ?>cookieboxScaleIntro() {
-            setTimeout(<?php print $prefix; ?>cookieboxScaleIntro, 1000);
+        function <?php print $beyond->prefix; ?>cookieboxScaleIntro() {
+            setTimeout(<?php print $beyond->prefix; ?>cookieboxScaleIntro, 1000);
 
-            buttonsDiv = document.getElementById('<?php print $prefix; ?>cookieboxIntroButtons')
+            buttonsDiv = document.getElementById('<?php print $beyond->prefix; ?>cookieboxIntroButtons')
             buttonsOffsetHeight = buttonsDiv.offsetHeight;
 
             buttonsDiv.style.position = 'absolute';
@@ -274,7 +274,7 @@ if (!property_exists($configObj, 'cookies')) {
             buttonsDiv.style.right = '0';
             buttonsDiv.style.left = '0';
 
-            textDiv = document.getElementById('<?php print $prefix; ?>cookieboxIntro')
+            textDiv = document.getElementById('<?php print $beyond->prefix; ?>cookieboxIntro')
 
             textDiv.style.position = 'absolute';
             textDiv.style.display = 'block';
@@ -290,16 +290,16 @@ if (!property_exists($configObj, 'cookies')) {
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            <?php print $prefix; ?>cookieboxScaleIntro();
+            <?php print $beyond->prefix; ?>cookieboxScaleIntro();
         }, false);
 
         /*
          * Intro -> Settings
          */
 
-        function <?php print $prefix; ?>cookieboxOpenSettings() {
-            document.getElementById("<?php print $prefix; ?>cookieBoxStartpage").style.display = "none";
-            document.getElementById("<?php print $prefix; ?>cookieBoxSettings").style.display = "block";
+        function <?php print $beyond->prefix; ?>cookieboxOpenSettings() {
+            document.getElementById("<?php print $beyond->prefix; ?>cookieBoxStartpage").style.display = "none";
+            document.getElementById("<?php print $beyond->prefix; ?>cookieBoxSettings").style.display = "block";
         }
 
     </script>
@@ -308,37 +308,37 @@ if (!property_exists($configObj, 'cookies')) {
 <body>
 
 <!-- Startpage -->
-<div align="center" id="<?php print $prefix; ?>cookieBoxStartpage">
-    <div class="<?php print $prefix; ?>cookieboxIntro" id="<?php print $prefix; ?>cookieboxIntro">
+<div align="center" id="<?php print $beyond->prefix; ?>cookieBoxStartpage">
+    <div class="<?php print $beyond->prefix; ?>cookieboxIntro" id="<?php print $beyond->prefix; ?>cookieboxIntro">
         <?php print $configObj->apperence->box->text; ?>
     </div>
-    <div align="center" class="<?php print $prefix; ?>cookieboxIntroButtons"
-         id="<?php print $prefix; ?>cookieboxIntroButtons">
-        <span class="<?php print $prefix; ?>cookieboxPreferedButton"><?php print $configObj->apperence->preferedButton->text; ?></span>
-        <span class="<?php print $prefix; ?>cookieboxButton"><?php print $configObj->apperence->button->text; ?></span>
-        <span class="<?php print $prefix; ?>cookieboxSettings"
-              onclick="<?php print $prefix; ?>cookieboxOpenSettings();"><?php print $configObj->apperence->settingsLink->text; ?></span>
+    <div align="center" class="<?php print $beyond->prefix; ?>cookieboxIntroButtons"
+         id="<?php print $beyond->prefix; ?>cookieboxIntroButtons">
+        <span class="<?php print $beyond->prefix; ?>cookieboxPreferedButton"><?php print $configObj->apperence->preferedButton->text; ?></span>
+        <span class="<?php print $beyond->prefix; ?>cookieboxButton"><?php print $configObj->apperence->button->text; ?></span>
+        <span class="<?php print $beyond->prefix; ?>cookieboxSettings"
+              onclick="<?php print $beyond->prefix; ?>cookieboxOpenSettings();"><?php print $configObj->apperence->settingsLink->text; ?></span>
     </div>
 </div>
 
 <!-- Settings -->
-<div align="center" id="<?php print $prefix; ?>cookieBoxSettings" style="display:none;">
-    <div align="left" class="<?php print $prefix; ?>cookieboxSettingsIntro">
+<div align="center" id="<?php print $beyond->prefix; ?>cookieBoxSettings" style="display:none;">
+    <div align="left" class="<?php print $beyond->prefix; ?>cookieboxSettingsIntro">
         <?php print $configObj->apperence->box->detailsText; ?>
     </div>
-    <div id="<?php print $prefix; ?>cookieBoxItems" align="left">
+    <div id="<?php print $beyond->prefix; ?>cookieBoxItems" align="left">
 
         <?php
         foreach (array_keys((array)$configObj->cookies) as $cookieName) {
 
             // -- Wrap --
-            print '<div class="' . $prefix . 'cookieboxItemWrap" style="margin-bottom: 20px;">';
+            print '<div class="' . $beyond->prefix . 'cookieboxItemWrap" style="margin-bottom: 20px;">';
 
             // -- Left --
             print '<div style="width:60px; float:left; margin-right: -60px;">';
 
             // Checkbox
-            print '<input class="apple-switch" type="checkbox" id="' . $prefix . 'cookieBoxCheckbox_' . $cookieName . '" ' . ($configObj->cookies->{$cookieName}->required ? 'checked disabled' : '') . '>';
+            print '<input class="apple-switch" type="checkbox" id="' . $beyond->prefix . 'cookieBoxCheckbox_' . $cookieName . '" ' . ($configObj->cookies->{$cookieName}->required ? 'checked disabled' : '') . '>';
 
 
             // --- Right --
@@ -346,11 +346,11 @@ if (!property_exists($configObj, 'cookies')) {
             print '<div style="margin-left: 60px;">';
 
             // Details & Link
-            print '<div class="' . $prefix . 'cookieBoxDetails" align="justify">';
-            print '<strong style="display:block;">' . $configObj->cookies->{$cookieName}->title->{$_SESSION[$prefix . 'data']['language']} . '</strong>';
-            print $configObj->cookies->{$cookieName}->info->{$_SESSION[$prefix . 'data']['language']};
-            if ($configObj->cookies->{$cookieName}->privacyURL->{$_SESSION[$prefix . 'data']['language']} !== '') {
-                print '<a style="display:block;" target="_blank" href="' . $configObj->cookies->{$cookieName}->privacyURL->{$_SESSION[$prefix . 'data']['language']} . '" class="' . $prefix . 'cookieBoxLink">';
+            print '<div class="' . $beyond->prefix . 'cookieBoxDetails" align="justify">';
+            print '<strong style="display:block;">' . $configObj->cookies->{$cookieName}->title->{$_SESSION[$beyond->prefix . 'data']['language']} . '</strong>';
+            print $configObj->cookies->{$cookieName}->info->{$_SESSION[$beyond->prefix . 'data']['language']};
+            if ($configObj->cookies->{$cookieName}->privacyURL->{$_SESSION[$beyond->prefix . 'data']['language']} !== '') {
+                print '<a style="display:block;" target="_blank" href="' . $configObj->cookies->{$cookieName}->privacyURL->{$_SESSION[$beyond->prefix . 'data']['language']} . '" class="' . $beyond->prefix . 'cookieBoxLink">';
                 print '  Datenschutzbedingungen des Anbieters';
                 print '</a>';
             }
@@ -365,7 +365,7 @@ if (!property_exists($configObj, 'cookies')) {
         ?>
     </div>
     <div align="center" style="margin-top:20px;">
-        <span class="<?php print $prefix; ?>cookieboxPreferedButton"><?php print $configObj->apperence->detailsButton->text; ?></span>
+        <span class="<?php print $beyond->prefix; ?>cookieboxPreferedButton"><?php print $configObj->apperence->detailsButton->text; ?></span>
     </div>
 </div>
 

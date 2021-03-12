@@ -3,8 +3,8 @@
 header('Content-type: text/html; Charset=UTF-8');
 
 require_once __DIR__ . '/inc/init.php';
-if (!$tools->checkRole('admin,view')) {
-    header('Location: ' . $config->get('base', 'server.baseUrl') . '/beyond/login.php');
+if (!$beyond->tools->checkRole('admin,view')) {
+    header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
     exit;
 }
 
@@ -28,7 +28,7 @@ if (!$tools->checkRole('admin,view')) {
     <script>
 
         function usersFetch(initialEdit = '') {
-            <?php print $prefix; ?>api.users.fetch({
+            <?php print $beyond->prefix; ?>api.users.fetch({
                 //
             }, function (error, data) {
                 if (error !== false) {
@@ -65,7 +65,7 @@ if (!$tools->checkRole('admin,view')) {
         }
 
         function usersAdd(userName, roles, password1, password2) {
-            <?php print $prefix; ?>api.users.add({
+            <?php print $beyond->prefix; ?>api.users.add({
                 'userName': userName,
                 'roles': roles,
                 'password1': password1,
@@ -96,7 +96,7 @@ if (!$tools->checkRole('admin,view')) {
                 });
                 return false;
             }
-            <?php print $prefix; ?>api.users.modify({
+            <?php print $beyond->prefix; ?>api.users.modify({
                 'userName': userName,
                 'roles': roles,
                 'password1': password1,
@@ -121,7 +121,7 @@ if (!$tools->checkRole('admin,view')) {
                 $('#dialogUsersDelete').data('userName', atob(userNameBase64)).modal('show');
                 return false;
             }
-            <?php print $prefix; ?>api.users.delete({
+            <?php print $beyond->prefix; ?>api.users.delete({
                 'userName': atob(userNameBase64)
             }, function (error, data) {
                 if (error !== false) {
@@ -141,7 +141,7 @@ if (!$tools->checkRole('admin,view')) {
 
             // Fetch users
             usersFetch(
-                <?php print json_encode($variable->get('edit', '')); ?> // Open editor for this user
+                <?php print json_encode($beyond->variable->get('edit', '')); ?> // Open editor for this user
             );
 
             // Modal: Add user (On show)

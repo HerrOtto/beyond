@@ -1,24 +1,24 @@
 <?php
 
-class dbSqlite3 extends dbBaseClass
+class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
 {
 
     // Connection settings
-    private $file = "";
-    private $busyTimeoutMS = "";
+    private string $file = "";
+    private int $busyTimeoutMS;
 
     // Constructor
     public function __construct($file, $busyTimeoutMS)
     {
-
         // Parameter ernehmen
-        $this->file = __DIR__ . '/../db/' . basename($file);
-        $this->busyTimeoutMS = $busyTimeoutMS;
+        $this->file = __DIR__ . '/../../db/' . basename($file);
+        $this->busyTimeoutMS = intval($busyTimeoutMS);
 
         // Connect
         if (!class_exists('SQLite3')) {
             throw new Exception('Could not connect to sqlite3 database [' . basename($this->file) . '] error message [SQLite3 extension not loaded]');
         }
+
         try {
             $this->connection = new SQLite3($this->file, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
         } catch (Exception $e) {

@@ -3,12 +3,12 @@
 header('Content-type: text/html; Charset=UTF-8');
 
 require_once __DIR__ . '/inc/init.php';
-if (!$tools->checkRole('admin,view')) {
-    header('Location: ' . $config->get('base', 'server.baseUrl') . '/beyond/login.php');
+if (!$beyond->tools->checkRole('admin,view')) {
+    header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
     exit;
 }
 
-$plugin = preg_replace('/[^a-z0-9\-]/', '', $variable->get('name', ''));
+$plugin = preg_replace('/[^a-z0-9\-]/', '', $beyond->variable->get('name', ''));
 
 ?>
 <html>

@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../../../api/apiBaseClass.php';
 require_once __DIR__ . '/../inc/class_captcha.php';
 
-class captcha_base extends apiBaseClass
+class captcha_base extends beyondApiBaseClass
 {
 
     /**

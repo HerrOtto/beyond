@@ -3,8 +3,8 @@
 header('Content-type: text/html; Charset=UTF-8');
 
 require_once __DIR__ . '/inc/init.php';
-if (!$tools->checkRole('admin,view')) {
-    header('Location: ' . $config->get('base', 'server.baseUrl') . '/beyond/login.php');
+if (!$beyond->tools->checkRole('admin,view')) {
+    header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
     exit;
 }
 
@@ -69,7 +69,7 @@ foreach (range(0, 100000) as $i) {
     <script>
 
         function tablesFetch() {
-            <?php print $prefix; ?>api.tables.fetch({
+            <?php print $beyond->prefix; ?>api.tables.fetch({
                 //
             }, function (error, data) {
                 if (error !== false) {
@@ -138,7 +138,7 @@ foreach (range(0, 100000) as $i) {
                 $('#dialogTablesDrop').data('table', atob(tableBase64)).data('database', atob(databaseBase64)).modal('show');
                 return false;
             }
-            <?php print $prefix; ?>api.tables.drop({
+            <?php print $beyond->prefix; ?>api.tables.drop({
                 'database': atob(databaseBase64),
                 'table': atob(tableBase64)
             }, function (error, data) {
@@ -177,7 +177,7 @@ foreach (range(0, 100000) as $i) {
                 'null': allowNull,
                 'default': defaultValue
             };
-            <?php print $prefix; ?>api.tables.create({
+            <?php print $beyond->prefix; ?>api.tables.create({
                 'database': atob(databaseBase64),
                 'table': tableName,
                 'fields': {
@@ -212,7 +212,7 @@ foreach (range(0, 100000) as $i) {
             editDatabase = false;
             editTable = false;
 
-            <?php print $prefix; ?>api.tables.info({
+            <?php print $beyond->prefix; ?>api.tables.info({
                 'database': atob(databaseBase64),
                 'table': atob(tableBase64)
             }, function (error, data) {
@@ -290,7 +290,7 @@ foreach (range(0, 100000) as $i) {
                 'null': allowNull,
                 'default': defaultValue
             };
-            <?php print $prefix; ?>api.tables.columnAdd(data, function (error, data) {
+            <?php print $beyond->prefix; ?>api.tables.columnAdd(data, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
                 } else {
@@ -310,7 +310,7 @@ foreach (range(0, 100000) as $i) {
                 $('#dialogTablesDropField').data('fieldName', atob(fieldNameBase64)).modal('show');
                 return false;
             }
-            <?php print $prefix; ?>api.tables.columnDrop({
+            <?php print $beyond->prefix; ?>api.tables.columnDrop({
                 'database': editDatabase,
                 'table': editTable,
                 'field': atob(fieldNameBase64)
@@ -349,7 +349,7 @@ foreach (range(0, 100000) as $i) {
             viewPrimaryKind = '';
             viewInternalTable = internalTable;
 
-            <?php print $prefix; ?>api.tables.info({
+            <?php print $beyond->prefix; ?>api.tables.info({
                 'database': atob(databaseBase64),
                 'table': atob(tableBase64)
             }, function (error, data) {
@@ -413,7 +413,7 @@ foreach (range(0, 100000) as $i) {
         function tablesViewLoadTable(loadPage) {
             $('#viewCells tbody').empty();
 
-            <?php print $prefix; ?>api.tables.rowCount({
+            <?php print $beyond->prefix; ?>api.tables.rowCount({
                 'database': viewDatabase,
                 'table': viewTable
             }, function (error, data) {
@@ -481,7 +481,7 @@ foreach (range(0, 100000) as $i) {
         }
 
         function tablesViewLoadTableData(loadPage) {
-            <?php print $prefix; ?>api.tables.loadData({
+            <?php print $beyond->prefix; ?>api.tables.loadData({
                 'database': viewDatabase,
                 'table': viewTable,
                 'offset': ((loadPage - 1) * viewRowsPerPage),
@@ -547,7 +547,7 @@ foreach (range(0, 100000) as $i) {
                 fields[field] = $('#addRowField_' + field).val();
             }
 
-            <?php print $prefix; ?>api.tables.addData({
+            <?php print $beyond->prefix; ?>api.tables.addData({
                 'database': viewDatabase,
                 'table': viewTable,
                 'fields': fields
@@ -595,7 +595,7 @@ foreach (range(0, 100000) as $i) {
                 fields[field] = $('#editRowField_' + field).val();
             }
 
-            <?php print $prefix; ?>api.tables.modifyData({
+            <?php print $beyond->prefix; ?>api.tables.modifyData({
                 'database': viewDatabase,
                 'table': viewTable,
                 'fields': fields,
@@ -622,7 +622,7 @@ foreach (range(0, 100000) as $i) {
                 $('#dialogViewRowDelete').data('primaryValue', atob(primaryValueBase64)).modal('show');
                 return false;
             }
-            <?php print $prefix; ?>api.tables.deleteData({
+            <?php print $beyond->prefix; ?>api.tables.deleteData({
                 'database': viewDatabase,
                 'table': viewTable,
                 'primary': viewPrimaryColumn,

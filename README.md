@@ -32,7 +32,7 @@ The software is based on the following other OpenSource projects:
 ## Programming style guide
 
 * Keep it simple
-* Don't break compatibility
+* Don't break backward compatibility
 * Internally only UTF8 encoding
 * Internally english language only
 * Separate changeable files and static files
@@ -43,6 +43,7 @@ The software is based on the following other OpenSource projects:
 ## TODO
 
 * Plugin: Content
+* Plugin: Send mail (with db storage)
 * Plugin: SEO
 * Plugin: Menu builder
 * Plugin: Shop
