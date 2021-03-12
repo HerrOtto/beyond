@@ -82,7 +82,7 @@ class content_config extends beyondApiBaseClass
                 throw new Exception('Can not query table [' . $this->prefix . 'content_settings]');
             }
             $settings = array();
-            if ($row = $query->fetch()) {
+            while ($row = $query->fetch()) {
                 array_push($settings, array(
                     'filePathName' => $row['filePathName'],
                     'configJson' => $row['configJson']
@@ -102,7 +102,7 @@ class content_config extends beyondApiBaseClass
                 throw new Exception('Can not query table [' . $this->prefix . 'content_data]');
             }
             $content = array();
-            if ($row = $query->fetch()) {
+            while ($row = $query->fetch()) {
                 array_push($content, array(
                     'filePathName' => $row['filePathName'],
                     'dataJson' => $row['dataJson']
