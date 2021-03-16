@@ -21,7 +21,7 @@ $database = $beyond->db->databases[$configObj->database];
 ?>
 <script>
 
-    function renderField(fieldName, fieldConfig) {
+    function contentRenderField(fieldName, fieldConfig) {
         var field = '';
         var languages = <?php print $beyond->prefix; ?>languages;
 
@@ -67,7 +67,7 @@ $database = $beyond->db->databases[$configObj->database];
                 message('Error: ' + error);
             } else {
                 $('#contentFields').append(
-                    renderField(data.addField, data.config.fields[data.addField])
+                    contentRenderField(data.addField, data.config.fields[data.addField])
                 );
                 $('#contentDialogAddField').modal('hide');
             }
@@ -86,7 +86,7 @@ $database = $beyond->db->databases[$configObj->database];
                     var languages = <?php print $beyond->prefix; ?>languages;
                     for (field in data.config.fields) {
                         $('#contentFields').append(
-                            renderField(field, data.config.fields[field], data.content)
+                            contentRenderField(field, data.config.fields[field], data.content)
                         );
 
                     }

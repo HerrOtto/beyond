@@ -1,16 +1,18 @@
 <?php
 
 header('Content-type: text/html; Charset=UTF-8');
-require_once __DIR__ . '/inc/init.php';
+include_once __DIR__ . '/inc/init.php';
 if (!$beyond->tools->checkRole('admin,view')) {
+    // Is not admin or viewer
     header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
     exit;
 }
+
 ?>
 <html>
 <head>
     <title>API</title>
-    <?php require_once __DIR__ . '/inc/head.php'; ?>
+    <?php include_once __DIR__ . '/inc/head.php'; ?>
 
     <!-- ace editor -->
     <script src="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/assets/ace-1.4.12/build/src/ace.js"
@@ -248,10 +250,10 @@ if (!$beyond->tools->checkRole('admin,view')) {
     </script>
 </head>
 <body class="sb-nav-fixed">
-<?php require_once __DIR__ . '/inc/begin.php'; ?>
-<?php require_once __DIR__ . '/inc/menuTop.php'; ?>
+<?php include_once __DIR__ . '/inc/begin.php'; ?>
+<?php include_once __DIR__ . '/inc/menuTop.php'; ?>
 <div id="layoutSidenav">
-    <?php require_once __DIR__ . '/inc/menuSide.php'; ?>
+    <?php include_once __DIR__ . '/inc/menuSide.php'; ?>
 
     <!-- Create api -->
     <div class="modal fade" id="dialogApiAdd" tabindex="-1" role="dialog">
@@ -297,7 +299,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid">
-                <?php require_once __DIR__ . '/inc/beginSite.php'; ?>
+                <?php include_once __DIR__ . '/inc/beginSite.php'; ?>
 
                 <ol class="breadcrumb mb-4 mt-4">
                     <li class="breadcrumb-item active">API</li>
@@ -414,11 +416,11 @@ if (!$beyond->tools->checkRole('admin,view')) {
                 print '<div class="card-body p-0" style="border:1px solid silver;" id="aceEditor">' . PHP_EOL;
                 print '</div>' . PHP_EOL;
                 ?>
-                <?php require_once __DIR__ . '/inc/endSite.php'; ?>
+                <?php include_once __DIR__ . '/inc/endSite.php'; ?>
             </div>
         </main>
     </div>
 </div>
-<?php require_once __DIR__ . '/inc/end.php'; ?>
+<?php include_once __DIR__ . '/inc/end.php'; ?>
 </body>
 </html>

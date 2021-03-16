@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../../../api/apiBaseClass.php';
+include_once __DIR__ . '/../../../api/apiBaseClass.php';
 
 class captcha_config extends beyondApiBaseClass
 {

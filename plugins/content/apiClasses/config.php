@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . '/../../../api/apiBaseClass.php';
-require_once __DIR__ . '/../inc/class_contentDatabase.php';
+include_once __DIR__ . '/../../../api/apiBaseClass.php';
+include_once __DIR__ . '/../inc/class_contentDatabase.php';
 
 class content_config extends beyondApiBaseClass
 {
@@ -188,7 +188,7 @@ class content_config extends beyondApiBaseClass
                 '*'
             ),
             array(
-                'filePathName = \'' . $database->escape($pathAndFilename) . '\''
+                'filePathName = \'' . $database->escape(ltrim($pathAndFilename,'/')) . '\''
             )
         );
         if ($query === false) {
@@ -238,7 +238,7 @@ class content_config extends beyondApiBaseClass
                 '*'
             ),
             array(
-                'filePathName = \'' . $database->escape($pathAndFilename) . '\''
+                'filePathName = \'' . $database->escape(ltrim($pathAndFilename,'/')) . '\''
             )
         );
         if ($query === false) {
@@ -287,7 +287,7 @@ class content_config extends beyondApiBaseClass
                 '*'
             ),
             array(
-                'filePathName = \'' . $database->escape($pathAndFilename) . '\''
+                'filePathName = \'' . $database->escape(ltrim($pathAndFilename,'/')) . '\''
             )
         );
         if ($query === false) {
@@ -305,7 +305,7 @@ class content_config extends beyondApiBaseClass
                 $this->prefix . 'content_settings',
                 array(
                     'filePathName' => $pathAndFilename,
-                    'configJson' => json_encode($fileConfigObj)
+                    'configJson' => json_encode(ltrim($pathAndFilename,'/'))
                 )
             );
             if ($query === false) {
@@ -319,7 +319,7 @@ class content_config extends beyondApiBaseClass
                     'configJson' => json_encode($fileConfigObj)
                 ),
                 array(
-                    'filePathName = \'' . $database->escape($pathAndFilename) . '\''
+                    'filePathName = \'' . $database->escape(ltrim($pathAndFilename,'/')) . '\''
                 )
             );
             if ($query === false) {
@@ -435,7 +435,7 @@ class content_config extends beyondApiBaseClass
         $query = $database->delete(
             $this->prefix . 'content_data',
             array(
-                'filePathName = \'' . $database->escape($dir['relPath'] . '/' . $data->fileName) . '\''
+                'filePathName = \'' . $database->escape(ltrim($dir['relPath'] . '/' . $data->fileName,'/')) . '\''
             )
         );
         if ($query === false) {
@@ -550,7 +550,7 @@ class content_config extends beyondApiBaseClass
                 '*'
             ),
             array(
-                'filePathName = \'' . $database->escape($dir['relPath'] . '/' . $data->fileName) . '\''
+                'filePathName = \'' . $database->escape(ltrim($dir['relPath'] . '/' . $data->fileName,'/')) . '\''
             )
         );
         if ($query === false) {
@@ -567,7 +567,7 @@ class content_config extends beyondApiBaseClass
             $query = $database->insert(
                 $this->prefix . 'content_data',
                 array(
-                    'filePathName' => $dir['relPath'] . '/' . $data->fileName,
+                    'filePathName' => ltrim($dir['relPath'] . '/' . $data->fileName, '/'),
                     'dataJson' => json_encode($newConfigObj)
                 )
             );
@@ -582,7 +582,7 @@ class content_config extends beyondApiBaseClass
                     'dataJson' => json_encode($newConfigObj)
                 ),
                 array(
-                    'filePathName = \'' . $database->escape($dir['relPath'] . '/' . $data->fileName) . '\''
+                    'filePathName = \'' . $database->escape(trim($dir['relPath'] . '/' . $data->fileName)) . '\''
                 )
             );
             if ($query === false) {

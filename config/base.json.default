@@ -15,6 +15,9 @@
       "file": 644
     }
   },
+  "backend": {
+    "allowOtherRoles": true
+  },
   "php": {
     "timeZone": "Europe/Berlin",
     "errorReporting": 0

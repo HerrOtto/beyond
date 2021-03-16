@@ -2,8 +2,9 @@
 
 header('Content-type: text/html; Charset=UTF-8');
 
-require_once __DIR__ . '/inc/init.php';
+include_once __DIR__ . '/inc/init.php';
 if (!$beyond->tools->checkRole('admin,view')) {
+    // Is not admin or viewer
     header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
     exit;
 }
@@ -21,7 +22,7 @@ foreach (range(0, 100000) as $i) {
 <html>
 <head>
     <title>Tables</title>
-    <?php require_once __DIR__ . '/inc/head.php'; ?>
+    <?php include_once __DIR__ . '/inc/head.php'; ?>
 
     <style>
 
@@ -650,8 +651,8 @@ foreach (range(0, 100000) as $i) {
     </script>
 </head>
 <body class="sb-nav-fixed">
-<?php require_once __DIR__ . '/inc/begin.php'; ?>
-<?php require_once __DIR__ . '/inc/menuTop.php'; ?>
+<?php include_once __DIR__ . '/inc/begin.php'; ?>
+<?php include_once __DIR__ . '/inc/menuTop.php'; ?>
 <div id="layoutSidenav">
 
     <!-- Create table -->
@@ -889,11 +890,11 @@ foreach (range(0, 100000) as $i) {
         </div>
     </div>
 
-    <?php require_once __DIR__ . '/inc/menuSide.php'; ?>
+    <?php include_once __DIR__ . '/inc/menuSide.php'; ?>
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid">
-                <?php require_once __DIR__ . '/inc/beginSite.php'; ?>
+                <?php include_once __DIR__ . '/inc/beginSite.php'; ?>
 
                 <ol class="breadcrumb mb-4 mt-4">
                     <li class="breadcrumb-item active">Databases/Tables</li>
@@ -959,11 +960,11 @@ foreach (range(0, 100000) as $i) {
                     </div>
                 </div>
 
-                <?php require_once __DIR__ . '/inc/endSite.php'; ?>
+                <?php include_once __DIR__ . '/inc/endSite.php'; ?>
             </div>
         </main>
     </div>
 </div>
-<?php require_once __DIR__ . '/inc/end.php'; ?>
+<?php include_once __DIR__ . '/inc/end.php'; ?>
 </body>
 </html>

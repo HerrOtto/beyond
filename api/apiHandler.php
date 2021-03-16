@@ -5,7 +5,7 @@
  */
 
 header('Content-type: application/json; Charset=UTF-8');
-require_once __DIR__ . '/../inc/init.php';
+include_once __DIR__ . '/../inc/init.php';
 
 $result = false;
 

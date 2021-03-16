@@ -2,7 +2,8 @@
 
 header('Content-type: text/html; Charset=UTF-8');
 require_once __DIR__ . '/inc/init.php';
-if (!$beyond->tools->checkRole('admin')) {
+if (!$beyond->tools->checkRole('admin,view')) {
+    // Is not admin
     header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
     exit;
 }
@@ -69,7 +70,6 @@ $height = 225;
             type="text/javascript" charset="utf-8"></script>
 
     <style>
-
         .pluginItem {
             border: 0px;
             background-color: #e9ecef;
@@ -77,9 +77,52 @@ $height = 225;
             margin-bottom: 10px;
         }
 
+        .pluginItemContent {
+            margin-bottom:10px;
+        }
+    </style>
+
+    <style>
+        /* TODO - Splitter
+
+          .splitter {
+              width: 100%;
+              height: 100px;
+              display: flex;
+          }
+
+          #separator {
+              cursor: col-resize;
+              background-color: #aaa;
+              background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='30'><path d='M2 0 v30 M5 0 v30 M8 0 v30' fill='none' stroke='black'/></svg>");
+              background-repeat: no-repeat;
+              background-position: center;
+              width: 10px;
+              height: 100%;
+              -moz-user-select: none;
+              -ms-user-select: none;
+              user-select: none;
+          }
+
+          #first {
+              background-color: #dde;
+              width: 20%;
+              height: 100%;
+              min-width: 10px;
+          }
+
+          #second {
+              background-color: #eee;
+              width: 80%;
+              height: 100%;
+              min-width: 100px;
+          }
+         */
     </style>
 
     <script>
+
+        // -------------------------------------------------------------------------------------------------------------
 
         var pluginSaveHandler = new Array();
 
@@ -229,6 +272,56 @@ $height = 225;
             editor.resize();
         }
 
+        // -------------------------------------------------------------------------------------------------------------
+
+        /* TODO - Splitter
+        function dragElement(element, direction) {
+            var md; // remember mouse down info
+            const first = document.getElementById("first");
+            const second = document.getElementById("second");
+
+            element.onmousedown = onMouseDown;
+
+            function onMouseDown(e) {
+                //console.log("mouse down: " + e.clientX);
+                md = {
+                    e,
+                    offsetLeft: element.offsetLeft,
+                    offsetTop: element.offsetTop,
+                    firstWidth: first.offsetWidth,
+                    secondWidth: second.offsetWidth
+                };
+
+                document.onmousemove = onMouseMove;
+                document.onmouseup = () => {
+                    //console.log("mouse up");
+                    document.onmousemove = document.onmouseup = null;
+                }
+            }
+
+            function onMouseMove(e) {
+                //console.log("mouse move: " + e.clientX);
+                var delta = {
+                    x: e.clientX - md.e.clientX,
+                    y: e.clientY - md.e.clientY
+                };
+
+                if (direction === "H") // Horizontal
+                {
+                    // Prevent negative-sized elements
+                    delta.x = Math.min(Math.max(delta.x, -md.firstWidth),
+                        md.secondWidth);
+
+                    element.style.left = md.offsetLeft + delta.x + "px";
+                    first.style.width = (md.firstWidth + delta.x) + "px";
+                    second.style.width = (md.secondWidth - delta.x) + "px";
+                }
+            }
+        }
+         */
+
+        // -------------------------------------------------------------------------------------------------------------
+
         $(function () {
 
             // Resize editor on browser resize
@@ -260,6 +353,8 @@ $height = 225;
             if (editFile != '') {
                 fileEdit(btoa(editFile), btoa(editExtension));
             }
+
+            // TODO - Splitter: dragElement(document.getElementById("separator"), "H");
 
         });
     </script>
@@ -346,6 +441,38 @@ $height = 225;
                 print '    </div>' . PHP_EOL;
                 print '    <div class="row">' . PHP_EOL;
 
+                /* TODO-Splitter
+                if ($editorPluginsInstalled) {
+                    print '<div class="splitter">' . PHP_EOL;
+                    print '  <div id="first">' . PHP_EOL;
+                    print '    <div id="pluginsContent">' . PHP_EOL;
+                    foreach (glob(__DIR__ . '/plugins/*') as $pluginDir) {
+                        if (!is_dir($pluginDir)) {
+                            continue;
+                        }
+                        if (file_exists($pluginDir . '/editor.php')) {
+                            try {
+                                print '<div class="pluginItem">Plugin: ' . basename($pluginDir) . '</div>' . PHP_EOL;
+                                require_once $pluginDir . '/editor.php';
+                            } catch (Exception $e) {
+                                $beyond->exceptionHandler->add($e);
+                            }
+                        }
+                    }
+                    print '    </div>' . PHP_EOL;
+                    print '  </div>' . PHP_EOL;
+                    print '  <div id="separator" ></div>' . PHP_EOL;
+                    print '  <div id="second" >' . PHP_EOL;
+                    print '    <div class="col-12 m-0 p-0" id="aceEditor" style="border:1px solid silver;">' . PHP_EOL;
+                    print '    </div>' . PHP_EOL; # /col right
+                    print '  </div>' . PHP_EOL;
+                    print '</div>' . PHP_EOL;
+                } else {
+                    print '<div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 m-0 p-0" id="aceEditor" style="border:1px solid silver;">' . PHP_EOL;
+                    print '</div>' . PHP_EOL; # /col full width (no plugins)
+                }
+                */
+
                 if ($editorPluginsInstalled) {
                     print '      <div id="plugins" class="col-xl-4 col-lg-12 col-md-12 col-sm-12 m-0 p-0">' . PHP_EOL;
                     print '        <div id="pluginsContent">' . PHP_EOL;
@@ -356,7 +483,9 @@ $height = 225;
                         if (file_exists($pluginDir . '/editor.php')) {
                             try {
                                 print '<div class="pluginItem">Plugin: ' . basename($pluginDir) . '</div>' . PHP_EOL;
-                                require_once $pluginDir . '/editor.php';
+                                print '<div class="pluginItemContent">' . PHP_EOL;
+                                include_once $pluginDir . '/editor.php';
+                                print '</div>' . PHP_EOL;
                             } catch (Exception $e) {
                                 $beyond->exceptionHandler->add($e);
                             }

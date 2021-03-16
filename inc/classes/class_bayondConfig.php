@@ -40,14 +40,14 @@ class beyondConfig
         // Walk through $jsonPath
         $jsonPathArray = explode('.', $jsonPath);
         foreach ($jsonPathArray as $pathIndex => $pathItem) {
-            if (!array_key_exists($pathItem, $current)) {
+            if (!array_key_exists(trim($pathItem), $current)) {
                 if ($replacement !== null) {
                     return $replacement;
                 } else {
-                    throw new Exception('Configuration path not resolvable [' . $jsonPath . '] missing part [' . $pathItem . '] within configuration file [' . $configFile . '.json]');
+                    throw new Exception('Configuration path not resolvable [' . $jsonPath . '] missing part [' . trim($pathItem) . '] within configuration file [' . $configFile . '.json]');
                 }
             }
-            $current = $current[$pathItem];
+            $current = $current[trim($pathItem)];
         }
 
         return $current;

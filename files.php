@@ -1,8 +1,9 @@
 <?php
 
 header('Content-type: text/html; Charset=UTF-8');
-require_once __DIR__ . '/inc/init.php';
+include_once __DIR__ . '/inc/init.php';
 if (!$beyond->tools->checkRole('admin,view')) {
+    // Is not admin or viewer
     header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
     exit;
 }
@@ -30,7 +31,7 @@ $height = 225;
 <html>
 <head>
     <title>Files</title>
-    <?php require_once __DIR__ . '/inc/head.php'; ?>
+    <?php include_once __DIR__ . '/inc/head.php'; ?>
 
     <style>
 
@@ -351,10 +352,10 @@ $height = 225;
 <div id="uploadOverlay" class="uploadOverlay" style="display:none;"></div>
 <div id="uploadStatus" class="uploadStatus" style="display:none;">...</div>
 
-<?php require_once __DIR__ . '/inc/begin.php'; ?>
-<?php require_once __DIR__ . '/inc/menuTop.php'; ?>
+<?php include_once __DIR__ . '/inc/begin.php'; ?>
+<?php include_once __DIR__ . '/inc/menuTop.php'; ?>
 <div id="layoutSidenav">
-    <?php require_once __DIR__ . '/inc/menuSide.php'; ?>
+    <?php include_once __DIR__ . '/inc/menuSide.php'; ?>
 
     <!-- Create directory -->
     <div class="modal fade" id="dialogDirectoryAdd" tabindex="-1" role="dialog">
@@ -441,7 +442,7 @@ $height = 225;
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid">
-                <?php require_once __DIR__ . '/inc/beginSite.php'; ?>
+                <?php include_once __DIR__ . '/inc/beginSite.php'; ?>
 
                 <ol class="breadcrumb mb-4 mt-4"><?php
                     if ($dir['isValid'] !== true) {
@@ -670,11 +671,11 @@ $height = 225;
                 unset($outputImage);
 
                 ?>
-                <?php require_once __DIR__ . '/inc/endSite.php'; ?>
+                <?php include_once __DIR__ . '/inc/endSite.php'; ?>
             </div>
         </main>
     </div>
 </div>
-<?php require_once __DIR__ . '/inc/end.php'; ?>
+<?php include_once __DIR__ . '/inc/end.php'; ?>
 </body>
 </html>

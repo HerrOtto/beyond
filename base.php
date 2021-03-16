@@ -9,7 +9,7 @@
  *
  */
 
-require_once __DIR__ . '/inc/init.php';
+include_once __DIR__ . '/inc/init.php';
 
 header('Content-type: application/javascript; Charset=UTF-8');
 header('Access-Control-Allow-Origin: ' . $beyond->config->get('base', 'api.accessOrigin'));
@@ -78,21 +78,26 @@ try {
 
     // Enumerate classes
     foreach (glob(__DIR__ . '/api/classes/*.php') as $classFileName) {
-        require_once $classFileName;
+        try {
+            include_once $classFileName;
 
-        // Begin class
-        $script .= '  \'' . basename($classFileName, '.php') . '\': {' . PHP_EOL;
+            // Begin class
+            $script .= '  \'' . basename($classFileName, '.php') . '\': {' . PHP_EOL;
 
-        // Functions
-        $functions = get_class_methods(basename($classFileName, '.php'));
-        foreach ($functions as $functionIndex => $functionItem) {
-            if (preg_match('/^_/', $functionItem)) { continue; }
-            $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
+            // Functions
+            $functions = get_class_methods(basename($classFileName, '.php'));
+            foreach ($functions as $functionIndex => $functionItem) {
+                if (preg_match('/^_/', $functionItem)) {
+                    continue;
+                }
+                $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
+            }
+
+            // End class
+            $script .= '  },' . PHP_EOL . PHP_EOL;
+        } catch (Exception $e) {
+            print '// ' . $e->getMessage() . PHP_EOL;
         }
-
-        // End class
-        $script .= '  },' . PHP_EOL . PHP_EOL;
-
     }
 
     // Enumerate plugin classes
@@ -101,31 +106,40 @@ try {
             continue;
         }
         foreach (glob(__DIR__ . '/plugins/' . basename($pluginDir) . '/apiClasses/*.php') as $classFileName) {
-            require_once __DIR__ . '/plugins/' . basename($pluginDir) . '/apiClasses/' . basename($classFileName);
-            // Begin class
-            $script .= '  \'' . basename($pluginDir) . '_' . basename($classFileName, '.php') . '\': {' . PHP_EOL;
-            // Functions
-            $functions = get_class_methods(basename($pluginDir) . '_' . basename($classFileName, '.php'));
-            foreach ($functions as $functionIndex => $functionItem) {
-                if (preg_match('/^_/', $functionItem)) { continue; }
-                $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($pluginDir) . '_' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
-            }
-            // End class
-            $script .= '  },' . PHP_EOL . PHP_EOL;
+            try {
+                include_once __DIR__ . '/plugins/' . basename($pluginDir) . '/apiClasses/' . basename($classFileName);
 
+                // Begin class
+                $script .= '  \'' . basename($pluginDir) . '_' . basename($classFileName, '.php') . '\': {' . PHP_EOL;
+                // Functions
+                $functions = get_class_methods(basename($pluginDir) . '_' . basename($classFileName, '.php'));
+                foreach ($functions as $functionIndex => $functionItem) {
+                    if (preg_match('/^_/', $functionItem)) {
+                        continue;
+                    }
+                    $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($pluginDir) . '_' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
+                }
+
+                // End class
+                $script .= '  },' . PHP_EOL . PHP_EOL;
+            } catch (Exception $e) {
+                print '// ' . $e->getMessage() . PHP_EOL;
+            }
         }
     }
 
     // Enumerate site classes
     foreach (glob(__DIR__ . '/config/siteClasses/*.php') as $classFileName) {
         try {
-            require_once __DIR__ . '/config/siteClasses/' . basename($classFileName);
+            include_once __DIR__ . '/config/siteClasses/' . basename($classFileName);
             // Begin class
             $script .= '  \'' . basename($classFileName, '.php') . '\': {' . PHP_EOL;
             // Functions
             $functions = get_class_methods(basename($pluginDir) . '_' . basename($classFileName, '.php'));
             foreach ($functions as $functionIndex => $functionItem) {
-                if (preg_match('/^_/', $functionItem)) { continue; }
+                if (preg_match('/^_/', $functionItem)) {
+                    continue;
+                }
                 $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($pluginDir) . '_' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
             }
             // End class

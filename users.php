@@ -4,6 +4,7 @@ header('Content-type: text/html; Charset=UTF-8');
 
 require_once __DIR__ . '/inc/init.php';
 if (!$beyond->tools->checkRole('admin,view')) {
+    // Is not admin or viewer
     header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
     exit;
 }

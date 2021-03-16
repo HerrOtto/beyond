@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../apiBaseClass.php';
+include_once __DIR__ . '/../apiBaseClass.php';
 
 class files extends beyondApiBaseClass
 {

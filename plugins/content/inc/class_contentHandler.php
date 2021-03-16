@@ -72,7 +72,7 @@ class contentHandler
                     '*'
                 ),
                 array(
-                    'filePathName = \'' . $this->database->escape($dir['relPath'] . '/' . $callerFile) . '\''
+                    'filePathName = \'' . $this->database->escape(ltrim($dir['relPath'] . '/' . $callerFile,'/')) . '\''
                 )
             );
             if ($query === false) {

@@ -1,13 +1,13 @@
 <?php
 
 header('Content-type: text/html; Charset=UTF-8');
-require_once __DIR__ . '/inc/init.php';
+include_once __DIR__ . '/inc/init.php';
 
 ?>
 <html>
 <head>
     <title>Login</title>
-    <?php require_once __DIR__ . '/inc/head.php'; ?>
+    <?php include_once __DIR__ . '/inc/head.php'; ?>
 
     <style>
 
@@ -68,7 +68,7 @@ require_once __DIR__ . '/inc/init.php';
     </script>
 </head>
 <body>
-<?php require_once __DIR__ . '/inc/begin.php'; ?>
+<?php include_once __DIR__ . '/inc/begin.php'; ?>
 
 <!-- Login dialog -->
 <div class="modal fade" id="loginDialog">
@@ -105,6 +105,6 @@ require_once __DIR__ . '/inc/init.php';
     </div>
 </div>
 
-<?php require_once __DIR__ . '/inc/end.php'; ?>
+<?php include_once __DIR__ . '/inc/end.php'; ?>
 </body>
 </html>

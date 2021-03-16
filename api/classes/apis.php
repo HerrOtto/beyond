@@ -2,7 +2,7 @@
 
 // API with underscore "_" at the beginning is not allowed due to plugin api naming scheme: pluginName_apiName
 
-require_once __DIR__ . '/../apiBaseClass.php';
+include_once __DIR__ . '/../apiBaseClass.php';
 
 class apis extends beyondApiBaseClass
 {
@@ -57,7 +57,7 @@ class apis extends beyondApiBaseClass
         } else if (file_put_contents($createFile,
                 '<?php' . PHP_EOL .
                 '' . PHP_EOL .
-                'require_once __DIR__ . \'/../../api/apiBaseClass.php\';' . PHP_EOL .
+                'include_once __DIR__ . \'/../../api/apiBaseClass.php\';' . PHP_EOL .
                 '' . PHP_EOL .
                 'class ' . $apiName . ' extends beyondApiBaseClass' . PHP_EOL .
                 '{' . PHP_EOL .

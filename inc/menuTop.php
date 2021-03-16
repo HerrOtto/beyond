@@ -38,7 +38,11 @@
             <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/users.php?edit=<?php print urlencode($_SESSION[$beyond->prefix . 'data']['auth']['userName']); ?>">Account</a>
+                <?php
+                if ($beyond->tools->checkRole('admin')) {
+                    print '<a class="dropdown-item" href="' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/users.php?edit=' . urlencode($_SESSION[$beyond->prefix . 'data']['auth']['userName']) . '">Account</a>' . PHP_EOL;
+                }
+                ?>
                 <!--
                 <a class="dropdown-item" href="#">Activity Log</a>
                 <div class="dropdown-divider"></div>

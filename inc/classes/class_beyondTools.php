@@ -52,6 +52,22 @@ class beyondTools
         return false;
     }
 
+    /*
+     * Get current user name
+     * @result mixed Returns the current username if logged in otherwise "false"
+     */
+
+    public function currentUser()
+    {
+        $result = false;
+        if (array_key_exists('auth', $_SESSION[$this->prefix . 'data'])) {
+            if (array_key_exists('roles', $_SESSION[$this->prefix . 'data']['auth'])) {
+                $result = $_SESSION[$this->prefix . 'data']['auth']['userName'];
+            }
+        }
+        return $result;
+    }
+
     /**
      * Check current working directory from browser
      * @param string $directory Directory to check
@@ -150,7 +166,7 @@ class beyondTools
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 
         if ($outputFile !== false) {
-            $fp = fopen ($outputFile, 'w+');
+            $fp = fopen($outputFile, 'w+');
             curl_setopt($curl, CURLOPT_FILE, $fp);
         }
 
