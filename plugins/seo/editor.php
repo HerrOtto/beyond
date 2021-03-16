@@ -54,7 +54,7 @@ $database = $beyond->db->databases[$configObj->database];
                             seoRenderField(lang, 'title', data.fileData, data.config)
                         );
                         $('#seoFieldItem_title' + '_' + lang).val(
-                            data.fileData['settings_' + lang].title ? data.fileData['settings_' + lang].title : ''
+                            ('settings_' + lang in data.fileData) && (data.fileData['settings_' + lang].title) ? data.fileData['settings_' + lang].title : ''
                         );
                     }
                     for (lang in beyond_languages) {
@@ -62,7 +62,7 @@ $database = $beyond->db->databases[$configObj->database];
                             seoRenderField(lang, 'author', data.fileData, data.config)
                         );
                         $('#seoFieldItem_author' + '_' + lang).val(
-                            data.fileData['settings_' + lang].author ? data.fileData['settings_' + lang].author : ''
+                            ('settings_' + lang in data.fileData) && (data.fileData['settings_' + lang].author) ? data.fileData['settings_' + lang].author : ''
                         );
                     }
                     for (lang in beyond_languages) {
@@ -70,7 +70,7 @@ $database = $beyond->db->databases[$configObj->database];
                             seoRenderField(lang, 'description', data.fileData, data.config)
                         );
                         $('#seoFieldItem_description' + '_' + lang).val(
-                            data.fileData['settings_' + lang].description ? data.fileData['settings_' + lang].description : ''
+                            ('settings_' + lang in data.fileData) && (data.fileData['settings_' + lang].description) ? data.fileData['settings_' + lang].description : ''
                         );
                     }
                     for (lang in beyond_languages) {
@@ -78,7 +78,7 @@ $database = $beyond->db->databases[$configObj->database];
                             seoRenderField(lang, 'robots', data.fileData, data.config)
                         );
                         $('#seoFieldItem_robots' + '_' + lang).val(
-                            data.fileData['settings_' + lang].robots ? data.fileData['settings_' + lang].robots : ''
+                            ('settings_' + lang in data.fileData) && (data.fileData['settings_' + lang].robots) ? data.fileData['settings_' + lang].robots : ''
                         );
                     }
                 } else {

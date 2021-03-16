@@ -6,6 +6,7 @@ Features:
 
 * Multi user role based permissions
 * Edit PHP files from the admin panel
+* Multilingual content
 * Develop a JSON/AJAX based API
 * Configure database tables
 * Easy plugin development and some basic plugins out of the box like a shop system or a cookiebox
@@ -43,13 +44,39 @@ The software is based on the following other OpenSource projects:
 ## TODO
 
 * Plugin: Content delete content when file is getting deleted
+* Plugin: SEO delete content when file is getting deleted
 * Plugin: Send mail (with db storage)
-* Plugin: SEO
 * Plugin: Menu builder
 * Plugin: Shop
-* Plugin: customer login (used by shop)
 * Plugin: htaccess
+* Enduser backend
 * Install/Update plugins from repository
 * Update cleanup
 * System compatibility check, permission check
 * Installer
+
+## PHP files
+
+Add beyond functionality to your PHP files by adding this lines in the very beginning:
+
+&lt;?php
+    include_once \_\_DIR\_\_ . '/beyond/inc/init.php';
+?&gt;
+
+## Plugin: content
+
+To output content field from your PHP code: 
+
+&lt;?php
+    $beyond->content->get('fieldNameHere');
+?&gt;
+
+## Plugin: seo
+
+Output HTML header with title and meta tags:
+
+&lt;head&gt;
+&lt;?php
+    $beyond->seo->printHead();
+?&gt;
+&lt;/head&gt;
