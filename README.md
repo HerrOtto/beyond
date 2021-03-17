@@ -77,6 +77,14 @@ Output HTML header with title and meta tags:
 
 &lt;head&gt;
 &lt;?php
-    $beyond->seo->printHead();
+$beyond->seo->printHead();
 ?&gt;
 &lt;/head&gt;
+
+## Plugin: mail
+
+Send an mail:
+
+&lt;?php
+$beyond->mail->send('Subject', 'Body', 'to@mail.address');
+?&gt;
