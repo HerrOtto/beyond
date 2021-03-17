@@ -436,6 +436,7 @@ $height = 225;
                 print '    <div class="row">';
                 print '    <div class="col-12 text-right mt-0 ml-0 mr-0 mb-4 p-0">';
                 print '    <button id="saveButton" class="btn btn-success" type="button" onclick="fileSave();">Save file (Ctrl+S)</button>' . PHP_EOL;
+                print '    <button id="saveButton" class="btn btn-secondary" type="button" onclick="window.open(\'' . $beyond->config->get('base', 'server.baseUrl') . '/' .  $dir['relPath']  . '/' . $editFile . '\',\'_blank\');">Open in new tab</button>' . PHP_EOL;
                 print '    <button class="btn btn-danger" type="button" onclick="location.href = \'' . $backUrl . '\';">Close file</button>' . PHP_EOL;
                 print '    </div>' . PHP_EOL;
                 print '    </div>' . PHP_EOL;

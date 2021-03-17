@@ -197,11 +197,20 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
         $result = '';
 
         // kind: string, longText, integer, decimal - default "string"
-        // index: primary, unique, ""           - default ""
+        // index: primary, unique, auto, ""     - default ""
         // null: true/false                     - default "false"
         // default: number or text              - default n/a
 
-        if (in_array(strtolower($field['kind']), $this->textNames)) {
+        $autoIncrement = false;
+        if (array_key_exists('index', $field)) {
+            if ($field['index'] === 'auto') {
+                $autoIncrement = true;
+            }
+        }
+
+        if ($autoIncrement) {
+            $result .= ' INT';
+        } else if (in_array(strtolower($field['kind']), $this->textNames)) {
             $result .= ' LONGTEXT';
         } else if (in_array(strtolower($field['kind']), $this->integerNames)) {
             $result .= ' INT';
@@ -211,13 +220,15 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
             $result .= ' VARCHAR(255)';
         }
 
-        if ((!array_key_exists('null', $field)) || (!$field['null'])) {
+        if ($autoIncrement) {
+            //
+        } else if ((!array_key_exists('null', $field)) || (!$field['null'])) {
             $result .= ' NOT NULL';
         }
 
-        // TODO: AUTO_INCREMENT
-
-        if (array_key_exists('default', $field)) {
+        if ($autoIncrement) {
+            $result .= ' DEFAULT NULL';
+        } else if (array_key_exists('default', $field)) {
             if ($field['default'] == 'NULL') {
                 $result .= ' DEFAULT NULL';
             } else if (in_array(strtolower($field['kind']), $this->decimalNames)) {
@@ -229,7 +240,9 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
             }
         }
 
-        if (array_key_exists('index', $field)) {
+        if ($autoIncrement) {
+            $result .= ' PRIMARY KEY AUTO_INCREMENT';
+        } else if (array_key_exists('index', $field)) {
             if ($field['index'] === 'primary') {
                 $result .= ' PRIMARY KEY';
             } else if ($field['index'] === 'unique') {
@@ -264,6 +277,7 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
                 $fields .
                 ')';
         }
+
         return $this->query($sql) === false ? $this->connection->error : true;
     }
 
@@ -313,14 +327,20 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
                 // Add to field list
                 $fieldsArray[$row['COLUMN_NAME']] = array(
                     'kind' => $type,
-                    'index' => ($row['COLUMN_KEY'] === 'PRI' ? 'primary' : ($row['COLUMN_KEY'] === 'UNI' ? 'unique' : '')),
-                    'null' => ($row['IS_NULLABLE'] === 'YES')
-                    // TODO: AUTO_INCRMENT
+                    'index' => (
+                        $row['EXTRA'] === 'auto_increment' ? 'auto' :
+                            ($row['COLUMN_KEY'] === 'PRI' ? 'primary' :
+                                ($row['COLUMN_KEY'] === 'UNI' ? 'unique' : '')
+                            )
+                    ),
+                    'null' =>  ($row['EXTRA'] === 'auto_increment' ? true : $row['IS_NULLABLE'] === 'YES')
                 );
 
                 // Default value
                 $default = null;
-                if (preg_match('/^[\'|"](.*)[\'|"]$/', $row['COLUMN_DEFAULT'], $matches)) {
+                if ($row['EXTRA'] === 'auto_increment') {
+                    $fieldsArray[$row['COLUMN_NAME']]['default'] = 'NULL';
+                } else if (preg_match('/^[\'|"](.*)[\'|"]$/', $row['COLUMN_DEFAULT'], $matches)) {
                     $default = $matches[1];
                 } else {
                     $default = $row['COLUMN_DEFAULT'];

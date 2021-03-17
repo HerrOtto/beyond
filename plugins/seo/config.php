@@ -11,9 +11,6 @@
                 message('Error: ' + error);
             } else {
                 if ((typeof data.load === 'object') && (data.load !== null)) {
-
-                    console.log();
-
                     $('#seoDatabase').val(data.load.database).change();
                     $('#seoDatabase').removeAttr('readonly');
 

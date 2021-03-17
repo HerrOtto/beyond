@@ -83,7 +83,7 @@ class seoHandler
                 $fileData = $row['dataJson'];
             }
             if (($fileData === false) || (trim($fileData) === '')) {
-                throw new Exception('SEO data not found');
+                throw new Exception('seo data not found');
             }
 
             // Language
@@ -94,7 +94,7 @@ class seoHandler
             // Decode stored data
             $fielConfigObj = json_decode($fileData);
             if (!property_exists($fielConfigObj, 'settings_' . $language)) {
-                throw new Exception('SEO fields for language [' . $language . '] not found');
+                throw new Exception('seo fields for language [' . $language . '] not found');
             }
 
             // Title
@@ -156,7 +156,7 @@ class seoHandler
             }
 
         } catch (Exception $e) {
-            print "<!-- SEO plugin exception: " . $e->getMessage() . ' -->' . PHP_EOL;
+            print "<!-- seo plugin exception: " . $e->getMessage() . ' -->' . PHP_EOL;
         }
 
         print PHP_EOL;

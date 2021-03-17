@@ -78,6 +78,7 @@ foreach (range(0, 100000) as $i) {
                 } else {
                     if (typeof data.fetch === 'object') {
                         var out = '';
+
                         for (database in data.fetch) {
                             out += '<div class="database">';
                             out += database;
@@ -172,12 +173,7 @@ foreach (range(0, 100000) as $i) {
             }
 
             var fields = [];
-            fields[fieldName] = {
-                'kind': kind,
-                'index': index,
-                'null': allowNull,
-                'default': defaultValue
-            };
+
             <?php print $beyond->prefix; ?>api.tables.create({
                 'database': atob(databaseBase64),
                 'table': tableName,
@@ -249,7 +245,7 @@ foreach (range(0, 100000) as $i) {
             });
         }
 
-        function tablesEditAddField(fieldName, kind, index, allowNull, defaultValue, fieldCount, internalTable) { // , kind, defaultValue, allowNull, unique, primary
+        function tablesEditAddField(fieldName, kind, index, allowNull, defaultValue, fieldCount, internalTable) {
             var html =
                 '<tr>' +
                 '  <td>' + fieldName + '</td>' +
@@ -337,6 +333,7 @@ foreach (range(0, 100000) as $i) {
         var viewColumns = [];
         var viewPrimaryColumn = '';
         var viewPrimaryKind = '';
+        var viewAutoColumn = '';
         var viewFields = {};
         var viewCurrentPage = 1;
         var viewInternalTable = false;
@@ -347,6 +344,7 @@ foreach (range(0, 100000) as $i) {
             viewTable = false;
             viewCurrentPage = 1;
             viewPrimaryColumn = '';
+            viewAutoColumn = '';
             viewPrimaryKind = '';
             viewInternalTable = internalTable;
 
@@ -375,11 +373,16 @@ foreach (range(0, 100000) as $i) {
                         viewFields = data.info;
                         var primary = false;
                         var unique = false;
+                        var auto = false;
                         for (fieldIndex in data.info) {
                             primary = false;
                             unique = false;
+                            auto = false;
                             if (data.info[fieldIndex].index) {
-                                if (data.info[fieldIndex].index === 'primary') {
+                                if (data.info[fieldIndex].index === 'auto') {
+                                    viewAutoColumn = fieldIndex;
+                                    auto = true;
+                                } else if (data.info[fieldIndex].index === 'primary') {
                                     viewPrimaryColumn = fieldIndex;
                                     viewPrimaryKind = data.info[fieldIndex].kind;
                                     primary = true;
@@ -389,7 +392,7 @@ foreach (range(0, 100000) as $i) {
                             }
                             viewColumns.push(fieldIndex);
                             $('#viewCells thead tr').append(
-                                '<th nowrap>' + fieldIndex + (primary ? ' <i class="fas fa-key ml-1"></i>' : unique ? ' <i class="fas fa-star ml-1"></i>' : '') + '</th>'
+                                '<th nowrap>' + fieldIndex + (auto ? ' <i class="fas fa-bomb ml-1"></i>' : primary ? ' <i class="fas fa-key ml-1"></i>' : unique ? ' <i class="fas fa-star ml-1"></i>' : '') + '</th>'
                             );
                         }
 
@@ -494,18 +497,21 @@ foreach (range(0, 100000) as $i) {
                     if (data.loadData !== false) {
                         for (rowNo in data.loadData) {
                             var cols = '';
-                            var primaryValue = '';
+                            var keyValue = '';
                             for (fieldName in viewColumns) {
+                                if (viewAutoColumn === viewColumns[fieldName]) {
+                                    keyValue = data.loadData[rowNo][viewColumns[fieldName]];
+                                }
                                 if (viewPrimaryColumn === viewColumns[fieldName]) {
-                                    primaryValue = data.loadData[rowNo][viewColumns[fieldName]];
+                                    keyValue = data.loadData[rowNo][viewColumns[fieldName]];
                                 }
                                 cols += '<td>' + data.loadData[rowNo][viewColumns[fieldName]] + '</td>';
                             }
                             var rowData = btoa(JSON.stringify(data.loadData[rowNo]));
                             cols += '<td align=center nowrap>';
-                            if ((viewPrimaryColumn !== '') && (viewInternalTable !== true)) {
-                                cols += '<i class="fas fa-pen mt-1" style="cursor:pointer;" onclick="console.log(); tablesViewRowEdit(\'' + btoa(primaryValue) + '\', \'' + rowData + '\');"></i>';
-                                cols += '<i class="fas fa-trash mt-1 ml-2" style="cursor:pointer;" onclick="tablesViewRowDelete(\'' + btoa(primaryValue) + '\', false);"></i>';
+                            if (((viewAutoColumn !== '') || (viewPrimaryColumn !== '')) && (viewInternalTable !== true)) {
+                                cols += '<i class="fas fa-pen mt-1" style="cursor:pointer;" onclick="console.log(); tablesViewRowEdit(\'' + btoa(keyValue) + '\', \'' + rowData + '\');"></i>';
+                                cols += '<i class="fas fa-trash mt-1 ml-2" style="cursor:pointer;" onclick="tablesViewRowDelete(\'' + btoa(keyValue) + '\', false);"></i>';
                             }
                             cols += '</td>';
                             $('#viewCells tbody').append('<tr>' + cols + '</tr>');
@@ -528,11 +534,19 @@ foreach (range(0, 100000) as $i) {
         function tablesViewRowAdd(fromModal = false) {
             if (fromModal === false) {
                 var data = '';
+                console.log(viewFields);
                 for (field in viewFields) {
                     data +=
                         '<div class="form-group mb-4">' +
-                        '<label class="small mb-1" for="addRowField_' + field + '">' + field + '</label>' +
-                        '<input class="form-control py-4" id="addRowField_' + field + '" type="text" />' +
+                        '<label class="small mb-1" for="addRowField_' + field + '">' + field + (
+                            viewFields[field].index === 'auto' ? ' <i class="fas fa-bomb ml-1"></i>' :
+                                viewFields[field].index === 'primary' ? ' <i class="fas fa-key ml-1"></i>' :
+                                    ''
+                        ) + '</label>' +
+                        '<input class="form-control py-4" id="addRowField_' + field + '" type="text" ' + (
+                            viewFields[field].index === 'auto' ? ' disabled' :
+                                ''
+                        ) + ' />' +
                         '</div>';
                 }
                 $('#dialogViewRowAdd .modal-body').html(
@@ -545,7 +559,9 @@ foreach (range(0, 100000) as $i) {
 
             fields = {};
             for (field in viewFields) {
-                fields[field] = $('#addRowField_' + field).val();
+                if (viewFields[field].index !== 'auto') {
+                    fields[field] = $('#addRowField_' + field).val();
+                }
             }
 
             <?php print $beyond->prefix; ?>api.tables.addData({
@@ -574,7 +590,7 @@ foreach (range(0, 100000) as $i) {
                 for (field in viewFields) {
                     data +=
                         '<div class="form-group mb-4">' +
-                        '<label class="small mb-1" for="editRowField_' + field + '">' + (viewPrimaryColumn === field ? '<i class="fas fa-key"></i> ' : '') + field + '</label>' +
+                        '<label class="small mb-1" for="editRowField_' + field + '">' + field + (viewAutoColumn === field ? '<i class="fas fa-bomb"></i> ' : viewPrimaryColumn === field ? '<i class="fas fa-key"></i> ' : '') + '</label>' +
                         '<input class="form-control py-4" id="editRowField_' + field + '" type="text" />' +
                         '</div>';
                 }
@@ -585,6 +601,11 @@ foreach (range(0, 100000) as $i) {
                 $('#dialogViewRowEdit').data('primaryValue', atob(primaryValueBase64)).modal('show');
 
                 for (field in viewFields) {
+                    if (viewAutoColumn === field) {
+                        $('#editRowField_' + field).attr('disabled', true);
+                    } else {
+                        $('#editRowField_' + field).removeAttr('disabled');
+                    }
                     $('#editRowField_' + field).val(dataJson[field]);
                 }
 
@@ -593,15 +614,23 @@ foreach (range(0, 100000) as $i) {
 
             fields = {};
             for (field in viewFields) {
-                fields[field] = $('#editRowField_' + field).val();
+                if (viewAutoColumn !== field) {
+                    fields[field] = $('#editRowField_' + field).val();
+                }
+            }
+
+            var primaryColumn = viewAutoColumn !== '' ? viewAutoColumn : viewPrimaryColumn !== ''
+            viewPrimaryColumn : '';
+            if (primaryColumn === '') {
+                return;
             }
 
             <?php print $beyond->prefix; ?>api.tables.modifyData({
                 'database': viewDatabase,
                 'table': viewTable,
                 'fields': fields,
-                'primary': viewPrimaryColumn,
-                'kind': viewPrimaryKind,
+                'primary': primaryColumn,
+                'kind': (viewAutoColumn !== '' ? 'number' : viewPrimaryKind),
                 'value': atob(primaryValueBase64)
             }, function (error, data) {
                 if (error !== false) {
@@ -623,10 +652,17 @@ foreach (range(0, 100000) as $i) {
                 $('#dialogViewRowDelete').data('primaryValue', atob(primaryValueBase64)).modal('show');
                 return false;
             }
+
+            var primaryColumn = viewAutoColumn !== '' ? viewAutoColumn : viewPrimaryColumn !== ''
+            viewPrimaryColumn : '';
+            if (primaryColumn === '') {
+                return;
+            }
+
             <?php print $beyond->prefix; ?>api.tables.deleteData({
                 'database': viewDatabase,
                 'table': viewTable,
-                'primary': viewPrimaryColumn,
+                'primary': primaryColumn,
                 'value': atob(primaryValueBase64)
             }, function (error, data) {
                 if (error !== false) {
@@ -676,6 +712,27 @@ foreach (range(0, 100000) as $i) {
                     </div>
 
                     <div class="form-group">
+                        <label class="small mb-1" for="addTableColumnIndex">Index</label>
+                        <select class="form-control" id="addTableColumnIndex" onchange="if ($(this).val() === 'auto') {
+                            $('#addTableColumnKind').val('number').change();
+                            $('#addTableColumnKind').attr('disabled', true);
+                            $('#addTableColumnNull').attr('checked', true);
+                            $('#addTableColumnNull').attr('disabled', true);
+                            $('#addTableColumnDefault').val('');
+                            $('#addTableColumnDefault').attr('disabled', true);
+                        } else {
+                            $('#addTableColumnKind').removeAttr('disabled');
+                            $('#addTableColumnNull').removeAttr('disabled');
+                            $('#addTableColumnDefault').removeAttr('disabled');
+                        }">
+                            <option val="auto">auto</option>
+                            <option val="primary">primary</option>
+                            <option val="unique">unique</option>
+                            <option selected></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label class="small mb-1" for="addTableColumnKind">Column type</label>
                         <select class="form-control" id="addTableColumnKind">
                             <option selected val="string">string</option>
@@ -695,15 +752,6 @@ foreach (range(0, 100000) as $i) {
                         <input class="form-control py-4" id="addTableColumnDefault" type="text"
                                placeholder="Enter default value here"/>
                     </div>
-
-                    <div class="form-group">
-                        <label class="small mb-1" for="addTableColumnIndex">Index</label>
-                        <select class="form-control" id="addTableColumnIndex">
-                            <option val="primary">primary</option>
-                            <option val="unique">unique</option>
-                            <option selected></option>
-                        </select>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
@@ -713,11 +761,12 @@ foreach (range(0, 100000) as $i) {
                                 true,
                                 $('#addTableName').val(),
                                 $('#addTableColumnName').val(),
-                                $('#addTableColumnKind:selected').val(),
-                                $('#addTableColumnIndex:selected').val(),
+                                $('#addTableColumnKind').children('option:selected').val(),
+                                $('#addTableColumnIndex').children('option:selected').val(),
                                 $('#addTableColumnNull:checked').val() != undefined,
                                 $('#addTableColumnDefault').val()
                                 );">
+
                         Create table
                     </button>
                 </div>
@@ -735,6 +784,26 @@ foreach (range(0, 100000) as $i) {
                         <label class="small mb-1" for="addColumnName">Column name</label>
                         <input class="form-control py-4" id="addColumnName" type="text"
                                placeholder="Enter column name here"/ />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="small mb-1" for="addColumnIndex">Index</label>
+                        <select class="form-control" id="addColumnIndex" onchange="if ($(this).val() === 'auto') {
+                            $('#addColumnKind').val('number').change();
+                            $('#addColumnKind').attr('disabled', true);
+                            $('#addColumnNull').attr('checked', true);
+                            $('#addColumnNull').attr('disabled', true);
+                            $('#addColumnDefault').val('');
+                            $('#addColumnDefault').attr('disabled', true);
+                        } else {
+                            $('#addColumnKind').removeAttr('disabled');
+                            $('#addColumnNull').removeAttr('disabled');
+                            $('#addColumnDefault').removeAttr('disabled');
+                        }"
+                        <option val="primary">primary</option>
+                        <option val="unique">unique</option>
+                        <option selected></option>
+                        </select>
                     </div>
 
                     <div class="form-group">
@@ -758,14 +827,6 @@ foreach (range(0, 100000) as $i) {
                                placeholder="Enter default value here"/>
                     </div>
 
-                    <div class="form-group">
-                        <label class="small mb-1" for="addColumnIndex">Index</label>
-                        <select class="form-control" id="addColumnIndex">
-                            <option val="primary">primary</option>
-                            <option val="unique">unique</option>
-                            <option selected></option>
-                        </select>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>

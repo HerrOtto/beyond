@@ -1,7 +1,7 @@
 <?php
 
 include_once __DIR__ . '/../../../api/apiBaseClass.php';
-include_once __DIR__ . '/../inc/class_contentDatabase.php';
+include_once __DIR__ . '/../inc/class_seoDatabase.php';
 
 class seo_config extends beyondApiBaseClass
 {
@@ -143,8 +143,8 @@ class seo_config extends beyondApiBaseClass
             }
 
             $databaseNew = $this->db->databases[$data->database];
-            $contentDatabase = new contentDatabase($this->prefix);
-            $contentDatabase->init($databaseNew);
+            $seoDatabase = new seoDatabase($this->prefix);
+            $seoDatabase->init($databaseNew);
 
             // From now on: Rollback on failure
             try {
@@ -166,7 +166,7 @@ class seo_config extends beyondApiBaseClass
             } catch (Exception $e) {
 
                 // Rollback
-                $contentDatabase->drop($databaseNew);
+                $seoDatabase->drop($databaseNew);
 
                 // Replay exception
                 throw new Exception($e->getMessage());
@@ -174,7 +174,7 @@ class seo_config extends beyondApiBaseClass
             }
 
             // Drop old database
-            $contentDatabase->drop($databaseCurrent);
+            $seoDatabase->drop($databaseCurrent);
 
         }
 

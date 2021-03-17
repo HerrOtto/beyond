@@ -77,7 +77,6 @@ class seoDatabase
     public function drop($database)
     {
         $database->tableDrop($this->prefix . 'seo_tableVersionInfo');
-        $database->tableDrop($this->prefix . 'seo_settings');
         $database->tableDrop($this->prefix . 'seo_data');
     }
 

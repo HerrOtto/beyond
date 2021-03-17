@@ -37,7 +37,8 @@
     "pass": "",
     "secure": "tls",
     "from": "info@your-domain-name.com",
-    "replyTo": ""
+    "replyTo": "",
+    "bcc": ""
   },
   "languages": {
     "default": "English",

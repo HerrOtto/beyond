@@ -188,11 +188,20 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
         $result = '';
 
         // kind: string, longText, integer, decimal - default "string"
-        // index: primary, unique, ""           - default ""
+        // index: primary, unique, auto, ""     - default ""
         // null: true/false                     - default "false"
         // default: number or text              - default n/a
 
-        if (in_array(strtolower($field['kind']), $this->textNames)) {
+        $autoIncrement = false;
+        if (array_key_exists('index', $field)) {
+            if ($field['index'] === 'auto') {
+                $autoIncrement = true;
+            }
+        }
+
+        if ($autoIncrement) {
+            $result .= " INTEGER";
+        } else if (in_array(strtolower($field['kind']), $this->textNames)) {
             $result .= " TEXT";
         } else if (in_array(strtolower($field['kind']), $this->integerNames)) {
             $result .= " INTEGER";
@@ -202,13 +211,15 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
             $result .= " TEXT";
         }
 
-        if ((!array_key_exists('null', $field)) && (!$field['null'])) {
+        if ($autoIncrement) {
+            //
+        } else if ((!array_key_exists('null', $field)) && (!$field['null'])) {
             $result .= " NOT NULL";
         }
 
-        // TODO: AUTO_INCREMENT
-
-        if (array_key_exists('default', $field)) {
+        if ($autoIncrement) {
+            $result .= ' DEFAULT NULL';
+        } else if (array_key_exists('default', $field)) {
             if ($field['default'] == 'NULL') {
                 $result .= ' DEFAULT NULL';
             } else if (in_array(strtolower($field['kind']), $this->decimalNames)) {
@@ -220,7 +231,9 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
             }
         }
 
-        if (array_key_exists('index', $field)) {
+        if ($autoIncrement) {
+            $result .= ' PRIMARY KEY AUTOINCREMENT';
+        } else if (array_key_exists('index', $field)) {
             if ($field['index'] === 'primary') {
                 $result .= " PRIMARY KEY";
             } else if ($field['index'] === 'unique') {
@@ -432,6 +445,7 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
     public function tableInfo($tableName)
     {
         $fieldsArray = array();
+        $primary = '';
 
         $sql = 'PRAGMA table_info(\'' . $this->escape($tableName) . '\')';
         $query = $this->query($sql);
@@ -457,6 +471,10 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
                     // AUTO_INCREMENT
                 );
 
+                if ($row['pk'] == 1) {
+                    $primary = $row['name'];
+                }
+
                 // Default value
                 if ($row['dflt_value'] != '') {
                     if (preg_match('/^[\'|"](.*)[\'|"]$/', $row['dflt_value'], $matches)) {
@@ -469,7 +487,19 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
             }
         }
 
-        // Fetch all indexes
+        // Fetch auto increment
+        $sql = 'SELECT 1 as auto FROM sqlite_master WHERE tbl_name=\'' . $this->escape($tableName) . '\' AND sql LIKE \'%AUTOINCREMENT%\'';
+        $query = $this->query($sql);
+        if ($query !== false) {
+            if ($row = $query->fetch()) {
+                if ($row['auto'] === 1) {
+                    $fieldsArray[$primary]['null'] = true;
+                    $fieldsArray[$primary]['index'] = 'auto';
+                }
+            }
+        }
+
+        // Fetch all unique indexes
         $sql = 'PRAGMA index_list(\'' . $this->escape($tableName) . '\')';
         $query = $this->query($sql);
         if ($query !== false) {
@@ -481,7 +511,7 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
                     $queryIndex = $this->query($sqlIndex);
                     if ($queryIndex !== false) {
                         while ($rowIndex = $queryIndex->fetch()) {
-                            if ($fieldsArray[$rowIndex['name']]['index'] !== 'primary') {
+                            if (($fieldsArray[$rowIndex['name']]['index'] !== 'auto') && ($fieldsArray[$rowIndex['name']]['index'] !== 'primary')) {
                                 $fieldsArray[$rowIndex['name']]['index'] = 'unique';
                             }
                         }

@@ -1,5 +1,14 @@
 <?php
 
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
+include_once __DIR__ . '/../../assets/phpmailer-6.3.0/src/Exception.php';
+include_once __DIR__ . '/../../assets/phpmailer-6.3.0/src/PHPMailer.php';
+include_once __DIR__ . '/../../assets/phpmailer-6.3.0/src/SMTP.php';
+
 /**
  * Global used functions
  * @author     Tim David Saxen <info@netzmal.de>
@@ -186,6 +195,84 @@ class beyondTools
             return $result;
         } else {
             return true;
+        }
+    }
+
+    /*
+     * Send mail
+     *
+     * @param string $subject Subject
+     * @param string $body Content
+     * @param string $kind Mail kind: "html" or "text"
+     * @param string $from Sender header
+     * @param string $to Recipient header
+     * @param string $replyTo Reply to header
+     * @param string $bcc BCC header
+     */
+
+    public function sendMail($subject, $body, $kind = 'text', $from = false, $to = false, $replyTo = false, $bcc = false)
+    {
+
+        $mail = new PHPMailer(true);
+
+        // Base directory on server
+        try {
+
+            $mail->SMTPDebug = SMTP::DEBUG_OFF;
+            $mail->isSMTP();
+
+            $mail->Host = $this->config->get('base', 'mail.host', 'localhost');
+            $mail->SMTPAuth = $this->config->get('base', 'mail.auth', false);
+            $mail->Username = $this->config->get('base', 'mail.user', '');
+            $mail->Password = $this->config->get('base', 'mail.pass', '');
+
+            $encryption = $this->config->get('base', 'mail.secure', '');
+            if ($encryption === 'tls') {
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = $this->config->get('base', 'mail.port', 587);
+            } else if ($encryption === 'ssl') {
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                $mail->Port = $this->config->get('base', 'mail.port', 465);
+            } else {
+                $mail->Port = $this->config->get('base', 'mail.port', 25);
+            }
+
+            if ($from === false) {
+                $from = $this->config->get('base', 'mail.from', 'root@localhost');
+            }
+            if ($from !== '') {
+                $mail->setFrom($from);
+            }
+
+            if ($to === false) {
+                $to = $this->config->get('base', 'mail.to', 'root@localhost');
+            }
+            if ($to !== '') {
+                $mail->addAddress($to);
+            }
+
+            if ($replyTo === false) {
+                $replyTo = $this->config->get('base', 'mail.replyTo', '');
+            }
+            if ($replyTo !== '') {
+                $mail->addReplyTo($replyTo);
+            }
+
+            if ($bcc === false) {
+                $bcc = $this->config->get('base', 'mail.bcc', '');
+            }
+            if ($bcc !== '') {
+                $mail->addBCC($bcc);
+            }
+
+            $mail->isHTML($kind === 'html');
+
+            $mail->Subject = $subject;
+            $mail->Body = $body;
+
+            $mail->send();
+        } catch (Exception $e) {
+            throw new Exception('Mailer error: ' . $mail->ErrorInfo);
         }
     }
 
