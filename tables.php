@@ -656,8 +656,12 @@ foreach (range(0, 100000) as $i) {
                 return false;
             }
 
-            var primaryColumn = viewAutoColumn !== '' ? viewAutoColumn : viewPrimaryColumn !== ''
-            viewPrimaryColumn : '';
+            var primaryColumn;
+            if (viewAutoColumn !== '') {
+                primaryColumn = viewAutoColumn;
+            } else if (viewPrimaryColumn !== '') {
+                primaryColumn = viewPrimaryColumn;
+            }
             if (primaryColumn === '') {
                 return;
             }
