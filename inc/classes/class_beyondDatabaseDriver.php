@@ -19,7 +19,7 @@ abstract class beyondDatabaseDriver
     abstract public function internalFetch($queryResult);
     abstract public function query($sql);
     abstract public function insertId();
-    abstract public function select($tableName, $fieldArray, $whereArray, $offset = false, $limit = false);
+    abstract public function select($tableName, $fieldArray, $whereArray, $offset = false, $limit = false, $order = false);
     abstract public function count($tableName, $whereArray);
     abstract public function insert($tableName, $fieldArray);
     abstract public function update($tableName, $fieldArray, $whereArray);

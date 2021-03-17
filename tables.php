@@ -474,6 +474,9 @@ foreach (range(0, 100000) as $i) {
                             }
                         }
 
+                        if (pageNumbers == '') {
+                            pageNumbers = 1;
+                        }
                         $('#viewPagination').html('Pages: ' + pageNumbers);
                         tablesViewLoadTableData(loadPage);
 
@@ -590,7 +593,7 @@ foreach (range(0, 100000) as $i) {
                 for (field in viewFields) {
                     data +=
                         '<div class="form-group mb-4">' +
-                        '<label class="small mb-1" for="editRowField_' + field + '">' + field + (viewAutoColumn === field ? '<i class="fas fa-bomb"></i> ' : viewPrimaryColumn === field ? '<i class="fas fa-key"></i> ' : '') + '</label>' +
+                        '<label class="small mb-1" for="editRowField_' + field + '">' + field + (viewAutoColumn === field ? ' <i class="fas fa-bomb"></i> ' : viewPrimaryColumn === field ? ' <i class="fas fa-key"></i> ' : '') + '</label>' +
                         '<input class="form-control py-4" id="editRowField_' + field + '" type="text" />' +
                         '</div>';
                 }

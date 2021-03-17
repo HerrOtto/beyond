@@ -82,19 +82,28 @@ class seoHandler
             if ($row = $query->fetch()) {
                 $fileData = $row['dataJson'];
             }
-            if (($fileData === false) || (trim($fileData) === '')) {
-                throw new Exception('seo data not found');
-            }
 
             // Language
             if ($language === false) {
                 $language = $this->language;
             }
 
-            // Decode stored data
-            $fielConfigObj = json_decode($fileData);
-            if (!property_exists($fielConfigObj, 'settings_' . $language)) {
-                throw new Exception('seo fields for language [' . $language . '] not found');
+            // Parse data or crearte empty dataset if no data exists
+            if (($fileData === false) || (trim($fileData) === '')) {
+                // Create empty data
+                $fileConfigObj = new stdClass();
+                foreach ($this->languages as $lang => $langName) {
+                    $fileConfigObj->{'settings_' . $lang} = new stdClass();
+                }
+                $fileData = json_encode($fileConfigObj);
+            } else {
+                // Decode stored data
+                $fileConfigObj = json_decode($fileData);
+                foreach ($this->languages as $lang => $langName) {
+                    if (!property_exists($fileConfigObj, 'settings_' . $lang)) {
+                        $fileConfigObj->{'settings_' . $lang} = new stdClass();
+                    }
+                }
             }
 
             // Title
@@ -102,8 +111,8 @@ class seoHandler
             if (property_exists($configObj->{'defaults_' . $language}, 'titlePrefix')) {
                 print $configObj->{'defaults_' . $language}->titlePrefix;
             }
-            if (property_exists($fielConfigObj->{'settings_' . $language}, 'title')) {
-                print htmlspecialchars($fielConfigObj->{'settings_' . $language}->title);
+            if (property_exists($fileConfigObj->{'settings_' . $language}, 'title')) {
+                print htmlspecialchars($fileConfigObj->{'settings_' . $language}->title);
             }
             if (property_exists($configObj->{'defaults_' . $language}, 'titleSuffix')) {
                 print $configObj->{'defaults_' . $language}->titleSuffix;
@@ -112,8 +121,8 @@ class seoHandler
 
             // Author
             $author = '';
-            if (property_exists($fielConfigObj->{'settings_' . $language}, 'author')) {
-                $author = $fielConfigObj->{'settings_' . $language}->author;
+            if (property_exists($fileConfigObj->{'settings_' . $language}, 'author')) {
+                $author = $fileConfigObj->{'settings_' . $language}->author;
             }
             if ((trim($author) === '') && (property_exists($configObj->{'defaults_' . $language}, 'author'))) {
                 $author = $configObj->{'defaults_' . $language}->author;
@@ -127,8 +136,8 @@ class seoHandler
 
             // Description
             $description = '';
-            if (property_exists($fielConfigObj->{'settings_' . $language}, 'description')) {
-                $description = $fielConfigObj->{'settings_' . $language}->description;
+            if (property_exists($fileConfigObj->{'settings_' . $language}, 'description')) {
+                $description = $fileConfigObj->{'settings_' . $language}->description;
             }
             if ((trim($description) === '') && (property_exists($configObj->{'defaults_' . $language}, 'description'))) {
                 $description = $configObj->{'defaults_' . $language}->description;
@@ -142,8 +151,8 @@ class seoHandler
 
             // Description
             $robots = '';
-            if (property_exists($fielConfigObj->{'settings_' . $language}, 'robots')) {
-                $robots = $fielConfigObj->{'settings_' . $language}->robots;
+            if (property_exists($fileConfigObj->{'settings_' . $language}, 'robots')) {
+                $robots = $fileConfigObj->{'settings_' . $language}->robots;
             }
             if ((trim($robots) === '') && (property_exists($configObj->{'defaults_' . $language}, 'robots'))) {
                 $robots = $configObj->{'defaults_' . $language}->robots;

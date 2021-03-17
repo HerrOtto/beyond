@@ -108,11 +108,31 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
     }
 
     // Simple select from table
-    public function select($tableName, $fieldArray, $whereArray, $offset = false, $limit = false)
+    public function select($tableName, $fieldArray, $whereArray, $offset = false, $limit = false, $order = false)
     {
-        $sql = 'SELECT ' . implode(',', $fieldArray) . ' ' .
+        $fields = '';
+        foreach ($fieldArray as $field) {
+            if ($field === '*') {
+                $fields .= ($fields === '' ? '' : ', ') . '*';
+            } else {
+                $fields .= ($fields === '' ? '' : ', ') . '`' . $this->escape($field) . '`';
+            }
+        }
+
+        $sql = 'SELECT ' . $fields . ' ' .
             'FROM ' . $this->escape($tableName) . ' ' .
             $this->internalParseWhere($whereArray);
+
+        if ($order !== false) {
+            $orderItem = explode(':', $order, 2);
+            $orderItem[0] = '`' . $this->escape($orderItem[0]) . '`';
+            if ((count($orderItem) > 1) && (strtolower($orderItem[1]) === 'desc')) {
+                $orderItem[1] = 'DESC';
+            } else {
+                $orderItem[1] = '';
+            }
+            $sql .= ' ORDER BY ' . $orderItem[0] . ' ' . $orderItem[1];
+        }
 
         if (($offset !== false) and ($limit !== false)) {
             $sql .= ' LIMIT ' . intval($offset) . ', ' . intval($limit);
@@ -141,7 +161,7 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
         $columns = "";
         $values = "";
         foreach ($fieldArray as $column => $value) {
-            $columns .= ($columns === '' ? '' : ', ') . $this->escape($column);
+            $columns .= ($columns === '' ? '' : ', ') . '`' . $this->escape($column) . '`';
             if (is_numeric($value)) {
                 $values .= ($values === '' ? '' : ', ') . $this->escape($value);
             } else {
@@ -149,7 +169,7 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
             }
         }
 
-        $sql = 'INSERT INTO ' . $this->escape($tableName) . ' (' . $columns . ') VALUES (' . $values . ')';
+        $sql = 'INSERT INTO ' . '`' . $this->escape($tableName) . '`' . ' (' . $columns . ') VALUES (' . $values . ')';
         return $this->query($sql) === false ? $this->connection->error : true;
     }
 
@@ -163,7 +183,7 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
             } else {
                 $value = '\'' . $this->escape($value) . '\'';
             }
-            $fields .= ($fields === '' ? '' : ', ') . $this->escape($column) . ' = ' . $value;
+            $fields .= ($fields === '' ? '' : ', ') . '`' . $this->escape($column) . '`' . ' = ' . $value;
         }
 
         $sql = 'UPDATE ' . $this->escape($tableName) . ' SET ' . $fields . ' ' . $this->internalParseWhere($whereArray);
@@ -174,7 +194,7 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
     // Simple delete table
     public function delete($tableName, $whereArray)
     {
-        $sql = 'DELETE FROM ' . $this->escape($tableName) . ' ' . $this->internalParseWhere($whereArray);
+        $sql = 'DELETE FROM ' . '`' . $this->escape($tableName) . '`' . ' ' . $this->internalParseWhere($whereArray);
         return $this->query($sql) === false ? $this->connection->error : true;
     }
 
@@ -266,14 +286,14 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
             if (is_object($fieldItem)) {
                 $fieldItem = (array)$fieldItem;
             }
-            $fields .= ($fields === '' ? '' : ', ') . $fieldIndex;
+            $fields .= ($fields === '' ? '' : ', ') . '`' . $this->escape($fieldIndex) . '`';
             $fields .= $this->fieldToSQL($fieldItem);
         }
 
         if ($fields === '') {
             return false;
         } else {
-            $sql = 'CREATE TABLE ' . $tableName . ' (' .
+            $sql = 'CREATE TABLE ' . '`' . $tableName . '`' . ' (' .
                 $fields .
                 ')';
         }
@@ -284,16 +304,16 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
     // Add a column to table
     public function tableColumnAdd($tableName, $fieldName, $field)
     {
-        $sql = 'ALTER TABLE ' . $tableName . ' ' .
-            'ADD COLUMN ' . $fieldName . ' ' . $this->fieldToSQL($field);
+        $sql = 'ALTER TABLE ' . '`' . $tableName . '`' . ' ' .
+            'ADD COLUMN ' . '`' . $fieldName . '`' . ' ' . $this->fieldToSQL($field);
         return $this->query($sql) === false ? $this->connection->error : true;
     }
 
     // Remove a column from table
     public function tableColumnDrop($tableName, $fieldName)
     {
-        $sql = 'ALTER TABLE ' . $tableName . ' ' .
-            'DROP COLUMN ' . $fieldName;
+        $sql = 'ALTER TABLE ' . '`' . $tableName . '`' . ' ' .
+            'DROP COLUMN ' . '`' . $fieldName . '`';
         return $this->query($sql) === false ? $this->connection->error : true;
     }
 
@@ -328,12 +348,12 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
                 $fieldsArray[$row['COLUMN_NAME']] = array(
                     'kind' => $type,
                     'index' => (
-                        $row['EXTRA'] === 'auto_increment' ? 'auto' :
-                            ($row['COLUMN_KEY'] === 'PRI' ? 'primary' :
-                                ($row['COLUMN_KEY'] === 'UNI' ? 'unique' : '')
-                            )
+                    $row['EXTRA'] === 'auto_increment' ? 'auto' :
+                        ($row['COLUMN_KEY'] === 'PRI' ? 'primary' :
+                            ($row['COLUMN_KEY'] === 'UNI' ? 'unique' : '')
+                        )
                     ),
-                    'null' =>  ($row['EXTRA'] === 'auto_increment' ? true : $row['IS_NULLABLE'] === 'YES')
+                    'null' => ($row['EXTRA'] === 'auto_increment' ? true : $row['IS_NULLABLE'] === 'YES')
                 );
 
                 // Default value
@@ -358,7 +378,7 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
     // Drop table
     public function tableDrop($tableName)
     {
-        $sql = 'DROP TABLE ' . $tableName;
+        $sql = 'DROP TABLE ' . '`' . $tableName . '`';
         return $this->query($sql) === false ? $this->connection->error : true;
     }
 

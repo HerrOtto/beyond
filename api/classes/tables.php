@@ -242,13 +242,29 @@ class tables extends beyondApiBaseClass
         // Check user input
         $this->checkString($data, 'database', true, false);
         $this->checkString($data, 'table', true, false);
-        $this->checkInteger($data, 'offset', false, false, true);
-        $this->checkInteger($data, 'limit', false, false, true);
+
+        if (property_exists($data, 'offset')) {
+            $this->checkInteger($data, 'offset', false, false, true);
+        } else {
+            $data->offset = false;
+        }
+
+        if (property_exists($data, 'limit')) {
+            $this->checkInteger($data, 'limit', false, false, true);
+        } else {
+            $data->limit = false;
+        }
+
+        if (property_exists($data, 'order')) {
+            $this->checkString($data, 'order', true, false);
+        } else {
+            $data->order = false;
+        }
 
         //
         $result = array();
 
-        $query = $this->db->databases[$data->database]->select($data->table, array('*'), array(), $data->offset, $data->limit);
+        $query = $this->db->databases[$data->database]->select($data->table, array('*'), array(), $data->offset, $data->limit, $data->order);
         if ($query === false) {
             throw new Exception('Can not query table [' . $this->table . '] from database [' . $data->database . ']');
         }

@@ -41,20 +41,22 @@ try {
     $beyond->tools = new beyondTools($beyond->prefix, $beyond->config);
 
     // Start session
-    if (session_set_cookie_params(
-            $beyond->config->get('base', 'site.session.lifeTimeSec', 86400),
-            $beyond->config->get('base', 'site.session.path', '/'),
-            $beyond->config->get('base', 'site.session.domain', null),
-    ) === false) {
-        throw new Exception('Can not configure session cookie');
-    }
-    $beyond->sid = $beyond->variable->get('beyondSid', '');
-    if ($beyond->sid !== '') {
-        session_id($beyond->sid);
-    }
-    session_name($beyond->config->get('base', 'site.session.name', 'nmSession'));
-    if (session_start() === false) {
-        throw new Exception('Can not start session');
+    if (session_status() === PHP_SESSION_NONE) {
+        if (session_set_cookie_params(
+                $beyond->config->get('base', 'site.session.lifeTimeSec', 86400),
+                $beyond->config->get('base', 'site.session.path', '/'),
+                $beyond->config->get('base', 'site.session.domain', null),
+            ) === false) {
+            throw new Exception('Can not configure session cookie');
+        }
+        $beyond->sid = $beyond->variable->get('beyondSid', '');
+        if ($beyond->sid !== '') {
+            session_id($beyond->sid);
+        }
+        session_name($beyond->config->get('base', 'site.session.name', 'nmSession'));
+        if (session_start() === false) {
+            throw new Exception('Can not start session');
+        }
     }
     $beyond->sid = session_id();
     if (!array_key_exists($beyond->prefix . 'data', $_SESSION)) {

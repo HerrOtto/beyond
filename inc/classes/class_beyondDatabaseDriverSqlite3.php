@@ -97,11 +97,31 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
     }
 
     // Simple select from table
-    public function select($tableName, $fieldArray, $whereArray, $offset = false, $limit = false)
+    public function select($tableName, $fieldArray, $whereArray, $offset = false, $limit = false, $order = false)
     {
-        $sql = 'SELECT ' . implode(',', $fieldArray) . ' ' .
+        $fields = '';
+        foreach ($fieldArray as $field) {
+            if ($field === '*') {
+                $fields .= ($fields === '' ? '' : ', ') . '*';
+            } else {
+                $fields .= ($fields === '' ? '' : ', ') . '`' . $this->escape($field) . '`';
+            }
+        }
+
+        $sql = 'SELECT ' . $fields . ' ' .
             'FROM ' . $this->escape($tableName) . ' ' .
             $this->internalParseWhere($whereArray);
+
+        if ($order !== false) {
+            $orderItem = explode(':', $order, 2);
+            $orderItem[0] = '`' . $this->escape($orderItem[0]) . '`';
+            if ((count($orderItem) > 1) && (strtolower($orderItem[1]) === 'desc')) {
+                $orderItem[1] = 'DESC';
+            } else {
+                $orderItem[1] = '';
+            }
+            $sql .= ' ORDER BY ' . $orderItem[0] . ' ' . $orderItem[1];
+        }
 
         if (($offset !== false) and ($limit !== false)) {
             $sql .= ' LIMIT ' . intval($limit) . ' OFFSET  ' . intval($offset);
@@ -130,7 +150,7 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
         $columns = "";
         $values = "";
         foreach ($fieldArray as $column => $value) {
-            $columns .= ($columns === '' ? '' : ', ') . $this->escape($column);
+            $columns .= ($columns === '' ? '' : ', ') . '\'' . $this->escape($column) . '\'';
             if (is_numeric($value)) {
                 $values .= ($values === '' ? '' : ', ') . $this->escape($value);
             } else {
@@ -152,7 +172,7 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
             } else {
                 $value = '\'' . $this->escape($value) . '\'';
             }
-            $fields .= ($fields === '' ? '' : ', ') . $this->escape($column) . ' = ' . $value;
+            $fields .= ($fields === '' ? '' : ', ') . '\'' . $this->escape($column) . '\'' . ' = ' . $value;
         }
 
         $sql = 'UPDATE ' . $this->escape($tableName) . ' SET ' . $fields . ' ' . $this->internalParseWhere($whereArray);
@@ -257,7 +277,7 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
             if (is_object($fieldItem)) {
                 $fieldItem = (array)$fieldItem;
             }
-            $fields .= ($fields === '' ? '' : ', ') . $this->escape($fieldIndex);
+            $fields .= ($fields === '' ? '' : ', ') . '\'' . $this->escape($fieldIndex) . '\'';
             $fields .= $this->fieldToSQL($fieldItem);
         }
 
@@ -268,6 +288,7 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
                 $fields .
                 ')';
         }
+
         return $this->query($sql) === false ? $this->connection->lastErrorMsg() : true;
     }
 
@@ -304,7 +325,7 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
             if (is_object($fieldItem)) {
                 $fieldItem = (array)$fieldItem;
             }
-            $fields .= ($fields === '' ? '' : ', ') . $this->escape($fieldIndex);
+            $fields .= ($fields === '' ? '' : ', ') . '\'' . $this->escape($fieldIndex) . '\'';
             $fields .= $this->fieldToSQL($fieldItem);
         }
         if ($fields === '') {
@@ -323,7 +344,7 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
             if ($fieldIndex === $fieldName) {
                 continue; // Ignore new field
             }
-            $fields .= ($fields === '' ? '' : ', ') . $this->escape($fieldIndex);
+            $fields .= ($fields === '' ? '' : ', ') . '\'' . $this->escape($fieldIndex) . '\'';
         }
         if ($fields === '') {
             return 'No fileds defined';
@@ -389,7 +410,7 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
             if ($fieldIndex === $fieldName) {
                 continue; // Ignore new field
             }
-            $fields .= ($fields === '' ? '' : ', ') . $this->escape($fieldIndex);
+            $fields .= ($fields === '' ? '' : ', ') . '\'' . $this->escape($fieldIndex) . '\'';
             $fields .= $this->fieldToSQL($fieldItem);
         }
         if ($fields === '') {
@@ -408,7 +429,7 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
             if ($fieldIndex === $fieldName) {
                 continue; // Ignore new field
             }
-            $fields .= ($fields === '' ? '' : ', ') . $this->escape($fieldIndex);
+            $fields .= ($fields === '' ? '' : ', ') . '\'' . $this->escape($fieldIndex) . '\'';
         }
         if ($fields === '') {
             return 'No fileds defined';
