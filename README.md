@@ -29,6 +29,7 @@ The software is based on the following other OpenSource projects:
 * jquery (https://jquery.org/license)
 * startbootstrap (MIT license)
 * ace (AS IS, Copyright (c) 2010, Ajax.org B.V.)
+* phpmailer (GNU LESSER GENERAL PUBLIC LICENSE)
 
 ## Programming style guide
 
