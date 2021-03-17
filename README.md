@@ -46,7 +46,6 @@ The software is based on the following other OpenSource projects:
 
 * Plugin: Content delete content when file is getting deleted
 * Plugin: SEO delete content when file is getting deleted
-* Plugin: Send mail (with db storage)
 * Plugin: Menu builder
 * Plugin: Shop
 * Plugin: htaccess
