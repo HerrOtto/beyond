@@ -251,16 +251,6 @@ if ((property_exists($configObj, 'database')) && (array_key_exists($configObj->d
 
 <div style="width: 100%;" id="list">
 
-    <div class="mb-4 float-right">
-
-        <button class="btn btn-secondary"
-                type="button"
-                onclick="location.href='<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/pluginConfig.php?name=mail&page=settings';">
-            Configuration
-        </button>
-
-    </div>
-
     <div class="table-responsive mb-4">
         <table class="table table-bordered table-hover table-striped" id="viewCells">
             <thead>

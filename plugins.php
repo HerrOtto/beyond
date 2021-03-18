@@ -63,7 +63,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                 <?php include_once __DIR__ . '/inc/beginSite.php'; ?>
 
                 <ol class="breadcrumb mb-4 mt-4">
-                    <li class="breadcrumb-item active">Manage plugins</li>
+                    <li class="breadcrumb-item active">Manage plugins (click to configure)</li>
                 </ol>
 
                 <div class="mb-4">
@@ -72,11 +72,20 @@ if (!$beyond->tools->checkRole('admin,view')) {
                         if (!is_dir($pluginDir)) {
                             continue;
                         }
+                        if (file_exists($pluginDir . '/config.php')) {
+                            $link = $beyond->config->get('base', 'server.baseUrl') . '/beyond/pluginConfig.php?name=' . basename($pluginDir);
+                        } else {
+                            $link = '';
+                        }
                         print '<div class="pluginItem">';
                         print '<span class="pluginItemIcon">';
                         print '<i class="fas fa-puzzle-piece"></i>';
                         print '</span>';
-                        print '<span class="pluginItemName">';
+                        if ($link === '') {
+                            print '<span class="pluginItemName">';
+                        } else {
+                            print '<span class="pluginItemName" style="cursor:pointer;" onclick="location.href=\'' . $link . '\';">';
+                        }
                         print basename($pluginDir);
                         print '</span>';
                         print '<span class="pluginItemAction text-nowrap">';

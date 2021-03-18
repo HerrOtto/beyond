@@ -36,9 +36,9 @@
                 print '<div class="sb-sidenav-menu-heading">Plugins</div>' . PHP_EOL;
                 // Include plugins
                 foreach (glob(__DIR__ . '/../plugins/*') as $pluginDir) {
-                    if (file_exists($pluginDir . '/config.php')) {
-                        print '<a class="nav-link ' . ((basename($_SERVER["SCRIPT_FILENAME"]) === 'pluginConfig.php') && ($beyond->variable->get('name') === basename($pluginDir)) ? 'active' : '') . '"';
-                        print '   href="' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/pluginConfig.php?name=' . basename($pluginDir) . '">';
+                    if (file_exists($pluginDir . '/site.php')) {
+                        print '<a class="nav-link ' . ((basename($_SERVER["SCRIPT_FILENAME"]) === 'pluginSite.php') && ($beyond->variable->get('name') === basename($pluginDir)) ? 'active' : '') . '"';
+                        print '   href="' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/pluginSite.php?name=' . basename($pluginDir) . '">';
                         print '    <div class="sb-nav-link-icon"><i class="fas fa-puzzle-piece"></i></div>';
                         print '    ' . basename($pluginDir);
                         print '</a>';
