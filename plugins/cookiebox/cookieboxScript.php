@@ -1,6 +1,6 @@
 <?php
 
-header('Content-type: text/html; Charset=UTF-8');
+header("Content-type: text/javascript; Charset=UTF-8");
 require_once __DIR__ . '/../../inc/init.php';
 
 ?>

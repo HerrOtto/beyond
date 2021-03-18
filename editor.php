@@ -14,19 +14,6 @@ $dir = $beyond->tools->checkDirectory($beyond->variable->get('dir', ''));
 // Check current file
 $editFile = $beyond->variable->get('file', '');
 
-// Check for editor plugins
-$editorPluginsInstalled = false;
-foreach (glob(__DIR__ . '/plugins/*') as $pluginDir) {
-    if (!is_dir($pluginDir)) {
-        continue;
-    }
-    if (file_exists($pluginDir . '/editor.php')) {
-        $editorPluginsInstalled = true;
-        break;
-    }
-}
-unset($pluginDir);
-
 // Code/Text - Edit in editor
 $extCode = array(
     // Code
@@ -78,7 +65,7 @@ $height = 225;
         }
 
         .pluginItemContent {
-            margin-bottom:10px;
+            margin-bottom: 10px;
         }
     </style>
 
@@ -361,21 +348,28 @@ $height = 225;
 
     <?php
     // Check for editor plugins
+    $editorPluginsInstalled = false;
     foreach (glob(__DIR__ . '/plugins/*') as $pluginDir) {
         if (!is_dir($pluginDir)) {
             continue;
         }
         if (file_exists($pluginDir . '/editorHead.php')) {
             try {
-                require_once $pluginDir . '/editorHead.php';
+                if (ob_start()) {
+                    include $pluginDir . '/editorHead.php';
+                    $res = ob_get_contents();
+                    ob_end_clean();
+                    print $res;
+                }
+                $editorPluginsInstalled = true;
             } catch (Exception $e) {
-                $beyond->exceptionHandler->add($e);
+                ob_end_clean();
+                print "<!-- " . $pluginDir . '/editorHead.php - Exception: ' . $e->getMessage() . ' -->' . PHP_EOL;
             }
         }
     }
     unset($pluginDir);
     ?>
-
 </head>
 <body class="sb-nav-fixed">
 
@@ -436,7 +430,7 @@ $height = 225;
                 print '    <div class="row">';
                 print '    <div class="col-12 text-right mt-0 ml-0 mr-0 mb-4 p-0">';
                 print '    <button id="saveButton" class="btn btn-success" type="button" onclick="fileSave();">Save file (Ctrl+S)</button>' . PHP_EOL;
-                print '    <button id="saveButton" class="btn btn-secondary" type="button" onclick="window.open(\'' . $beyond->config->get('base', 'server.baseUrl') . '/' .  $dir['relPath']  . '/' . $editFile . '\',\'_blank\');">Open in new tab</button>' . PHP_EOL;
+                print '    <button id="saveButton" class="btn btn-secondary" type="button" onclick="window.open(\'' . $beyond->config->get('base', 'server.baseUrl') . '/' . $dir['relPath'] . '/' . $editFile . '\',\'_blank\');">Open in new tab</button>' . PHP_EOL;
                 print '    <button class="btn btn-danger" type="button" onclick="location.href = \'' . $backUrl . '\';">Close file</button>' . PHP_EOL;
                 print '    </div>' . PHP_EOL;
                 print '    </div>' . PHP_EOL;
@@ -483,10 +477,22 @@ $height = 225;
                         }
                         if (file_exists($pluginDir . '/editor.php')) {
                             try {
-                                print '<div class="pluginItem">Plugin: ' . basename($pluginDir) . '</div>' . PHP_EOL;
-                                print '<div class="pluginItemContent">' . PHP_EOL;
-                                include_once $pluginDir . '/editor.php';
-                                print '</div>' . PHP_EOL;
+                                $pluginError = false;
+                                $plugin = '';
+                                $plugin .= '<div class="pluginItem">Plugin: ' . basename($pluginDir) . '</div>' . PHP_EOL;
+                                $plugin .= '<div class="pluginItemContent">' . PHP_EOL;
+                                ob_start();
+                                try {
+                                    include $pluginDir . '/editor.php';
+                                    $plugin .= ob_get_contents();
+                                } catch (Exception $e) {
+                                    $pluginError = true;
+                                }
+                                ob_end_clean();
+                                $plugin .= '</div>' . PHP_EOL;
+                                if (!$pluginError) {
+                                    print $plugin;
+                                }
                             } catch (Exception $e) {
                                 $beyond->exceptionHandler->add($e);
                             }

@@ -6,6 +6,10 @@
 // $editFile
 // $dir['relPath']
 
+if (pathinfo($editFile, PATHINFO_EXTENSION) !== 'php') {
+    throw new Exception('This plugin only supports PHP files');
+}
+
 $configJson = file_get_contents(__DIR__ . '/../../config/content_settings.json');
 $configObj = json_decode($configJson);
 

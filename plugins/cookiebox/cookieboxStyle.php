@@ -4,7 +4,7 @@
  * IFrame positioning
  */
 
-header('Content-type: text/html; Charset=UTF-8');
+header("Content-type: text/css; Charset=UTF-8");
 require_once __DIR__ . '/../../inc/init.php';
 
 ?>
@@ -22,6 +22,8 @@ require_once __DIR__ . '/../../inc/init.php';
         right: 40px;
         bottom: 40px;
 
+        border: 1px solid silver;
+        border-radius: 4px;
     }
 
     /* PC */
@@ -33,6 +35,7 @@ require_once __DIR__ . '/../../inc/init.php';
             transform: translate(-50%, -50%);
             width: 600px;
             height: 400px;
+
         }
 
     }

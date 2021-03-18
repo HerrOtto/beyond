@@ -14,17 +14,13 @@ include_once __DIR__ . '/inc/init.php';
 header('Content-type: application/javascript; Charset=UTF-8');
 header('Access-Control-Allow-Origin: ' . $beyond->config->get('base', 'api.accessOrigin'));
 
-// -----------------------------------------------------------------------------------------------------------------
-
-print 'var ' . $beyond->prefix . 'languages = ' . json_encode($beyond->languages) . ';' . PHP_EOL;
-print 'var ' . $beyond->prefix . 'language = "' . $_SESSION[$beyond->prefix . 'data']['language'] . '";' . PHP_EOL;
-print PHP_EOL;
-
-// -----------------------------------------------------------------------------------------------------------------
-
 try {
 
-    print 'function ' . $beyond->prefix . 'apiAjax(request, callBack) {' . PHP_EOL;
+    print 'var ' . $beyond->prefix . 'languages = ' . json_encode($beyond->languages) . ';' . PHP_EOL;
+    print 'var ' . $beyond->prefix . 'language = "' . $_SESSION[$beyond->prefix . 'data']['language'] . '";' . PHP_EOL;
+    print PHP_EOL;
+
+    print 'function ' . $beyond->prefix . 'apiAjax(request, callBack, method) {' . PHP_EOL;
     print '    var parameters = \'\';' . PHP_EOL;
     print '    for (key in request.data) {' . PHP_EOL;
     print '        parameters +=' . PHP_EOL;
@@ -34,6 +30,15 @@ try {
     print '            encodeURIComponent(request.data[key]);' . PHP_EOL;
     print '    }' . PHP_EOL;
     print '    parameters += \'&nocache=\' + encodeURIComponent(Date.now().toString() + Math.random().toString(20));' . PHP_EOL;
+    print '    if (method === \'get\') {' . PHP_EOL;
+    print '    ' . $beyond->prefix . 'apiAjaxGet(request, callBack, parameters);' . PHP_EOL;
+    print '    } else {' . PHP_EOL;
+    print '    ' . $beyond->prefix . 'apiAjaxPost(request, callBack, parameters);' . PHP_EOL;
+    print '    }' . PHP_EOL;
+    print '}' . PHP_EOL;
+    print  PHP_EOL;
+
+    print 'function ' . $beyond->prefix . 'apiAjaxGet(request, callBack, parameters) {' . PHP_EOL;
     print '    var xhr = new XMLHttpRequest();' . PHP_EOL;
     print '    xhr.open(' . PHP_EOL;
     print '        \'GET\',' . PHP_EOL;
@@ -66,11 +71,42 @@ try {
     print '}' . PHP_EOL;
     print  PHP_EOL;
 
-    // -----------------------------------------------------------------------------------------------------------------
-
-    $script = '';
+    print 'function ' . $beyond->prefix . 'apiAjaxPost(request, callBack, parameters) {' . PHP_EOL;
+    print '    var xhr = new XMLHttpRequest();' . PHP_EOL;
+    print '    xhr.open(' . PHP_EOL;
+    print '        \'POST\',' . PHP_EOL;
+    print '        request.url' . PHP_EOL;
+    print '    );' . PHP_EOL;
+    print '    xhr.onload = function () {' . PHP_EOL;
+    print '        if (xhr.status === 200) {' . PHP_EOL;
+    print '            var responseTextJson;' . PHP_EOL;
+    print '            try {' . PHP_EOL;
+    print '              responseTextJson = JSON.parse(xhr.responseText);' . PHP_EOL;
+    print '            } catch (e) {' . PHP_EOL;
+    print '              callBack(\'JSON parsing failed [\' + e.message + \'] on [\' + xhr.responseText + \']\', {});' . PHP_EOL;
+    print '            }' . PHP_EOL;
+    print '            try {' . PHP_EOL;
+    print '              if (responseTextJson.error !== false) {' . PHP_EOL;
+    print '                var error = responseTextJson.error;' . PHP_EOL;
+    print '                delete responseTextJson.error;' . PHP_EOL;
+    print '                callBack(error, responseTextJson)' . PHP_EOL;
+    print '              } else {' . PHP_EOL;
+    print '                callBack(false, responseTextJson);' . PHP_EOL;
+    print '              }' . PHP_EOL;
+    print '            } catch (e) {' . PHP_EOL;
+    print '              callBack(\'Exception [\' + e.message + \'] on [callback done]\', {});' . PHP_EOL;
+    print '            }' . PHP_EOL;
+    print '        } else {' . PHP_EOL;
+    print '            callBack(true, xhr.status);' . PHP_EOL;
+    print '        }' . PHP_EOL;
+    print '    };' . PHP_EOL;
+    print '    xhr.setRequestHeader(\'Content-type\', \'application/x-www-form-urlencoded\');' . PHP_EOL;
+    print '    xhr.send(parameters);' . PHP_EOL;
+    print '}' . PHP_EOL;
+    print  PHP_EOL;
 
     // API handler
+    $script = '';
     $script = 'var ' . $beyond->prefix . 'apiAjaxHandlerUrl = \'' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/api/apiHandler.php\';' . PHP_EOL . PHP_EOL;
 
     // API
@@ -96,7 +132,7 @@ try {
                     if (preg_match('/^_/', $functionItem)) {
                         continue;
                     }
-                    $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
+                    $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack, method = \'post\') { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack, method); }, ' . PHP_EOL;
                 }
 
                 // End class
@@ -130,7 +166,7 @@ try {
                         if (preg_match('/^_/', $functionItem)) {
                             continue;
                         }
-                        $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($pluginDir) . '_' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
+                        $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack, method = \'post\') { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($pluginDir) . '_' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack, method); }, ' . PHP_EOL;
                     }
 
                     // End class
@@ -161,7 +197,7 @@ try {
                     if (preg_match('/^_/', $functionItem)) {
                         continue;
                     }
-                    $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack) { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($pluginDir) . '_' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack); }, ' . PHP_EOL;
+                    $script .= '    \'' . $functionItem . '\': function(jsonData, ajaxDoneCallBack, method = \'post\') { ' . $beyond->prefix . 'apiAjax({\'url\': ' . $beyond->prefix . 'apiAjaxHandlerUrl, \'data\': { \'class\': \'' . basename($pluginDir) . '_' . basename($classFileName, '.php') . '\', \'call\': \'' . $functionItem . '\', \'data\': JSON.stringify(jsonData) } }, ajaxDoneCallBack, method); }, ' . PHP_EOL;
                 }
                 // End class
                 $script .= '  },' . PHP_EOL . PHP_EOL;
@@ -174,8 +210,6 @@ try {
 
     // End API
     $script .= '};' . PHP_EOL;
-
-    // -----------------------------------------------------------------------------------------------------------------
 
 } catch (Exception $e) {
     $beyond->exceptionHandler->add($e);

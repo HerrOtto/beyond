@@ -14,7 +14,6 @@ if (!$beyond->tools->checkRole('admin,view')) {
 <head>
     <title>Plugins</title>
 
-
     <style>
 
         .pluginItem {

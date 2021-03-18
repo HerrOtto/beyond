@@ -6,6 +6,10 @@
 // $editFile
 // $dir['relPath']
 
+if (pathinfo($editFile, PATHINFO_EXTENSION) !== 'php') {
+    throw new Exception('This plugin only supports PHP files');
+}
+
 ?>
 <script>
     pluginSaveHandler.push(function (fileName, path) {
