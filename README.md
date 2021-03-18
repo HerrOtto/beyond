@@ -55,36 +55,88 @@ The software is based on the following other OpenSource projects:
 * System compatibility check, permission check
 * Installer
 
+## Use API
+
+Embedd API base script:
+
+<pre>&lt;head&gt;
+...
+&lt;?script src="/beyond/base.php?nocache=1616059542.28085dd5447867f28834418c"?&gt;&lt;/script?&gt; 
+...
+&lt;/head&gt;</pre>
+
+You now have access to the following variables:
+
+<pre>beyond_languages // Array of configured languages
+beyond_language // Current session language
+beyond_api // API class
+</pre>
+
+Javascript call to an API function:
+
+<pre>beyond_api.<font color="red">CLASS_NAME</font>.<font color="green">FUNCTION_NAME</font>({
+  'parameter1': 'value1',
+  'parameter2': 'value2'
+}, function (error, data) {
+  if (error) {
+    alert('Error: ' + data);  
+    return;
+  }
+  console.log(data); // Handle result here
+});</pre>
+
 ## PHP files
 
 Add beyond functionality to your PHP files by adding this lines in the very beginning:
 
-&lt;?php
+<pre>&lt;?php
     include_once \_\_DIR\_\_ . '/beyond/inc/init.php';
-?&gt;
+?&gt;</pre>
 
 ## Plugin: content
 
 To output content field from your PHP code: 
 
-&lt;?php
+<pre>&lt;?php
     $beyond->content->get('fieldNameHere');
-?&gt;
+?&gt;</pre>
 
 ## Plugin: seo
 
 Output HTML header with title and meta tags:
 
-&lt;head&gt;
+<pre>&lt;head&gt;
+...
 &lt;?php
 $beyond->seo->printHead();
 ?&gt;
-&lt;/head&gt;
+...
+&lt;/head&gt;</pre>
 
 ## Plugin: mail
 
 Send an mail:
 
-&lt;?php
+<pre>&lt;?php
 $beyond->mail->send('Subject', 'Body', 'to@mail.address');
-?&gt;
+?&gt;</pre>
+
+## Plugin: cookiebox
+
+Include API to head first:
+
+<pre>&lt;head&gt;
+...
+&lt;?script src="/beyond/base.php?nocache=1616059542.28085dd5447867f28834418c"?&gt;&lt;/script?&gt;
+..
+&lt;/head&gt;</pre>
+
+Add cookie box script to header:
+
+<pre>&lt;head&gt;
+...
+&lt;script src="/beyond/plugins/cookiebox/cookieboxScript.php"&gt;&lt;/script&gt;  
+&lt;link href="/beyond/plugins/cookiebox/cookieboxStyle.php" rel="stylesheet" /&gt;
+..
+&lt;/head&gt;</pre>
+        
