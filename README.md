@@ -101,6 +101,14 @@ To output content field from your PHP code:
     $beyond->content->get('fieldNameHere');
 ?&gt;</pre>
 
+## Plugin: blocks
+
+To output global content blocks from your PHP code: 
+
+<pre>&lt;?php
+    $beyond->blocks->get('blockNameHere');
+?&gt;</pre>
+
 ## Plugin: seo
 
 Output HTML header with title and meta tags:
