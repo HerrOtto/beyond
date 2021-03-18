@@ -21,7 +21,6 @@ if (!$beyond->tools->checkRole('admin,view')) {
             border: 1px solid transparent;
             border-radius: 4px;
             padding: 4px;
-            cursor: pointer;
         }
 
         .pluginItem:hover {
@@ -82,7 +81,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                         print '<i class="fas fa-puzzle-piece"></i>';
                         print '</span>';
                         if ($link === '') {
-                            print '<span class="pluginItemName">';
+                            print '<span class="pluginItemName" style="cursor:not-allowed;">';
                         } else {
                             print '<span class="pluginItemName" style="cursor:pointer;" onclick="location.href=\'' . $link . '\';">';
                         }

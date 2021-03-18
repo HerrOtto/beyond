@@ -18,8 +18,8 @@ $plugin = preg_replace('/[^a-z0-9\-]/', '', $beyond->variable->get('name', ''));
     <?php include_once __DIR__ . '/inc/head.php'; ?>
 
     <?php
-    if (file_exists(__DIR__ . '/plugins/' . $plugin . '/configHead.php')) {
-        include_once __DIR__ . '/plugins/' . $plugin . '/configHead.php';
+    if (file_exists(__DIR__ . '/plugins/' . $plugin . '/siteHead.php')) {
+        include_once __DIR__ . '/plugins/' . $plugin . '/siteHead.php';
     }
     ?>
 </head>

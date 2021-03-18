@@ -1,5 +1,7 @@
 <?php
 
+// Called from: ../../pluginSite.php
+
 // Get configured database from plugin configuration
 $configJson = file_get_contents(__DIR__ . '/../../config/mail_settings.json');
 $configObj = json_decode($configJson); // , JSON_OBJECT_AS_ARRAY);
