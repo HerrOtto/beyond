@@ -4,7 +4,7 @@
 
 include_once __DIR__ . '/../apiBaseClass.php';
 
-class apis extends beyondApiBaseClass
+class beyondApis extends beyondApiBaseClass
 {
 
     /**

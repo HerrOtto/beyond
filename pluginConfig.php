@@ -11,6 +11,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
 
 $plugin = preg_replace('/[^a-z0-9\-]/', '', $beyond->variable->get('name', ''));
 
+
 ?>
 <html>
 <head>
@@ -38,9 +39,15 @@ $plugin = preg_replace('/[^a-z0-9\-]/', '', $beyond->variable->get('name', ''));
                 </ol>
 
                 <?php
+
                 if (file_exists(__DIR__ . '/plugins/' . $plugin . '/config.php')) {
-                    include_once __DIR__ . '/plugins/' . $plugin . '/config.php';
+                    try {
+                        include __DIR__ . '/plugins/' . $plugin . '/config.php';
+                    } catch (\Throwable $e) {
+                        print $e->getMessage();
+                    }
                 }
+
                 ?>
 
                 <?php include_once __DIR__ . '/inc/endSite.php'; ?>

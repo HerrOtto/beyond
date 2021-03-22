@@ -118,7 +118,7 @@ $height = 225;
 
         function fileEdit(fileBase64, fileExtensionBase64) {
 
-            <?php print $beyond->prefix; ?>api.files.fileLoad({
+            <?php print $beyond->prefix; ?>api.beyondFiles.fileLoad({
                 'file': atob(fileBase64),
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {
@@ -185,7 +185,7 @@ $height = 225;
                 message('Editor not initialized');
                 return false;
             }
-            <?php print $beyond->prefix; ?>api.files.fileSave({
+            <?php print $beyond->prefix; ?>api.beyondFiles.fileSave({
                 'file': editorFileName,
                 'content': editor.getValue(),
                 'currentPath': <?php print json_encode($dir['relPath']); ?>

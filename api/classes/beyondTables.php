@@ -2,7 +2,7 @@
 
 include_once __DIR__ . '/../apiBaseClass.php';
 
-class tables extends beyondApiBaseClass
+class beyondTables extends beyondApiBaseClass
 {
 
     private $internalTables = array(

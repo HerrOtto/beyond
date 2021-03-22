@@ -135,7 +135,7 @@ $height = 225;
     <script>
 
         function directoryCreate(dir) {
-            <?php print $beyond->prefix; ?>api.files.directoryCreate({
+            <?php print $beyond->prefix; ?>api.beyondFiles.directoryCreate({
                 'directory': dir,
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {
@@ -159,7 +159,7 @@ $height = 225;
                 $('#dialogDirectoryDelete').data('directory', atob(dirBase64)).modal('show');
                 return false;
             }
-            <?php print $beyond->prefix; ?>api.files.directoryDelete({
+            <?php print $beyond->prefix; ?>api.beyondFiles.directoryDelete({
                 'directory': atob(dirBase64),
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {
@@ -179,7 +179,7 @@ $height = 225;
         }
 
         function fileCreate(fileName) {
-            <?php print $beyond->prefix; ?>api.files.fileCreate({
+            <?php print $beyond->prefix; ?>api.beyondFiles.fileCreate({
                 'file': fileName,
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {
@@ -201,7 +201,7 @@ $height = 225;
                 $('#dialogFileDelete').data('fileName', atob(fileBase64)).modal('show');
                 return false;
             }
-            <?php print $beyond->prefix; ?>api.files.fileDelete({
+            <?php print $beyond->prefix; ?>api.beyondFiles.fileDelete({
                 'file': atob(fileBase64),
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {

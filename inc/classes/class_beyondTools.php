@@ -16,8 +16,8 @@ include_once __DIR__ . '/../../assets/phpmailer-6.3.0/src/SMTP.php';
 class beyondTools
 {
 
-    private string $prefix = '';
-    private beyondConfig $config;
+    private $prefix = ''; // string
+    private $config; // beyondConfig
 
     /**
      * Constructor

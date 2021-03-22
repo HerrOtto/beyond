@@ -29,7 +29,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
     <script>
 
         function usersFetch(initialEdit = '') {
-            <?php print $beyond->prefix; ?>api.users.fetch({
+            <?php print $beyond->prefix; ?>api.beyondUsers.fetch({
                 //
             }, function (error, data) {
                 if (error !== false) {
@@ -66,7 +66,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
         }
 
         function usersAdd(userName, roles, password1, password2) {
-            <?php print $beyond->prefix; ?>api.users.add({
+            <?php print $beyond->prefix; ?>api.beyondUsers.add({
                 'userName': userName,
                 'roles': roles,
                 'password1': password1,
@@ -97,7 +97,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                 });
                 return false;
             }
-            <?php print $beyond->prefix; ?>api.users.modify({
+            <?php print $beyond->prefix; ?>api.beyondUsers.modify({
                 'userName': userName,
                 'roles': roles,
                 'password1': password1,
@@ -122,7 +122,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                 $('#dialogUsersDelete').data('userName', atob(userNameBase64)).modal('show');
                 return false;
             }
-            <?php print $beyond->prefix; ?>api.users.delete({
+            <?php print $beyond->prefix; ?>api.beyondUsers.delete({
                 'userName': atob(userNameBase64)
             }, function (error, data) {
                 if (error !== false) {

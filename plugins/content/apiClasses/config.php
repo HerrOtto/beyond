@@ -66,101 +66,49 @@ class content_config extends beyondApiBaseClass
         $configObj = json_decode(json_encode($configObj['load']));
         if ($configObj->database !== $data->database) {
 
-            // Current Database
+            // Copy tables to new Database
             $databaseCurrent = $this->db->databases[$configObj->database];
-
-            // Load settins from current database
-            $query = $databaseCurrent->select(
-                $this->prefix . 'content_settings',
-                array(
-                    'filePathName',
-                    'configJson'
-                ),
-                array()
-            );
-            if ($query === false) {
-                throw new Exception('Can not query table [' . $this->prefix . 'content_settings]');
-            }
-            $settings = array();
-            while ($row = $query->fetch()) {
-                array_push($settings, array(
-                    'filePathName' => $row['filePathName'],
-                    'configJson' => $row['configJson']
-                ));
-            }
-
-            // Load data from current database
-            $query = $databaseCurrent->select(
-                $this->prefix . 'content_data',
-                array(
-                    'filePathName',
-                    'dataJson'
-                ),
-                array()
-            );
-            if ($query === false) {
-                throw new Exception('Can not query table [' . $this->prefix . 'content_data]');
-            }
-            $content = array();
-            while ($row = $query->fetch()) {
-                array_push($content, array(
-                    'filePathName' => $row['filePathName'],
-                    'dataJson' => $row['dataJson']
-                ));
-            }
-
             $databaseNew = $this->db->databases[$data->database];
-            $contentDatabase = new contentDatabase($this->prefix);
-            $contentDatabase->init($databaseNew);
 
-            // From now on: Rollback on failure
+            $tables = array(
+                $this->prefix . 'content_settings',
+                $this->prefix . 'content_data',
+                $this->prefix . 'content_tableVersionInfo'
+            );
+
             try {
 
-                // Write settings to new database
-                foreach ($settings as $settingsItem) {
-                    $query = $databaseNew->insert(
-                        $this->prefix . 'content_settings',
-                        array(
-                            'filePathName' => $settingsItem['filePathName'],
-                            'configJson' => $settingsItem['configJson']
-                        )
-                    );
-                    if ($query === false) {
-                        throw new Exception('Can not insert into table [' . $this->prefix . 'content_settings]');
+                // Copy data to new database
+                foreach ($tables as $tableIndex => $tableName) {
+                    $this->db->moveTable(false, $databaseCurrent, $databaseNew, $tableName);
+                }
+
+                // On success drop old tables
+                foreach ($tables as $tableIndex => $tableName) {
+                    try {
+                        $databaseCurrent->tableDrop($tableName);
+                    } catch (Exception $e) {
+                        // Ignore exception
                     }
                 }
 
-                // Write data to new database
-                foreach ($content as $contentItem) {
-                    $query = $databaseNew->insert(
-                        $this->prefix . 'content_data',
-                        array(
-                            'filePathName' => $contentItem['filePathName'],
-                            'dataJson' => $contentItem['dataJson']
-                        )
-                    );
-                    if ($query === false) {
-                        throw new Exception('Can not insert into table [' . $this->prefix . 'content_data]');
-                    }
-                }
+                // Change database in configuration
+                $configObj->database = $data->database;
 
             } catch (Exception $e) {
 
-                // Rollback
-                $contentDatabase->drop($databaseNew);
-
-                // Replay exception
-                throw new Exception($e->getMessage());
+                // On failure drop new tables
+                foreach ($tables as $tableIndex => $tableName) {
+                    try {
+                        $databaseNew->tableDrop($tableName);
+                    } catch (Exception $e) {
+                        // Ignore exception
+                    }
+                }
 
             }
 
-            // Drop old database
-            $contentDatabase->drop($databaseCurrent);
-
         }
-
-        // Change database in configuration
-        $configObj->database = $data->database;
 
         file_put_contents(__DIR__ . '/../../../config/content_settings.json', json_encode($configObj, JSON_PRETTY_PRINT));
 

@@ -77,7 +77,9 @@
             }
 
             $('#dialogAddBlock form').html(fields);
-            $('#dialogAddBlock').modal('show');
+            $('#dialogAddBlock').modal('show').on('shown.bs.modal', function (e) {
+                $('#addBlockName').focus();
+            });
             return false;
         }
 
@@ -134,7 +136,6 @@
 
     function editBlock(nameBase64) {
 
-
         var fields = '';
 
         fields +=
@@ -165,7 +166,9 @@
                 $('#editBlockValue_' + language).val('');
             }
         }
-        $('#dialogEditBlock').modal('show');
+        $('#dialogEditBlock').modal('show').on('shown.bs.modal', function (e) {
+            $('#editBlockValue_default').focus();
+        });
 
     }
 
@@ -258,10 +261,6 @@
 
 
 <div style="width: 100%;">
-    <div class="mb-4 float-left" id="captchaTest">
-
-
-    </div>
     <div class="mb-4 float-right">
 
         <button class="btn btn-secondary" type="button" onclick="addBlock();">Add block</button>

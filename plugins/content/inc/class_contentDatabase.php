@@ -3,7 +3,7 @@
 class contentDatabase
 {
 
-    private string $prefix;
+    private $prefix; // string
 
     /**
      * Constructor

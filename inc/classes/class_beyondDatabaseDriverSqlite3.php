@@ -4,8 +4,8 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
 {
 
     // Connection settings
-    private string $file = "";
-    private int $busyTimeoutMS;
+    private $file = ""; // string
+    private $busyTimeoutMS; // int
 
     // Constructor
     public function __construct($file, $busyTimeoutMS)

@@ -2,7 +2,7 @@
 
 include_once __DIR__ . '/../apiBaseClass.php';
 
-class settings extends beyondApiBaseClass
+class beyondSettings extends beyondApiBaseClass
 {
 
     // TODO: List config files

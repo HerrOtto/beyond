@@ -3,11 +3,11 @@
 class seoHandler
 {
 
-    private string $language;
-    private string $prefix;
-    private beyondDatabaseDriver $database;
-    private beyondTools $tools;
-    private beyondConfig $config;
+    private $language; // string
+    private $prefix; // string
+    private $database; // beyondDatabaseDriver
+    private $tools; // beyondTools
+    private $config; // beyondConfig
 
     /**
      * Constructor

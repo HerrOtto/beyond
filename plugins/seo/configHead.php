@@ -1,3 +1,3 @@
 <?php
 
-// Called from: ../../inc/head.php
+// Called from: ../../pluginConfig.php

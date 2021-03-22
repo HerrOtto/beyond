@@ -2,7 +2,7 @@
 
 include_once __DIR__ . '/../apiBaseClass.php';
 
-class language extends beyondApiBaseClass
+class beyondLanguage extends beyondApiBaseClass
 {
 
     /**

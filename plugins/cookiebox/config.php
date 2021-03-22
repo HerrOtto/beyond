@@ -236,7 +236,9 @@
             }
 
             $('#dialogAddCookie form').html(fields);
-            $('#dialogAddCookie').modal('show');
+            $('#dialogAddCookie').modal('show').on('shown.bs.modal', function (e) {
+                $('#cookieName').focus();
+            });
             return false;
         }
 

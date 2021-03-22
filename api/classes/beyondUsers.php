@@ -2,7 +2,7 @@
 
 include_once __DIR__ . '/../apiBaseClass.php';
 
-class users extends beyondApiBaseClass
+class beyondUsers extends beyondApiBaseClass
 {
 
     /**
@@ -256,7 +256,7 @@ class users extends beyondApiBaseClass
                 $this->prefix . 'users',
                 array(
                     'roles' => $roles,
-                    'password' => $data->password1
+                    'password' => password_hash($data->password1, PASSWORD_DEFAULT, array('cost' => 11))
                 ),
                 array(
                     'userName = \'' . $this->db->defaultDatabase->escape($data->userName) . '\''

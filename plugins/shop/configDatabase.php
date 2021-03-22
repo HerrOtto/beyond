@@ -1,19 +1,19 @@
 <?php
 
-// Called from: ../../pluginConfig.php
+// Called from: config.php
 
 ?>
 <script>
 
     function load() {
-        <?php print $beyond->prefix; ?>api.content_config.load({}, function (error, data) {
+        <?php print $beyond->prefix; ?>api.shop_config.load({}, function (error, data) {
             if (error !== false) {
                 message('Error: ' + error);
             } else {
                 if ((typeof data.load === 'object') && (data.load !== null)) {
 
-                    $('#contentDatabase').val(data.load.database).change();
-                    $('#contentDatabase').removeAttr('readonly');
+                    $('#shopDatabase').val(data.load.database).change();
+                    $('#shopDatabase').removeAttr('readonly');
 
                 } else {
                     message('Load configuration failed: ' + data.load);
@@ -24,8 +24,8 @@
 
     function save() {
         // Send
-        <?php print $beyond->prefix; ?>api.content_config.save({
-            'database': $('#contentDatabase').val()
+        <?php print $beyond->prefix; ?>api.shop_config.save({
+            'database': $('#shopDatabase').val()
         }, function (error, data) {
             if (error !== false) {
                 message('Error: ' + error);
@@ -47,6 +47,11 @@
 </script>
 
 <div style="width: 100%;">
+    <div class="mb-4 float-left">
+
+        <?php print $shopMenu; ?>
+
+    </div>
     <div class="mb-4 float-right">
 
         <button class="btn btn-secondary" type="button" onclick="save();">Save config</button>
@@ -64,8 +69,8 @@
         <strong>Storage</strong>
 
         <div class="form-group">
-            <label class="small mb-1" for="contentDatabase">Database</label>
-            <select class="form-control" id="contentDatabase">
+            <label class="small mb-1" for="shopDatabase">Database</label>
+            <select class="form-control" id="shopDatabase">
                 <?php
                 print '<option value="" selected disabled></option>';
                 foreach ($beyond->config->get('database', 'items', array()) as $databaseName => $databaseConfig) {

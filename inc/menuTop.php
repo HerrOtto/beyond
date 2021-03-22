@@ -1,6 +1,6 @@
 <script>
     function logout() {
-        <?php print $beyond->prefix; ?>api.auth.logout({
+        <?php print $beyond->prefix; ?>api.beyondAuth.logout({
             //
         }, function (error, data) {
             if (error !== false) {

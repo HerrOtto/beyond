@@ -2,7 +2,7 @@
 
 include_once __DIR__ . '/../apiBaseClass.php';
 
-class auth extends beyondApiBaseClass
+class beyondAuth extends beyondApiBaseClass
 {
 
     /**
@@ -31,25 +31,24 @@ class auth extends beyondApiBaseClass
         );
 
         // Check if the password is valid
-        $valid = false;
-        if (($queryResult !== false) && ($row = $queryResult->fetch())) {
-            if (($row['userName'] == $data->userName) && (password_verify($data->password, $row['password']))) {
-                $valid = true;
+        if (($queryResult === false) || (! ($row = $queryResult->fetch()))) {
+            $valid = 'System failure';
+        } else if ($row['userName'] !== $data->userName) {
+            $valid = 'Wrong user';
+        } else if (!password_verify($data->password, $row['password'])) {
+            $valid = 'Wrong password';
+        } else {
+            $valid = true;
 
-                // Mark session as logged in
-                $_SESSION[$this->prefix . 'data']['auth'] = array(
-                    'userName' => $row['userName'],
-                    'roles' => $row['roles']
-                );
-            }
+            // Mark session as logged in
+            $_SESSION[$this->prefix . 'data']['auth'] = array(
+                'userName' => $row['userName'],
+                'roles' => $row['roles']
+            );
         }
 
         return array(
-            'loginValid' => $valid,
-            'session' => $_SESSION,
-            'prefix' => $this->prefix,
-            'sessionID' => session_id(),
-            'sessionName' => session_name(),
+            'login' => $valid
         );
     }
 

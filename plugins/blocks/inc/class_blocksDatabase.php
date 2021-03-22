@@ -3,7 +3,7 @@
 class blocksDatabase
 {
 
-    private string $prefix;
+    private $prefix; // string
 
     /**
      * Constructor

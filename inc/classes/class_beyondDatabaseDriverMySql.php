@@ -4,11 +4,11 @@ class beyondDatabaseDriverMySql extends beyondDatabaseDriver
 {
 
     // Connection settings
-    private string $host = "";
-    private string $port = "";
-    private string $user = "";
-    private string $pass = "";
-    private string $base = "";
+    private $host = ""; // string
+    private $port = ""; // string
+    private $user = ""; // string
+    private $pass = ""; // string
+    private $base = ""; // string
 
     // Constructor
     public function __construct($host, $port = 3389, $user, $pass, $base)

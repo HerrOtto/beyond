@@ -24,17 +24,17 @@ include_once __DIR__ . '/inc/init.php';
 
     <script>
         function login() {
-            <?php print $beyond->prefix; ?>api.auth.login({
+            <?php print $beyond->prefix; ?>api.beyondAuth.login({
                 'userName': $('#userName').val(),
                 'password': $('#password').val()
             }, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error)
                 } else {
-                    if (data.loginValid) {
-                        location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/files.php';
+                    if (data.login === true) {
+                        location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/index.php';
                     } else {
-                        $('#loginResult').text('Login failed');
+                        $('#loginResult').text('Error: ' + data.login);
                         if ($('#userName').val() === '') {
                             $('#userName').focus();
                         } else {

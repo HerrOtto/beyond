@@ -119,67 +119,48 @@ class seo_config extends beyondApiBaseClass
         // Database changed?
         if ($configObj->database !== $data->database) {
 
-            // Current Database
+            // Copy tables to new Database
             $databaseCurrent = $this->db->databases[$configObj->database];
-
-            // Load data from current database
-            $query = $databaseCurrent->select(
-                $this->prefix . 'seo_data',
-                array(
-                    'filePathName',
-                    'dataJson'
-                ),
-                array()
-            );
-            if ($query === false) {
-                throw new Exception('Can not query table [' . $this->prefix . 'seo_data]');
-            }
-            $content = array();
-            while ($row = $query->fetch()) {
-                array_push($content, array(
-                    'filePathName' => $row['filePathName'],
-                    'dataJson' => $row['dataJson']
-                ));
-            }
-
             $databaseNew = $this->db->databases[$data->database];
-            $seoDatabase = new seoDatabase($this->prefix);
-            $seoDatabase->init($databaseNew);
 
-            // From now on: Rollback on failure
+            $tables = array(
+                $this->prefix . 'seo_data',
+                $this->prefix . 'seo_tableVersionInfo'
+            );
+
             try {
 
-                // Write data to new database
-                foreach ($content as $contentItem) {
-                    $query = $databaseNew->insert(
-                        $this->prefix . 'seo_data',
-                        array(
-                            'filePathName' => $contentItem['filePathName'],
-                            'dataJson' => $contentItem['dataJson']
-                        )
-                    );
-                    if ($query === false) {
-                        throw new Exception('Can not insert into table [' . $this->prefix . 'seo_data]');
+                // Copy data to new database
+                foreach ($tables as $tableIndex => $tableName) {
+                    $this->db->moveTable(false, $databaseCurrent, $databaseNew, $tableName);
+                }
+
+                // On success drop old tables
+                foreach ($tables as $tableIndex => $tableName) {
+                    try {
+                        $databaseCurrent->tableDrop($tableName);
+                    } catch (Exception $e) {
+                        // Ignore exception
                     }
                 }
 
+                // Change database in configuration
+                $configObj->database = $data->database;
+
             } catch (Exception $e) {
 
-                // Rollback
-                $seoDatabase->drop($databaseNew);
-
-                // Replay exception
-                throw new Exception($e->getMessage());
+                // On failure drop new tables
+                foreach ($tables as $tableIndex => $tableName) {
+                    try {
+                        $databaseNew->tableDrop($tableName);
+                    } catch (Exception $e) {
+                        // Ignore exception
+                    }
+                }
 
             }
 
-            // Drop old database
-            $seoDatabase->drop($databaseCurrent);
-
         }
-
-        // Change database in configuration
-        $configObj->database = $data->database;
 
         file_put_contents(__DIR__ . '/../../../config/seo_settings.json', json_encode($configObj, JSON_PRETTY_PRINT));
 

@@ -1,6 +1,6 @@
 <?php
 
-class blocksHandler
+class shopHandler
 {
 
     private $language; // string
@@ -40,7 +40,7 @@ class blocksHandler
         try {
 
             // Load default values
-            $configJson = file_get_contents(__DIR__ . '/../../../config/blocks_settings.json');
+            $configJson = file_get_contents(__DIR__ . '/../../../config/shop_settings.json');
             if (trim($configJson) === '') {
                 $configObj = new stdClass();
             } else {
@@ -49,7 +49,7 @@ class blocksHandler
 
             // Getting file configuration from database
             $query = $this->database->select(
-                $this->prefix . 'blocks_data',
+                $this->prefix . 'shop_data',
                 array(
                     '*'
                 ),
@@ -58,7 +58,7 @@ class blocksHandler
                 )
             );
             if ($query === false) {
-                throw new Exception('Can not query table [' . $this->prefix . 'blocks_data]');
+                throw new Exception('Can not query table [' . $this->prefix . 'shop_data]');
             }
             if ($row = $query->fetch()) {
                 $block = json_decode($row['content']);
@@ -78,7 +78,7 @@ class blocksHandler
             }
 
         } catch (Exception $e) {
-            print "<!-- blocks plugin exception: " . $e->getMessage() . ' -->' . PHP_EOL;
+            print "<!-- shop plugin exception: " . $e->getMessage() . ' -->' . PHP_EOL;
         }
 
         print PHP_EOL;

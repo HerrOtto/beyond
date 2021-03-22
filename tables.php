@@ -70,7 +70,7 @@ foreach (range(0, 100000) as $i) {
     <script>
 
         function tablesFetch() {
-            <?php print $beyond->prefix; ?>api.tables.fetch({
+            <?php print $beyond->prefix; ?>api.beyondTables.fetch({
                 //
             }, function (error, data) {
                 if (error !== false) {
@@ -140,7 +140,7 @@ foreach (range(0, 100000) as $i) {
                 $('#dialogTablesDrop').data('table', atob(tableBase64)).data('database', atob(databaseBase64)).modal('show');
                 return false;
             }
-            <?php print $beyond->prefix; ?>api.tables.drop({
+            <?php print $beyond->prefix; ?>api.beyondTables.drop({
                 'database': atob(databaseBase64),
                 'table': atob(tableBase64)
             }, function (error, data) {
@@ -174,7 +174,7 @@ foreach (range(0, 100000) as $i) {
 
             var fields = [];
 
-            <?php print $beyond->prefix; ?>api.tables.create({
+            <?php print $beyond->prefix; ?>api.beyondTables.create({
                 'database': atob(databaseBase64),
                 'table': tableName,
                 'fields': {
@@ -209,7 +209,7 @@ foreach (range(0, 100000) as $i) {
             editDatabase = false;
             editTable = false;
 
-            <?php print $beyond->prefix; ?>api.tables.info({
+            <?php print $beyond->prefix; ?>api.beyondTables.info({
                 'database': atob(databaseBase64),
                 'table': atob(tableBase64)
             }, function (error, data) {
@@ -287,7 +287,7 @@ foreach (range(0, 100000) as $i) {
                 'null': allowNull,
                 'default': defaultValue
             };
-            <?php print $beyond->prefix; ?>api.tables.columnAdd(data, function (error, data) {
+            <?php print $beyond->prefix; ?>api.beyondTables.columnAdd(data, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
                 } else {
@@ -307,7 +307,7 @@ foreach (range(0, 100000) as $i) {
                 $('#dialogTablesDropField').data('fieldName', atob(fieldNameBase64)).modal('show');
                 return false;
             }
-            <?php print $beyond->prefix; ?>api.tables.columnDrop({
+            <?php print $beyond->prefix; ?>api.beyondTables.columnDrop({
                 'database': editDatabase,
                 'table': editTable,
                 'field': atob(fieldNameBase64)
@@ -348,7 +348,7 @@ foreach (range(0, 100000) as $i) {
             viewPrimaryKind = '';
             viewInternalTable = internalTable;
 
-            <?php print $beyond->prefix; ?>api.tables.info({
+            <?php print $beyond->prefix; ?>api.beyondTables.info({
                 'database': atob(databaseBase64),
                 'table': atob(tableBase64)
             }, function (error, data) {
@@ -417,7 +417,7 @@ foreach (range(0, 100000) as $i) {
         function tablesViewLoadTable(loadPage) {
             $('#viewCells tbody').empty();
 
-            <?php print $beyond->prefix; ?>api.tables.rowCount({
+            <?php print $beyond->prefix; ?>api.beyondTables.rowCount({
                 'database': viewDatabase,
                 'table': viewTable
             }, function (error, data) {
@@ -488,7 +488,7 @@ foreach (range(0, 100000) as $i) {
         }
 
         function tablesViewLoadTableData(loadPage) {
-            <?php print $beyond->prefix; ?>api.tables.loadData({
+            <?php print $beyond->prefix; ?>api.beyondTables.loadData({
                 'database': viewDatabase,
                 'table': viewTable,
                 'offset': ((loadPage - 1) * viewRowsPerPage),
@@ -567,7 +567,7 @@ foreach (range(0, 100000) as $i) {
                 }
             }
 
-            <?php print $beyond->prefix; ?>api.tables.addData({
+            <?php print $beyond->prefix; ?>api.beyondTables.addData({
                 'database': viewDatabase,
                 'table': viewTable,
                 'fields': fields
@@ -628,7 +628,7 @@ foreach (range(0, 100000) as $i) {
                 return;
             }
 
-            <?php print $beyond->prefix; ?>api.tables.modifyData({
+            <?php print $beyond->prefix; ?>api.beyondTables.modifyData({
                 'database': viewDatabase,
                 'table': viewTable,
                 'fields': fields,
@@ -666,7 +666,7 @@ foreach (range(0, 100000) as $i) {
                 return;
             }
 
-            <?php print $beyond->prefix; ?>api.tables.deleteData({
+            <?php print $beyond->prefix; ?>api.beyondTables.deleteData({
                 'database': viewDatabase,
                 'table': viewTable,
                 'primary': primaryColumn,

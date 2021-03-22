@@ -6,12 +6,12 @@
  */
 abstract class beyondApiBaseClass
 {
-    protected beyondConfig $config;
-    protected beyondVariable $variable;
-    protected beyondDatabaseConnection $db;
-    protected string $prefix;
-    protected array $languages;
-    protected beyondTools $tools;
+    protected $config; // beyondConfig
+    protected $variable; // beyondVariable
+    protected $db; // beyondDatabaseConnection
+    protected $prefix; // string
+    protected $languages; // array
+    protected $tools; // beyondTools
 
     /**
      * Constructor
@@ -68,6 +68,44 @@ abstract class beyondApiBaseClass
         }
 
         $object->{$propertyName} = intval($value);
+    }
+
+    /**
+     * Check if variable is a decimal or a string containing an integer
+     * @param object $object Variable
+     * @param string $propertyName Variable
+     * @param int $min Min. allowed value
+     * @param int $max Max. alowed value
+     * @param int $allowFalse Allow boolean value "false" as value
+     */
+    protected function checkFloat(&$object, $propertyName, $min = false, $max = false, $allowFalse = false)
+    {
+        if (!property_exists($object, $propertyName)) {
+            throw new Exception('Property [' . $propertyName . '] not defined');
+        }
+        $value = $object->{$propertyName};
+
+        if (($allowFalse === true) && ($value === false)) {
+            return $value;
+        }
+
+        if (!is_numeric($value)) {
+            throw new Exception('Parameter [' . $propertyName . '] value [' . $value . '] is not a decimal value');
+        }
+
+        if (strval(floatval($value)) !== $value) {
+            throw new Exception('Parameter [' . $propertyName . '] value [' . $value . '] is a not a decimal value');
+        }
+
+        if (($min !== false) && (floatval($value) > $min)) {
+            throw new Exception('Parameter [' . $propertyName . '] value [' . $value . '] exceeds expected min. value [' . $min . ']');
+        }
+
+        if (($max !== false) && (floatval($value) > $max)) {
+            throw new Exception('Parameter [' . $propertyName . '] value [' . $value . '] exceeds expected min. value [' . $max . ']');
+        }
+
+        $object->{$propertyName} = floatval($value);
     }
 
     /**

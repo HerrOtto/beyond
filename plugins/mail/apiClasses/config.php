@@ -144,85 +144,48 @@ class mail_config extends beyondApiBaseClass
             // Current Database
             $databaseCurrent = $this->db->databases[$configObj->database];
 
-            // Load data from current database
-            $query = $databaseCurrent->select(
-                $this->prefix . 'mail_data',
-                array(
-                    'id',
-                    'date',
-                    'from',
-                    'to',
-                    'replyTo',
-                    'bcc',
-                    'subject',
-                    'mail',
-                    'kind'
-                ),
-                array()
-            );
-            if ($query === false) {
-                throw new Exception('Can not query table [' . $this->prefix . 'mail_data]');
-            }
-            $content = array();
-            while ($row = $query->fetch()) {
-                array_push($content, array(
-                    'id' => $row['id'],
-                    'date' => $row['date'],
-                    'from' => $row['from'],
-                    'to' => $row['to'],
-                    'replyTo' => $row['replyTo'],
-                    'bcc' => $row['bcc'],
-                    'subject' => $row['subject'],
-                    'mail' => $row['mail'],
-                    'kind' => $row['kind']
-                ));
-            }
-
+            // Copy tables to new Database
+            $databaseCurrent = $this->db->databases[$configObj->database];
             $databaseNew = $this->db->databases[$data->database];
-            $mailDatabase = new mailDatabase($this->prefix);
-            $mailDatabase->init($databaseNew);
 
-            // From now on: Rollback on failure
+            $tables = array(
+                $this->prefix . 'mail_data',
+                $this->prefix . 'mail_tableVersionInfo'
+            );
+
             try {
 
-                // Write data to new database
-                foreach ($content as $contentItem) {
-                    $query = $databaseNew->insert(
-                        $this->prefix . 'mail_data',
-                        array(
-                            'id' => $contentItem['id'],
-                            'date' => $contentItem['date'],
-                            'from' => $contentItem['from'],
-                            'to' => $contentItem['to'],
-                            'replyTo' => $contentItem['replyTo'],
-                            'bcc' => $contentItem['bcc'],
-                            'subject' => $contentItem['subject'],
-                            'mail' => $contentItem['mail'],
-                            'kind' => $contentItem['kind']
-                        )
-                    );
-                    if ($query === false) {
-                        throw new Exception('Can not insert into table [' . $this->prefix . 'mail_data]');
+                // Copy data to new database
+                foreach ($tables as $tableIndex => $tableName) {
+                    $this->db->moveTable(false, $databaseCurrent, $databaseNew, $tableName);
+                }
+
+                // On success drop old tables
+                foreach ($tables as $tableIndex => $tableName) {
+                    try {
+                        $databaseCurrent->tableDrop($tableName);
+                    } catch (Exception $e) {
+                        // Ignore exception
                     }
                 }
 
+                // Change database in configuration
+                $configObj->database = $data->database;
+
             } catch (Exception $e) {
 
-                // Rollback
-                $mailDatabase->drop($databaseNew);
-
-                // Replay exception
-                throw new Exception($e->getMessage());
+                // On failure drop new tables
+                foreach ($tables as $tableIndex => $tableName) {
+                    try {
+                        $databaseNew->tableDrop($tableName);
+                    } catch (Exception $e) {
+                        // Ignore exception
+                    }
+                }
 
             }
 
-            // Drop old database
-            $mailDatabase->drop($databaseCurrent);
-
         }
-
-        // Change database in configuration
-        $configObj->database = $data->database;
 
         file_put_contents(__DIR__ . '/../../../config/mail_settings.json', json_encode($configObj, JSON_PRETTY_PRINT));
 

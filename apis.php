@@ -79,7 +79,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
     <script>
 
         function apiCreate(apiName) {
-            <?php print $beyond->prefix; ?>api.apis.apiCreate({
+            <?php print $beyond->prefix; ?>api.beyondApis.apiCreate({
                 'apiName': apiName
             }, function (error, data) {
                 if (error !== false) {
@@ -100,7 +100,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                 $('#dialogApiDelete').data('apiName', atob(apiNameBase64)).modal('show');
                 return false;
             }
-            <?php print $beyond->prefix; ?>api.apis.apiDelete({
+            <?php print $beyond->prefix; ?>api.beyondApis.apiDelete({
                 'apiName': atob(apiNameBase64)
             }, function (error, data) {
                 if (error !== false) {
@@ -119,7 +119,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
         var editorApiName = '';
 
         function apiEdit(apiNameBase64, kind) {
-            <?php print $beyond->prefix; ?>api.apis.apiLoad({
+            <?php print $beyond->prefix; ?>api.beyondApis.apiLoad({
                 'apiName': atob(apiNameBase64),
                 'kind': kind
             }, function (error, data) {
@@ -171,7 +171,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                 message('Editor not initialized');
                 return false;
             }
-            <?php print $beyond->prefix; ?>api.apis.apiSave({
+            <?php print $beyond->prefix; ?>api.beyondApis.apiSave({
                 'apiName': editorApiName,
                 'content': editor.getValue()
             }, function (error, data) {
@@ -395,15 +395,34 @@ if (!$beyond->tools->checkRole('admin,view')) {
                 print '<div class="text-right mb-4">' . PHP_EOL;
                 print '<button class="btn btn-secondary" type="button" data-toggle="modal" data-target="#dialogApiAdd">Add API</button>' . PHP_EOL;
                 print '</div>' . PHP_EOL;
+
+                print '<div class="mb-4">';
+                print '<div class="mb-1"><strong>Project API</strong></div>';
                 if ($outputSite !== '') {
                     print $outputSite . PHP_EOL;
+                } else {
+                    print "No project API configured";
                 }
+                print '</div>';
+
+                print '<div class="mb-4">';
+                print '<div class="mb-1"><strong>System API</strong></div>';
                 if ($output !== '') {
                     print $output . PHP_EOL;
+                } else {
+                    print "No system API configured";
                 }
+                print '</div>';
+
+                print '<div class="mb-4">';
+                print '<div class="mb-1"><strong>Plugin API</strong></div>';
                 if ($outputPlugins !== '') {
                     print $outputPlugins . PHP_EOL;
+                } else {
+                    print "No plugin API configured";
                 }
+                print '</div>';
+
                 print '</div>' . PHP_EOL;
                 print '</div>' . PHP_EOL;
 

@@ -65,70 +65,47 @@ class blocks_config extends beyondApiBaseClass
         $configObj = json_decode(json_encode($configObj['load']));
         if ($configObj->database !== $data->database) {
 
-            // Current Database
+            // Copy tables to new Database
             $databaseCurrent = $this->db->databases[$configObj->database];
-
-            // Load data from current database
-            $query = $databaseCurrent->select(
-                $this->prefix . 'blocks_data',
-                array(
-                    'name',
-                    'kind',
-                    'content'
-                ),
-                array()
-            );
-            if ($query === false) {
-                throw new Exception('Can not query table [' . $this->prefix . 'blocks_data]');
-            }
-            $blocks = array();
-            while ($row = $query->fetch()) {
-                array_push($blocks, array(
-                    'name' => $row['name'],
-                    'kind' => $row['kind'],
-                    'content' => $row['content']
-                ));
-            }
-
             $databaseNew = $this->db->databases[$data->database];
-            $blocksDatabase = new blocksDatabase($this->prefix);
-            $blocksDatabase->init($databaseNew);
 
-            // From now on: Rollback on failure
+            $tables = array(
+                $this->prefix . 'blocks_data',
+                $this->prefix . 'blocks_tableVersionInfo'
+            );
+
             try {
 
-                // Write data to new database
-                foreach ($blocks as $blocksItem) {
-                    $query = $databaseNew->insert(
-                        $this->prefix . 'blocks_data',
-                        array(
-                            'name' => $blocksItem['name'],
-                            'kind' => $blocksItem['kind'],
-                            'content' => $blocksItem['content']
-                        )
-                    );
-                    if ($query === false) {
-                        throw new Exception('Can not insert into table [' . $this->prefix . 'blocks_data]');
+                // Copy data to new database
+                foreach ($tables as $tableIndex => $tableName) {
+                    $this->db->moveTable(false, $databaseCurrent, $databaseNew, $tableName);
+                }
+
+                // On success drop old tables
+                foreach ($tables as $tableIndex => $tableName) {
+                    try {
+                        $databaseCurrent->tableDrop($tableName);
+                    } catch (Exception $e) {
+                        // Ignore exception
                     }
                 }
 
+                // Change database in configuration
+                $configObj->database = $data->database;
+
             } catch (Exception $e) {
 
-                // Rollback
-                $blocksDatabase->drop($databaseNew);
-
-                // Replay exception
-                throw new Exception($e->getMessage());
+                // On failure drop new tables
+                foreach ($tables as $tableIndex => $tableName) {
+                    try {
+                        $databaseNew->tableDrop($tableName);
+                    } catch (Exception $e) {
+                        // Ignore exception
+                    }
+                }
 
             }
-
-            // Drop old database
-            $blocksDatabase->drop($databaseCurrent);
-
         }
-
-        // Change database in configuration
-        $configObj->database = $data->database;
 
         file_put_contents(__DIR__ . '/../../../config/blocks_settings.json', json_encode($configObj, JSON_PRETTY_PRINT));
 

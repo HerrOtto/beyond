@@ -3,7 +3,7 @@
 class seoDatabase
 {
 
-    private string $prefix;
+    private $prefix; // string
 
     /**
      * Constructor

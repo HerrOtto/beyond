@@ -6,7 +6,7 @@ include_once __DIR__ . '/inc/init.php';
 
 if ($beyond->tools->currentUser() === false) {
     // Not logged in?
-    header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
+    header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php?error=redirectNoSession');
     exit;
 } else if ($beyond->tools->checkRole('admin,view')) {
     // Is admin or viewer
@@ -18,7 +18,7 @@ if ($beyond->tools->currentUser() === false) {
     exit;
 } else {
     // Otherwise
-    header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php');
+    header('Location: ' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/login.php?error=NoAdminOrViewRole');
 }
 
 
