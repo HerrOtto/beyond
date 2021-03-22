@@ -135,7 +135,7 @@ Include API to head first:
 
 <pre>&lt;head&gt;
 ...
-&lt;?script src="/beyond/base.php?nocache=1616059542.28085dd5447867f28834418c"?&gt;&lt;/script?&gt;
+&lt;script src="/beyond/base.php"&gt;&lt;/script&gt;
 ..
 &lt;/head&gt;</pre>
 
