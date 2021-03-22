@@ -9,7 +9,7 @@ class contentHandler
     private $tools; // beyondTools
     private $config; // beyondConfig
 
-    private array $cache;
+    private $cache; // array
 
     /**
      * Constructor
