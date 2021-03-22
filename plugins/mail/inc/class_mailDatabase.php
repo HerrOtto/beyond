@@ -3,7 +3,7 @@
 class mailDatabase
 {
 
-    private string $prefix;
+    private $prefix; // string
 
     /**
      * Constructor
