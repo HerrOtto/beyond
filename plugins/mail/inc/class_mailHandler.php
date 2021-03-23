@@ -39,9 +39,10 @@ class mailHandler
      * @param mixed $bcc Overwrite default "bcc"
      * @param mixed $from Overwrite default "from"
      * @param mixed $attachment Path to attachment
+     * @param mixed $attachmentName Name of attachment
      * @result string Field content
      */
-    public function send($to, $subject, $body, $kind = 'text', $language = false, $replyTo = false, $bcc = false, $from = false, $attachment = false)
+    public function send($to, $subject, $body, $kind = 'text', $language = false, $replyTo = false, $bcc = false, $from = false, $attachment = false, $attachmentName = false)
     {
 
         // Load default values
@@ -144,7 +145,8 @@ class mailHandler
             $to, // $to
             $replyTo, // $replyTo
             $bcc, // $bcc
-            $attachment // attachment
+            $attachment, // attachment
+            $attachmentName // attachment name
         );
 
         // Add mail to database
