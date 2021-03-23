@@ -332,7 +332,6 @@ if (!property_exists($configObj, 'cookies')) {
         function <?php print $beyond->prefix; ?>cookieboxAcceptAll() {
             <?php
             foreach (array_keys((array)$configObj->cookies) as $cookieName) {
-                //print $beyond->prefix . 'cookieboxSetCookie(\'cookiebox_\', value, 30)' . PHP_EOL;
                 print $beyond->prefix . 'cookieboxSetCookie(\'cookiebox_' . $cookieName . '\', \'1\', 30);' . PHP_EOL;
             }
             print $beyond->prefix . 'cookieboxSetCookie(\'cookieboxDone\', \'1\', 30);' . PHP_EOL;

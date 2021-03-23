@@ -147,4 +147,14 @@ Add cookie box script to header:
 &lt;link href="/beyond/plugins/cookiebox/cookieboxStyle.php" rel="stylesheet" /&gt;
 ..
 &lt;/head&gt;</pre>
+
+Example matomo implementation:
+
+<pre>&lt;script&gt;
+if (beyond_cookieboxGetCookie('cookiebox_COOKIENAME') === '1') {
+
+  //
+
+}
+&lt;/script&gt;</pre>
         
