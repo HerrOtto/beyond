@@ -116,7 +116,7 @@ if ((property_exists($configObj, 'database')) && (array_key_exists($configObj->d
             } else {
                 if (data.loadData !== false) {
                     for (rowNo in data.loadData) {
-                        var mailData = btoa(JSON.stringify(data.loadData[rowNo]));
+                        var mailData = base64encode(JSON.stringify(data.loadData[rowNo]));
 
                         var cols = '';
                         cols += '<td>' + data.loadData[rowNo]['from'] + '</td>';
