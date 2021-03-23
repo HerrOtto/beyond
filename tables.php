@@ -85,7 +85,7 @@ foreach (range(0, 100000) as $i) {
                             out += '</div>'
 
                             out += '<div class="text-right mb-4">';
-                            out += '<button class="btn btn-secondary" type="button" onclick="tablesCreate(\'' + btoa(database) + '\', false);">Create table';
+                            out += '<button class="btn btn-secondary" type="button" onclick="tablesCreate(\'' + base64encode(database) + '\', false);">Create table';
                             out += '</button>';
                             out += '</div>';
 
@@ -104,9 +104,9 @@ foreach (range(0, 100000) as $i) {
                                 out += '<i class="fas fa-table"></i>';
                                 out += '</span>';
                                 if (!internal) {
-                                    out += '<span class="tableItemName" onclick="tablesView(\'' + btoa(database) + '\', \'' + btoa(data.fetch[database][table]) + '\', false);">';
+                                    out += '<span class="tableItemName" onclick="tablesView(\'' + base64encode(database) + '\', \'' + base64encode(data.fetch[database][table]) + '\', false);">';
                                 } else {
-                                    out += '<span class="tableItemName" onclick="tablesView(\'' + btoa(database) + '\', \'' + btoa(data.fetch[database][table]) + '\', true);">';
+                                    out += '<span class="tableItemName" onclick="tablesView(\'' + base64encode(database) + '\', \'' + base64encode(data.fetch[database][table]) + '\', true);">';
                                 }
                                 out += data.fetch[database][table];
                                 out += '</span>';
@@ -114,10 +114,10 @@ foreach (range(0, 100000) as $i) {
                                 out += '<span class="tableItemAction text-nowrap">';
 
                                 if (!internal) {
-                                    out += '  <i class="fas fa-pen ml-1" onclick="tablesEdit(\'' + btoa(database) + '\', \'' + btoa(data.fetch[database][table]) + '\', false);"></i>';
-                                    out += '  <i class="fas fa-trash ml-1" onclick="tablesDrop(\'' + btoa(database) + '\',\'' + btoa(data.fetch[database][table]) + '\');"></i>';
+                                    out += '  <i class="fas fa-pen ml-1" onclick="tablesEdit(\'' + base64encode(database) + '\', \'' + base64encode(data.fetch[database][table]) + '\', false);"></i>';
+                                    out += '  <i class="fas fa-trash ml-1" onclick="tablesDrop(\'' + base64encode(database) + '\',\'' + base64encode(data.fetch[database][table]) + '\');"></i>';
                                 } else {
-                                    out += '  <i class="fas fa-eye ml-1" onclick="tablesEdit(\'' + btoa(database) + '\', \'' + btoa(data.fetch[database][table]) + '\', true);"></i>';
+                                    out += '  <i class="fas fa-eye ml-1" onclick="tablesEdit(\'' + base64encode(database) + '\', \'' + base64encode(data.fetch[database][table]) + '\', true);"></i>';
                                 }
 
                                 out += '</span>';
@@ -136,13 +136,13 @@ foreach (range(0, 100000) as $i) {
 
         function tablesDrop(databaseBase64, tableBase64, fromModal = false) {
             if (fromModal === false) {
-                $('#dialogTablesDrop .modal-body').html('Drop table <b>' + atob(tableBase64) + '</b> from database <b>' + atob(databaseBase64) + '</b>');
-                $('#dialogTablesDrop').data('table', atob(tableBase64)).data('database', atob(databaseBase64)).modal('show');
+                $('#dialogTablesDrop .modal-body').html('Drop table <b>' + base64decode(tableBase64) + '</b> from database <b>' + base64decode(databaseBase64) + '</b>');
+                $('#dialogTablesDrop').data('table', base64decode(tableBase64)).data('database', base64decode(databaseBase64)).modal('show');
                 return false;
             }
             <?php print $beyond->prefix; ?>api.beyondTables.drop({
-                'database': atob(databaseBase64),
-                'table': atob(tableBase64)
+                'database': base64decode(databaseBase64),
+                'table': base64decode(tableBase64)
             }, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
@@ -151,7 +151,7 @@ foreach (range(0, 100000) as $i) {
                         $('#dialogTablesDrop').modal('hide');
                         tablesFetch();
                     } else {
-                        message('Drop table [' + atob(tableBase64) + '] from database [' + atob(databaseBase64) + '] failed: ' + data.drop);
+                        message('Drop table [' + base64decode(tableBase64) + '] from database [' + base64decode(databaseBase64) + '] failed: ' + data.drop);
                     }
                 }
             });
@@ -159,14 +159,14 @@ foreach (range(0, 100000) as $i) {
 
         function tablesCreate(databaseBase64, fromModal = false, tableName, fieldName, kind, index, allowNull, defaultValue) {
             if (fromModal === false) {
-                $('#dialogTablesCreateTitle').html('Create table in database <b>' + atob(databaseBase64) + '</b>');
+                $('#dialogTablesCreateTitle').html('Create table in database <b>' + base64decode(databaseBase64) + '</b>');
                 $('#addTableName').val('');
                 $('#addTableColumnName').val('');
                 $('#addTableColumnKind').val('string').change();
                 $('#addTableColumnNull').prop('checked', true);
                 $('#addTableColumnDefault').val('');
                 $('#addTableColumnIndex').val('').change();
-                $('#dialogTablesCreate').data('database', atob(databaseBase64)).modal('show').on('shown.bs.modal', function (e) {
+                $('#dialogTablesCreate').data('database', base64decode(databaseBase64)).modal('show').on('shown.bs.modal', function (e) {
                     $('#addTableName').focus();
                 });
                 return false;
@@ -175,7 +175,7 @@ foreach (range(0, 100000) as $i) {
             var fields = [];
 
             <?php print $beyond->prefix; ?>api.beyondTables.create({
-                'database': atob(databaseBase64),
+                'database': base64decode(databaseBase64),
                 'table': tableName,
                 'fields': {
                     [fieldName]: {
@@ -193,7 +193,7 @@ foreach (range(0, 100000) as $i) {
                         $('#dialogTablesCreate').modal('hide');
                         tablesFetch();
                     } else {
-                        message('Create table [' + tableName + '] in database [' + atob(databaseBase64) + '] failed: ' + data.create);
+                        message('Create table [' + tableName + '] in database [' + base64decode(databaseBase64) + '] failed: ' + data.create);
                     }
                 }
             });
@@ -210,8 +210,8 @@ foreach (range(0, 100000) as $i) {
             editTable = false;
 
             <?php print $beyond->prefix; ?>api.beyondTables.info({
-                'database': atob(databaseBase64),
-                'table': atob(tableBase64)
+                'database': base64decode(databaseBase64),
+                'table': base64decode(tableBase64)
             }, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
@@ -225,8 +225,8 @@ foreach (range(0, 100000) as $i) {
                         } else {
                             $('#buttonEditTable').show();
                         }
-                        editDatabase = atob(databaseBase64);
-                        editTable = atob(tableBase64);
+                        editDatabase = base64decode(databaseBase64);
+                        editTable = base64decode(tableBase64);
                         for (fieldIndex in data.info) {
                             tablesEditAddField(
                                 fieldIndex,  // name
@@ -239,7 +239,7 @@ foreach (range(0, 100000) as $i) {
                             );
                         }
                     } else {
-                        message('Fetch table [' + atob(tableBase64) + '] details from database [' + atob(databaseBase64) + '] failed');
+                        message('Fetch table [' + base64decode(tableBase64) + '] details from database [' + base64decode(databaseBase64) + '] failed');
                     }
                 }
             });
@@ -262,7 +262,7 @@ foreach (range(0, 100000) as $i) {
                 '  <td align=center nowrap>' +
                 (
                     ((fieldCount < 2) || (internalTable === true)) ? '' :
-                        '<i class="fas fa-trash mt-1" style="cursor:pointer;" onclick="tablesColumnDrop(\'' + btoa(fieldName) + '\');"></i>'
+                        '<i class="fas fa-trash mt-1" style="cursor:pointer;" onclick="tablesColumnDrop(\'' + base64encode(fieldName) + '\');"></i>'
                 ) +
                 '  </td>' +
                 '</tr>';
@@ -293,7 +293,7 @@ foreach (range(0, 100000) as $i) {
                 } else {
                     if (data.columnAdd === true) {
                         $('#dialogTablesAddField').modal('hide');
-                        tablesEdit(btoa(editDatabase), btoa(editTable), false);
+                        tablesEdit(base64encode(editDatabase), base64encode(editTable), false);
                     } else {
                         message('Add column to table [' + editTable + '] of database [' + editDatabase + '] failed: ' + data.columnAdd);
                     }
@@ -303,23 +303,23 @@ foreach (range(0, 100000) as $i) {
 
         function tablesColumnDrop(fieldNameBase64, fromModal = false) {
             if (fromModal === false) {
-                $('#dialogTablesDropField .modal-body').html('Drop column <b>' + atob(fieldNameBase64) + '</b> of table <b>' + editTable + '</b> in database <b>' + editDatabase + '</b>');
-                $('#dialogTablesDropField').data('fieldName', atob(fieldNameBase64)).modal('show');
+                $('#dialogTablesDropField .modal-body').html('Drop column <b>' + base64decode(fieldNameBase64) + '</b> of table <b>' + editTable + '</b> in database <b>' + editDatabase + '</b>');
+                $('#dialogTablesDropField').data('fieldName', base64decode(fieldNameBase64)).modal('show');
                 return false;
             }
             <?php print $beyond->prefix; ?>api.beyondTables.columnDrop({
                 'database': editDatabase,
                 'table': editTable,
-                'field': atob(fieldNameBase64)
+                'field': base64decode(fieldNameBase64)
             }, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
                 } else {
                     if (data.columnDrop === true) {
                         $('#dialogTablesDropField').modal('hide');
-                        tablesEdit(btoa(editDatabase), btoa(editTable), false);
+                        tablesEdit(base64encode(editDatabase), base64encode(editTable), false);
                     } else {
-                        message('Drop column [' + atob(fieldNameBase64) + '] from table [' + editTable + '] of database [' + editDatabase + '] failed: ' + data.columnDrop);
+                        message('Drop column [' + base64decode(fieldNameBase64) + '] from table [' + editTable + '] of database [' + editDatabase + '] failed: ' + data.columnDrop);
                     }
                 }
             });
@@ -349,8 +349,8 @@ foreach (range(0, 100000) as $i) {
             viewInternalTable = internalTable;
 
             <?php print $beyond->prefix; ?>api.beyondTables.info({
-                'database': atob(databaseBase64),
-                'table': atob(tableBase64)
+                'database': base64decode(databaseBase64),
+                'table': base64decode(tableBase64)
             }, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
@@ -364,8 +364,8 @@ foreach (range(0, 100000) as $i) {
                         } else {
                             $('#buttonAddRow').show();
                         }
-                        viewDatabase = atob(databaseBase64);
-                        viewTable = atob(tableBase64);
+                        viewDatabase = base64decode(databaseBase64);
+                        viewTable = base64decode(tableBase64);
 
                         $('#viewCells thead tr').empty();
 
@@ -402,7 +402,7 @@ foreach (range(0, 100000) as $i) {
 
                         tablesViewLoadTable(1);
                     } else {
-                        message('Fetch table [' + atob(tableBase64) + '] details from database [' + atob(databaseBase64) + '] failed');
+                        message('Fetch table [' + base64decode(tableBase64) + '] details from database [' + base64decode(databaseBase64) + '] failed');
                     }
                 }
             });
@@ -481,7 +481,7 @@ foreach (range(0, 100000) as $i) {
                         tablesViewLoadTableData(loadPage);
 
                     } else {
-                        message('Fetch row count from table [' + atob(tableBase64) + '] of database [' + atob(databaseBase64) + '] failed');
+                        message('Fetch row count from table [' + base64decode(tableBase64) + '] of database [' + base64decode(databaseBase64) + '] failed');
                     }
                 }
             });
@@ -510,17 +510,17 @@ foreach (range(0, 100000) as $i) {
                                 }
                                 cols += '<td>' + data.loadData[rowNo][viewColumns[fieldName]] + '</td>';
                             }
-                            var rowData = btoa(JSON.stringify(data.loadData[rowNo]));
+                            var rowData = base64encode(JSON.stringify(data.loadData[rowNo]));
                             cols += '<td align=center nowrap>';
                             if (((viewAutoColumn !== '') || (viewPrimaryColumn !== '')) && (viewInternalTable !== true)) {
-                                cols += '<i class="fas fa-pen mt-1" style="cursor:pointer;" onclick="console.log(); tablesViewRowEdit(\'' + btoa(keyValue) + '\', \'' + rowData + '\');"></i>';
-                                cols += '<i class="fas fa-trash mt-1 ml-2" style="cursor:pointer;" onclick="tablesViewRowDelete(\'' + btoa(keyValue) + '\', false);"></i>';
+                                cols += '<i class="fas fa-pen mt-1" style="cursor:pointer;" onclick="console.log(); tablesViewRowEdit(\'' + base64encode(keyValue) + '\', \'' + rowData + '\');"></i>';
+                                cols += '<i class="fas fa-trash mt-1 ml-2" style="cursor:pointer;" onclick="tablesViewRowDelete(\'' + base64encode(keyValue) + '\', false);"></i>';
                             }
                             cols += '</td>';
                             $('#viewCells tbody').append('<tr>' + cols + '</tr>');
                         }
                     } else {
-                        message('Fetch rows from table [' + atob(tableBase64) + '] of database [' + atob(databaseBase64) + '] failed');
+                        message('Fetch rows from table [' + base64decode(tableBase64) + '] of database [' + base64decode(databaseBase64) + '] failed');
                     }
                 }
             });
@@ -579,7 +579,7 @@ foreach (range(0, 100000) as $i) {
                         $('#dialogViewRowAdd').modal('hide');
                         tablesViewLoadTable(viewCurrentPage);
                     } else {
-                        message('Add rows to table [' + atob(tableBase64) + '] of database [' + atob(databaseBase64) + '] failed');
+                        message('Add rows to table [' + base64decode(tableBase64) + '] of database [' + base64decode(databaseBase64) + '] failed');
                     }
                 }
             });
@@ -587,7 +587,7 @@ foreach (range(0, 100000) as $i) {
 
         function tablesViewRowEdit(primaryValueBase64 = false, dataJsonBase64 = false) {
             if (dataJsonBase64 !== false) {
-                dataJson = JSON.parse(atob(dataJsonBase64));
+                dataJson = JSON.parse(base64decode(dataJsonBase64));
 
                 var data = '';
                 for (field in viewFields) {
@@ -598,10 +598,10 @@ foreach (range(0, 100000) as $i) {
                         '</div>';
                 }
                 $('#dialogViewRowEdit .modal-body').html(
-                    '<div class="mb-4">Modify row with primary key <b>' + atob(primaryValueBase64) + '</b> from table <b>' + viewTable + '</b> in database <b>' + viewDatabase + '</b></div>' +
+                    '<div class="mb-4">Modify row with primary key <b>' + base64decode(primaryValueBase64) + '</b> from table <b>' + viewTable + '</b> in database <b>' + viewDatabase + '</b></div>' +
                     data
                 );
-                $('#dialogViewRowEdit').data('primaryValue', atob(primaryValueBase64)).modal('show');
+                $('#dialogViewRowEdit').data('primaryValue', base64decode(primaryValueBase64)).modal('show');
 
                 for (field in viewFields) {
                     if (viewAutoColumn === field) {
@@ -634,7 +634,7 @@ foreach (range(0, 100000) as $i) {
                 'fields': fields,
                 'primary': primaryColumn,
                 'kind': (viewAutoColumn !== '' ? 'number' : viewPrimaryKind),
-                'value': atob(primaryValueBase64)
+                'value': base64decode(primaryValueBase64)
             }, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
@@ -643,7 +643,7 @@ foreach (range(0, 100000) as $i) {
                         $('#dialogViewRowEdit').modal('hide');
                         tablesViewLoadTable(viewCurrentPage);
                     } else {
-                        message('Modify rows with primary key [' + atob(primaryValueBase64) + '] from table [' + atob(tableBase64) + '] of database [' + atob(databaseBase64) + '] failed');
+                        message('Modify rows with primary key [' + base64decode(primaryValueBase64) + '] from table [' + base64decode(tableBase64) + '] of database [' + base64decode(databaseBase64) + '] failed');
                     }
                 }
             });
@@ -651,8 +651,8 @@ foreach (range(0, 100000) as $i) {
 
         function tablesViewRowDelete(primaryValueBase64, fromModal = false) {
             if (fromModal === false) {
-                $('#dialogViewRowDelete .modal-body').html('<div class="mb-4">Delete row with primary key <b>' + atob(primaryValueBase64) + '</b> from table <b>' + viewTable + '</b> in database <b>' + viewDatabase + '</b></div>');
-                $('#dialogViewRowDelete').data('primaryValue', atob(primaryValueBase64)).modal('show');
+                $('#dialogViewRowDelete .modal-body').html('<div class="mb-4">Delete row with primary key <b>' + base64decode(primaryValueBase64) + '</b> from table <b>' + viewTable + '</b> in database <b>' + viewDatabase + '</b></div>');
+                $('#dialogViewRowDelete').data('primaryValue', base64decode(primaryValueBase64)).modal('show');
                 return false;
             }
 
@@ -670,7 +670,7 @@ foreach (range(0, 100000) as $i) {
                 'database': viewDatabase,
                 'table': viewTable,
                 'primary': primaryColumn,
-                'value': atob(primaryValueBase64)
+                'value': base64decode(primaryValueBase64)
             }, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
@@ -679,7 +679,7 @@ foreach (range(0, 100000) as $i) {
                         $('#dialogViewRowDelete').modal('hide');
                         tablesViewLoadTable(viewCurrentPage);
                     } else {
-                        message('Add rows to table [' + atob(tableBase64) + '] of database [' + atob(databaseBase64) + '] failed');
+                        message('Add rows to table [' + base64decode(tableBase64) + '] of database [' + base64decode(databaseBase64) + '] failed');
                     }
                 }
             });
@@ -764,7 +764,7 @@ foreach (range(0, 100000) as $i) {
                     <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
                     <button class="btn btn-success" type="button"
                             onclick="tablesCreate(
-                                btoa($('#dialogTablesCreate').data('database')),
+                                base64encode($('#dialogTablesCreate').data('database')),
                                 true,
                                 $('#addTableName').val(),
                                 $('#addTableColumnName').val(),
@@ -863,7 +863,7 @@ foreach (range(0, 100000) as $i) {
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button"
-                            onclick="tablesColumnDrop(btoa($('#dialogTablesDropField').data('fieldName')), true);">
+                            onclick="tablesColumnDrop(base64encode($('#dialogTablesDropField').data('fieldName')), true);">
                         Drop column
                     </button>
                     <button class="btn btn-success" type="button" data-dismiss="modal">Cancel</button>
@@ -883,7 +883,7 @@ foreach (range(0, 100000) as $i) {
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button"
-                            onclick="tablesDrop(btoa($('#dialogTablesDrop').data('database')), btoa($('#dialogTablesDrop').data('table')), true);">
+                            onclick="tablesDrop(base64encode($('#dialogTablesDrop').data('database')), base64encode($('#dialogTablesDrop').data('table')), true);">
                         Drop table
                     </button>
                     <button class="btn btn-success" type="button" data-dismiss="modal">Cancel</button>
@@ -925,7 +925,7 @@ foreach (range(0, 100000) as $i) {
                     <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
                     <button class="btn btn-success" type="button"
                             onclick="tablesViewRowEdit(
-                                btoa($('#dialogViewRowEdit').data('primaryValue')),
+                                base64encode($('#dialogViewRowEdit').data('primaryValue')),
                                 false
                                 );">
                         Save row
@@ -947,7 +947,7 @@ foreach (range(0, 100000) as $i) {
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button"
                             onclick="tablesViewRowDelete(
-                                btoa($('#dialogViewRowDelete').data('primaryValue')),
+                                base64encode($('#dialogViewRowDelete').data('primaryValue')),
                                 true
                                 );">
                         Delete row

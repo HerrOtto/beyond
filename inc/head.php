@@ -45,3 +45,20 @@ foreach (glob(__DIR__ . '/../plugins/*') as $pluginDir) {
     }
 }
 unset($pluginDir);
+
+?><script>
+
+    function base64encode(str) { // btoa with unicode support
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+            function toSolidBytes(match, p1) {
+                return String.fromCharCode('0x' + p1);
+            }));
+    }
+
+    function base64decode(str) { // atob with unicode support
+        return decodeURIComponent(base64decode(str).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    }
+
+</script>

@@ -138,7 +138,7 @@ if ((property_exists($configObj, 'database')) && (array_key_exists($configObj->d
 
     function viewMail(jsonData) {
         var out = '';
-        var data = JSON.parse(atob(jsonData));
+        var data = JSON.parse(base64decode(jsonData));
 
         if (data.from != '') {
             out += '<div>';
@@ -198,7 +198,7 @@ if ((property_exists($configObj, 'database')) && (array_key_exists($configObj->d
         }
 
         var out = '';
-        var data = JSON.parse(atob(jsonData));
+        var data = JSON.parse(base64decode(jsonData));
 
         <?php print $beyond->prefix; ?>api.beyondTables.deleteData({
             'database': database,

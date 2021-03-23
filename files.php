@@ -155,12 +155,12 @@ $height = 225;
 
         function directoryDelete(dirBase64, fromModal = false) {
             if (fromModal === false) {
-                $('#dialogDirectoryDelete .modal-body').html('Delete directory: <b>' + atob(dirBase64) + '</b>');
-                $('#dialogDirectoryDelete').data('directory', atob(dirBase64)).modal('show');
+                $('#dialogDirectoryDelete .modal-body').html('Delete directory: <b>' + base64decode(dirBase64) + '</b>');
+                $('#dialogDirectoryDelete').data('directory', base64decode(dirBase64)).modal('show');
                 return false;
             }
             <?php print $beyond->prefix; ?>api.beyondFiles.directoryDelete({
-                'directory': atob(dirBase64),
+                'directory': base64decode(dirBase64),
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {
                 if (error !== false) {
@@ -172,7 +172,7 @@ $height = 225;
                             '&nocache=<?php print urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
                     } else {
                         $('#dialogDirectoryDelete').modal('hide');
-                        message('Directory [' + atob(dirBase64) + '] deletion failed');
+                        message('Directory [' + base64decode(dirBase64) + '] deletion failed');
                     }
                 }
             });
@@ -197,12 +197,12 @@ $height = 225;
 
         function fileDelete(fileBase64, fromModal = false) {
             if (fromModal === false) {
-                $('#dialogFileDelete .modal-body').html('Delete file: <b>' + atob(fileBase64) + '</b>');
-                $('#dialogFileDelete').data('fileName', atob(fileBase64)).modal('show');
+                $('#dialogFileDelete .modal-body').html('Delete file: <b>' + base64decode(fileBase64) + '</b>');
+                $('#dialogFileDelete').data('fileName', base64decode(fileBase64)).modal('show');
                 return false;
             }
             <?php print $beyond->prefix; ?>api.beyondFiles.fileDelete({
-                'file': atob(fileBase64),
+                'file': base64decode(fileBase64),
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {
                 if (error !== false) {
@@ -211,7 +211,7 @@ $height = 225;
                     if (data.fileDelete === true) {
                         location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/files.php?dir=<?php print urlencode($dir['relPath']) . '&nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
                     } else {
-                        message('File [' + atob(fileBase64) + '] deletion failed');
+                        message('File [' + base64decode(fileBase64) + '] deletion failed');
                     }
                 }
             });
@@ -389,7 +389,7 @@ $height = 225;
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button"
-                            onclick="directoryDelete(btoa($('#dialogDirectoryDelete').data('directory')), true);">
+                            onclick="directoryDelete(base64encode($('#dialogDirectoryDelete').data('directory')), true);">
                         Delete directory
                     </button>
                     <button class="btn btn-success" type="button" data-dismiss="modal">Cancel</button>
@@ -430,7 +430,7 @@ $height = 225;
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button"
-                            onclick="fileDelete(btoa($('#dialogFileDelete').data('fileName')), true);">
+                            onclick="fileDelete(base64encode($('#dialogFileDelete').data('fileName')), true);">
                         Delete file
                     </button>
                     <button class="btn btn-success" type="button" data-dismiss="modal">Cancel</button>

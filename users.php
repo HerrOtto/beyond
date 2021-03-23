@@ -40,10 +40,10 @@ if (!$beyond->tools->checkRole('admin,view')) {
                         for (userName in data.fetch) {
                             $('#userTable').append(
                                 '<tr>' +
-                                '<td class="userCell" value="' + btoa(userName) + '">' + userName + '</td>' +
-                                '<td class="rolesCell" value="' + btoa(data.fetch[userName].roles) + '">' + data.fetch[userName].roles + '</td>' +
+                                '<td class="userCell" value="' + base64encode(userName) + '">' + userName + '</td>' +
+                                '<td class="rolesCell" value="' + base64encode(data.fetch[userName].roles) + '">' + data.fetch[userName].roles + '</td>' +
                                 '<td>' +
-                                '  <span style="cursor:pointer;" onclick="usersDelete(\'' + btoa(userName) + '\');"><i class="fas fa-trash"></i></span>' +
+                                '  <span style="cursor:pointer;" onclick="usersDelete(\'' + base64encode(userName) + '\');"><i class="fas fa-trash"></i></span>' +
                                 '</td>' +
                                 '</tr>'
                             );
@@ -53,8 +53,8 @@ if (!$beyond->tools->checkRole('admin,view')) {
                         }
                         $('.userCell,.rolesCell').on('click', function() {
                             var tr = $(this).closest('tr');
-                            var userName = atob(tr.children('.userCell').attr('value'));
-                            var roles = atob(tr.children('.rolesCell').attr('value'));
+                            var userName = base64decode(tr.children('.userCell').attr('value'));
+                            var roles = base64decode(tr.children('.rolesCell').attr('value'));
                             usersEdit(userName, roles, '', '', false);
                         })
 
@@ -118,12 +118,12 @@ if (!$beyond->tools->checkRole('admin,view')) {
 
         function usersDelete(userNameBase64, fromModal = false) {
             if (fromModal === false) {
-                $('#dialogUsersDelete .modal-body').html('Delete user: <b>' + atob(userNameBase64) + '</b>');
-                $('#dialogUsersDelete').data('userName', atob(userNameBase64)).modal('show');
+                $('#dialogUsersDelete .modal-body').html('Delete user: <b>' + base64decode(userNameBase64) + '</b>');
+                $('#dialogUsersDelete').data('userName', base64decode(userNameBase64)).modal('show');
                 return false;
             }
             <?php print $beyond->prefix; ?>api.beyondUsers.delete({
-                'userName': atob(userNameBase64)
+                'userName': base64decode(userNameBase64)
             }, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
@@ -132,7 +132,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                         $('#dialogUsersDelete').modal('hide');
                         usersFetch();
                     } else {
-                        message('User [' + atob(userNameBase64) + '] deletion failed');
+                        message('User [' + base64decode(userNameBase64) + '] deletion failed');
                     }
                 }
             });
@@ -208,7 +208,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button"
-                            onclick="usersDelete(btoa($('#dialogUsersDelete').data('userName')), true);">
+                            onclick="usersDelete(base64encode($('#dialogUsersDelete').data('userName')), true);">
                         Delete user
                     </button>
                     <button class="btn btn-success" type="button" data-dismiss="modal">Cancel</button>
