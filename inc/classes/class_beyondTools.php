@@ -210,7 +210,7 @@ class beyondTools
      * @param string $bcc BCC header
      */
 
-    public function sendMail($subject, $body, $kind = 'text', $from = false, $to = false, $replyTo = false, $bcc = false)
+    public function sendMail($subject, $body, $kind = 'text', $from = false, $to = false, $replyTo = false, $bcc = false, $attachment = false)
     {
 
         $mail = new PHPMailer(true);
@@ -266,6 +266,10 @@ class beyondTools
             }
             if ($bcc !== '') {
                 $mail->addBCC($bcc);
+            }
+
+            if ($attachment !== false) {
+                $mail->AddAttachment($attachment);
             }
 
             $mail->isHTML($kind === 'html');
