@@ -208,9 +208,11 @@ class beyondTools
      * @param string $to Recipient header
      * @param string $replyTo Reply to header
      * @param string $bcc BCC header
+     * @param string $attachment Path to attachment
+     * @param string $attachmentName Attachment file name
      */
 
-    public function sendMail($subject, $body, $kind = 'text', $from = false, $to = false, $replyTo = false, $bcc = false, $attachment = false)
+    public function sendMail($subject, $body, $kind = 'text', $from = false, $to = false, $replyTo = false, $bcc = false, $attachment = false, $attachmentName = false)
     {
 
         $mail = new PHPMailer(true);
@@ -269,7 +271,7 @@ class beyondTools
             }
 
             if ($attachment !== false) {
-                $mail->AddAttachment($attachment);
+                $mail->AddAttachment($attachment, $attachmentName);
             }
 
             $mail->isHTML($kind === 'html');
