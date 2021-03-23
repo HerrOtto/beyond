@@ -93,13 +93,15 @@ class mailHandler
         }
 
         // To
-        if ((property_exists($configObj->{'settings_' . $language}, 'to')) && (trim($configObj->{'settings_' . $language}->to) !== '')) {
-            $to = $configObj->{'settings_' . $language}->to;
-        } else if ((property_exists($configObj->{'settings_default'}, 'to')) && (trim($configObj->{'settings_default'}->to) !== '')) {
-            $to = $configObj->{'settings_default'}->to;
-        }
-        if (trim($to) === '') {
-            $to = $this->config->get('base', 'mail.to', 'root@localhost'); // System default
+        if ($to === false) {
+            if ((property_exists($configObj->{'settings_' . $language}, 'to')) && (trim($configObj->{'settings_' . $language}->to) !== '')) {
+                $to = $configObj->{'settings_' . $language}->to;
+            } else if ((property_exists($configObj->{'settings_default'}, 'to')) && (trim($configObj->{'settings_default'}->to) !== '')) {
+                $to = $configObj->{'settings_default'}->to;
+            }
+            if (trim($to) === '') {
+                $to = $this->config->get('base', 'mail.to', 'root@localhost'); // System default
+            }
         }
 
         // Reply to
