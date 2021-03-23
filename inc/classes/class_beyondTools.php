@@ -226,6 +226,9 @@ class beyondTools
             $mail->Username = $this->config->get('base', 'mail.user', '');
             $mail->Password = $this->config->get('base', 'mail.pass', '');
 
+            $mail->CharSet = 'UTF-8';
+            $mail->Encoding = 'base64';
+
             $encryption = $this->config->get('base', 'mail.secure', '');
             if ($encryption === 'tls') {
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
