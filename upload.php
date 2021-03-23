@@ -38,7 +38,7 @@ if (!move_uploaded_file($_FILES['file']['tmp_name'], $dir['absPath'] . '/' . $fi
 }
 
 unset($dir);
-unser($fileName);
+unset($fileName);
 
 // Done
 print json_encode(
