@@ -36,9 +36,12 @@ class mailHandler
      * @param mixed $kind Mail kind "html" or "text"
      * @param mixed $language If "false" use current user language otherwise the specified
      * @param mixed $replyTo Overwrite default "reply to"
+     * @param mixed $bcc Overwrite default "bcc"
+     * @param mixed $from Overwrite default "from"
+     * @param mixed $attachment Path to attachment
      * @result string Field content
      */
-    public function send($to, $subject, $body, $kind = 'text', $language = false, $replyTo = false)
+    public function send($to, $subject, $body, $kind = 'text', $language = false, $replyTo = false, $bcc = false, $from = false, $attachment = false)
     {
 
         // Load default values
@@ -82,14 +85,16 @@ class mailHandler
         }
 
         // From
-        $from = '';
-        if ((property_exists($configObj->{'settings_' . $language}, 'from')) && (trim($configObj->{'settings_' . $language}->from) !== '')) {
-            $from = $configObj->{'settings_' . $language}->from;
-        } else if ((property_exists($configObj->{'settings_default'}, 'from')) && (trim($configObj->{'settings_default'}->from) !== '')) {
-            $from = $configObj->{'settings_default'}->from;
-        }
-        if (trim($from) === '') {
-            $from = $this->config->get('base', 'mail.from', 'root@localhost'); // System default
+        if ($from === false) {
+            $from = '';
+            if ((property_exists($configObj->{'settings_' . $language}, 'from')) && (trim($configObj->{'settings_' . $language}->from) !== '')) {
+                $from = $configObj->{'settings_' . $language}->from;
+            } else if ((property_exists($configObj->{'settings_default'}, 'from')) && (trim($configObj->{'settings_default'}->from) !== '')) {
+                $from = $configObj->{'settings_default'}->from;
+            }
+            if (trim($from) === '') {
+                $from = $this->config->get('base', 'mail.from', 'root@localhost'); // System default
+            }
         }
 
         // To
@@ -118,25 +123,16 @@ class mailHandler
         }
 
         // BCC
-        $bcc = '';
-        if ((property_exists($configObj->{'settings_' . $language}, 'bcc')) && (trim($configObj->{'settings_' . $language}->bcc) !== '')) {
-            $bcc = $configObj->{'settings_' . $language}->bcc;
-        } else if ((property_exists($configObj->{'settings_default'}, 'bcc')) && (trim($configObj->{'settings_default'}->bcc) !== '')) {
-            $bcc = $configObj->{'settings_default'}->bcc;
-        }
-        if (trim($bcc) === '') {
-            $bcc = $this->config->get('base', 'mail.bcc', ''); // System default
-        }
-
-        // From
-        $from = '';
-        if ((property_exists($configObj->{'settings_' . $language}, 'from')) && (trim($configObj->{'settings_' . $language}->from) !== '')) {
-            $from = $configObj->{'settings_' . $language}->from;
-        } else if ((property_exists($configObj->{'settings_default'}, 'from')) && (trim($configObj->{'settings_default'}->from) !== '')) {
-            $from = $configObj->{'settings_default'}->from;
-        }
-        if (trim($from) === '') {
-            $from = $this->config->get('base', 'mail.from', 'root@localhost'); // System default
+        if ($bcc === false) {
+            $bcc = '';
+            if ((property_exists($configObj->{'settings_' . $language}, 'bcc')) && (trim($configObj->{'settings_' . $language}->bcc) !== '')) {
+                $bcc = $configObj->{'settings_' . $language}->bcc;
+            } else if ((property_exists($configObj->{'settings_default'}, 'bcc')) && (trim($configObj->{'settings_default'}->bcc) !== '')) {
+                $bcc = $configObj->{'settings_default'}->bcc;
+            }
+            if (trim($bcc) === '') {
+                $bcc = $this->config->get('base', 'mail.bcc', ''); // System default
+            }
         }
 
         // Send mail
@@ -147,7 +143,8 @@ class mailHandler
             $from, // $from
             $to, // $to
             $replyTo, // $replyTo
-            $bcc // $bcc
+            $bcc, // $bcc
+            $attachment // attachment
         );
 
         // Add mail to database
