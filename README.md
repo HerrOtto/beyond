@@ -127,6 +127,7 @@ Send an mail:
 
 <pre>&lt;?php
 $beyond->mail->send('Subject', 'Body', 'to@mail.address');
+// send($to, $subject, $body, $kind = 'text', $language = false, $to = false, $replyTo = false)
 ?&gt;</pre>
 
 ## Plugin: cookiebox
