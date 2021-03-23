@@ -11,6 +11,19 @@ require_once __DIR__ . '/../../inc/init.php';
 
 /* <style> */
 
+    .<?php print $beyond->prefix; ?>cookieboxBackground {
+
+        z-index:9998;
+        background-color: #000000;
+        opacity: 0.5;
+        position:fixed;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+
+    }
+
     /* Mobile */
     .<?php print $beyond->prefix; ?>cookieboxWrap {
 
