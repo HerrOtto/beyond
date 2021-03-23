@@ -31,7 +31,7 @@ if ((property_exists($configObj, 'database')) && (array_key_exists($configObj->d
     function loadPage(loadPage) {
         $('#viewCells tbody').empty();
 
-        <?php print $beyond->prefix; ?>api.tables.rowCount({
+        <?php print $beyond->prefix; ?>api.beyondTables.rowCount({
             'database': database,
             'table': table
         }, function (error, data) {
@@ -104,7 +104,7 @@ if ((property_exists($configObj, 'database')) && (array_key_exists($configObj->d
     function loadPageData(loadPage) {
         currentPage = loadPage;
 
-        <?php print $beyond->prefix; ?>api.tables.loadData({
+        <?php print $beyond->prefix; ?>api.beyondTables.loadData({
             'database': database,
             'table': table,
             'offset': ((loadPage - 1) * viewRowsPerPage),
@@ -200,7 +200,7 @@ if ((property_exists($configObj, 'database')) && (array_key_exists($configObj->d
         var out = '';
         var data = JSON.parse(atob(jsonData));
 
-        <?php print $beyond->prefix; ?>api.tables.deleteData({
+        <?php print $beyond->prefix; ?>api.beyondTables.deleteData({
             'database': database,
             'table': table,
             'primary': 'id',
