@@ -148,13 +148,23 @@ Add cookie box script to header:
 ..
 &lt;/head&gt;</pre>
 
-Example matomo implementation:
+Example _matomo_ implementation:
 
 <pre>&lt;script&gt;
-if (beyond_cookieboxGetCookie('cookiebox_COOKIENAME') === '1') {
-
-  //
-
-}
+document.addEventListener('DOMContentLoaded', function () {
+  if (beyond_cookieboxGetCookie('cookiebox_<font color="red">COOKIENAME</font>') === '1') {
+    var _paq = _paq || [];
+    _paq.push(["setCookieDomain", "<font color="red">YOUR-DOMAIN-NAME</font>"]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="//<font color="red">YOUR-MATMO.URL</font>/";
+      _paq.push(['setTrackerUrl', u+'piwik.php']);
+      _paq.push(['setSiteId', '<font color="red">YOUR-SITE-ID</font>']);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    })();
+  }
+}, false);
 &lt;/script&gt;</pre>
         
