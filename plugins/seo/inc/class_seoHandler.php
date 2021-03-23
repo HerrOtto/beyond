@@ -107,17 +107,19 @@ class seoHandler
             }
 
             // Title
-            print '<title>';
+            $title = '';
             if (property_exists($configObj->{'defaults_' . $language}, 'titlePrefix')) {
-                print $configObj->{'defaults_' . $language}->titlePrefix;
+                $title .= $configObj->{'defaults_' . $language}->titlePrefix;
             }
             if (property_exists($fileConfigObj->{'settings_' . $language}, 'title')) {
-                print htmlspecialchars($fileConfigObj->{'settings_' . $language}->title);
+                $title .= htmlspecialchars($fileConfigObj->{'settings_' . $language}->title);
             }
             if (property_exists($configObj->{'defaults_' . $language}, 'titleSuffix')) {
-                print $configObj->{'defaults_' . $language}->titleSuffix;
+                $title .= $configObj->{'defaults_' . $language}->titleSuffix;
             }
-            print '</title>' . PHP_EOL;
+            if (trim($title) !== '') {
+                print '<title>' . $title . '</title>' . PHP_EOL;
+            }
 
             // Author
             $author = '';
