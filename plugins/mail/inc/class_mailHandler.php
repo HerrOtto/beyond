@@ -35,11 +35,10 @@ class mailHandler
      * @param mixed $body Mail body
      * @param mixed $kind Mail kind "html" or "text"
      * @param mixed $language If "false" use current user language otherwise the specified
-     * @param mixed $to Overwrite default "to"
      * @param mixed $replyTo Overwrite default "reply to"
      * @result string Field content
      */
-    public function send($to, $subject, $body, $kind = 'text', $language = false, $to = false, $replyTo = false)
+    public function send($to, $subject, $body, $kind = 'text', $language = false, $replyTo = false)
     {
 
         // Load default values
@@ -94,15 +93,13 @@ class mailHandler
         }
 
         // To
-        if ($to === false) {
-            if ((property_exists($configObj->{'settings_' . $language}, 'to')) && (trim($configObj->{'settings_' . $language}->to) !== '')) {
-                $to = $configObj->{'settings_' . $language}->to;
-            } else if ((property_exists($configObj->{'settings_default'}, 'to')) && (trim($configObj->{'settings_default'}->to) !== '')) {
-                $to = $configObj->{'settings_default'}->to;
-            }
-            if (trim($to) === '') {
-                $to = $this->config->get('base', 'mail.to', 'root@localhost'); // System default
-            }
+        if ((property_exists($configObj->{'settings_' . $language}, 'to')) && (trim($configObj->{'settings_' . $language}->to) !== '')) {
+            $to = $configObj->{'settings_' . $language}->to;
+        } else if ((property_exists($configObj->{'settings_default'}, 'to')) && (trim($configObj->{'settings_default'}->to) !== '')) {
+            $to = $configObj->{'settings_default'}->to;
+        }
+        if (trim($to) === '') {
+            $to = $this->config->get('base', 'mail.to', 'root@localhost'); // System default
         }
 
         // Reply to
