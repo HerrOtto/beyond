@@ -313,7 +313,7 @@ if (!property_exists($configObj, 'cookies')) {
                 print 'var checked = document.getElementById("' . $beyond->prefix . 'cookieBoxCheckbox_' . $cookieName . '").checked;' . PHP_EOL;
                 print $beyond->prefix . 'cookieboxSetCookie(\'cookiebox_' . $cookieName . '\', checked === true ? \'1\' : \'0\', 30);' . PHP_EOL;
             }
-            print $beyond->prefix . 'cookieboxSetCookie(\'cookieboxDone\', \'<?php print $configObj->changeCount; ?>\', 30);' . PHP_EOL;
+            print $beyond->prefix . 'cookieboxSetCookie(\'cookieboxDone\', \'' . $configObj->changeCount . '\', 30);' . PHP_EOL;
             print $beyond->prefix . 'cookieboxReloadPage();' . PHP_EOL;
             ?>
         }
@@ -328,7 +328,7 @@ if (!property_exists($configObj, 'cookies')) {
                     print $beyond->prefix . 'cookieboxSetCookie(\'cookiebox_' . $cookieName . '\', \'0\', 30);' . PHP_EOL;
                 }
             }
-            print $beyond->prefix . 'cookieboxSetCookie(\'cookieboxDone\', \'<?php print $configObj->changeCount; ?>\', 30);' . PHP_EOL;
+            print $beyond->prefix . 'cookieboxSetCookie(\'cookieboxDone\', \'' . $configObj->changeCount . '\', 30);' . PHP_EOL;
             print $beyond->prefix . 'cookieboxReloadPage();' . PHP_EOL;
             ?>
         }
@@ -338,7 +338,7 @@ if (!property_exists($configObj, 'cookies')) {
             foreach (array_keys((array)$configObj->cookies) as $cookieName) {
                 print $beyond->prefix . 'cookieboxSetCookie(\'cookiebox_' . $cookieName . '\', \'1\', 30);' . PHP_EOL;
             }
-            print $beyond->prefix . 'cookieboxSetCookie(\'cookieboxDone\', \'<?php print $configObj->changeCount; ?>\', 30);' . PHP_EOL;
+            print $beyond->prefix . 'cookieboxSetCookie(\'cookieboxDone\', \'' . $configObj->changeCount . '\', 30);' . PHP_EOL;
             print $beyond->prefix . 'cookieboxReloadPage();' . PHP_EOL;
             ?>
         }
