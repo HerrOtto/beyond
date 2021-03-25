@@ -44,15 +44,20 @@ The software is based on the following other OpenSource projects:
 
 ## TODO
 
+* Rename file
+* Download file
+* Move file
+* Persistent hide/show plugins from editor
 * Plugin: Content delete content when file is getting deleted
 * Plugin: SEO delete content when file is getting deleted
 * Plugin: Menu builder
 * Plugin: Shop
 * Plugin: htaccess
-* Enduser backend
+* Plugin: backup/restore
+* Develop enduser backend from beyond
 * Install/Update plugins from repository
-* Update cleanup
-* System compatibility check, permission check
+* Update cleanup, delete unused files, introduce plugin cleanup
+* System compatibility check, permission check (PHP7.3, modules, ...)
 * Installer
 
 ## Use API
