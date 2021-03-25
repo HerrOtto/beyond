@@ -251,7 +251,6 @@ if (!property_exists($configObj, 'cookies')) {
                     print 'domain=' . $beyond->config->get('base', 'site.session.domain', '') . ';';
                 }
                 ?>path=/";
-
         }
 
         /*

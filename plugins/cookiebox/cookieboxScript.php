@@ -40,7 +40,6 @@ if (!property_exists($configObj, 'changeCount')) {
      */
 
     function <?php print $beyond->prefix; ?>cookieboxInit() {
-
         if (<?php print $beyond->prefix; ?>cookieboxGetCookie('cookieboxDone') !== '<?php print $configObj->changeCount; ?>') {
 
             // Add cookiebox
