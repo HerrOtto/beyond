@@ -12,6 +12,11 @@ if (!property_exists($configObj, 'version')) {
 }
 
 // Get apperence
+if (!property_exists($configObj, 'changeCount')) {
+    $configObj->changeCount = 1;
+}
+
+// Get apperence
 if (!property_exists($configObj, 'apperence')) {
     $configObj->apperence = new stdClass();
 }

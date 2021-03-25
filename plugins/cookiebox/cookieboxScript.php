@@ -3,6 +3,19 @@
 header("Content-type: text/javascript; Charset=UTF-8");
 require_once __DIR__ . '/../../inc/init.php';
 
+$configJson = file_get_contents(__DIR__ . '/../../config/cookiebox_settings.json');
+$configObj = json_decode($configJson); // , JSON_OBJECT_AS_ARRAY);
+
+// Get version
+if (!property_exists($configObj, 'version')) {
+    $configObj->version = 1;
+}
+
+// Get apperence
+if (!property_exists($configObj, 'changeCount')) {
+    $configObj->changeCount = 1;
+}
+
 ?>
 
 // <script>
@@ -28,7 +41,7 @@ require_once __DIR__ . '/../../inc/init.php';
 
     function <?php print $beyond->prefix; ?>cookieboxInit() {
 
-        if (<?php print $beyond->prefix; ?>cookieboxGetCookie('cookieboxDone') !== '1') {
+        if (<?php print $beyond->prefix; ?>cookieboxGetCookie('cookieboxDone') !== '<?php print $configObj->changeCount; ?>') {
 
             // Add cookiebox
             beyond_api.cookiebox_config.load({}, function (error, data) {
