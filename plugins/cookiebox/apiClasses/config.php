@@ -30,6 +30,10 @@ class cookiebox_config extends beyondApiBaseClass
             $config->apperence = new stdClass();
         }
 
+        if (!property_exists($config->apperence, 'changeCount')) {
+            $config->apperence->changeCount = 1;
+        }
+
         if (!property_exists($config->apperence, 'box')) {
             $config->apperence->box = new stdClass();
             $config->apperence->box->detailsText = '';
@@ -114,6 +118,12 @@ class cookiebox_config extends beyondApiBaseClass
         if (!property_exists($config, 'version')) {
             $config->version = 1;
         }
+
+        // Increment change counter
+        if (!property_exists($config->apperence, 'changeCount')) {
+            $config->apperence->changeCount = 0;
+        }
+        $config->apperence->changeCount += 1;
 
         // Update apperence
         if (!property_exists($config, 'apperence')) {
