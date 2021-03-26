@@ -595,40 +595,82 @@ $height = 225;
                         }
 
                         $info = getimagesize($dir['absPath'] . DIRECTORY_SEPARATOR . $dirItem);
+                        $lastModified = filemtime($dir['absPath'] . DIRECTORY_SEPARATOR . $dirItem);
+                        $cacheFile = __DIR__ . '/cache/' . sha1(trim(trim($dir['relPath'], '/') . '/' . $dirItem, '/')) . '.thumb';
 
-                        $final_width = 0;
-                        $final_height = 0;
-                        list($width_old, $height_old) = $info;
+                        // Load cache, init cache
+                        try {
+                            if (!file_exists($cacheFile)) {
+                                throw Exception('No cache file found');
+                            }
+                            $cache = json_decode(file_get_contents(
+                                $cacheFile
+                            ), JSON_OBJECT_AS_ARRAY);
+                            if (!is_array($cache)) {
+                                throw Exception('Not an array');
+                            }
+                            if ($lastModified !== $cache['lastModified']) {
+                                throw Exception('Original file changed');
+                            }
+                        } catch (Exception $e) {
+                            // On failure init new cache
+                            $cache = array(
+                                'lastModified' => $lastModified
+                            );
+                        }
 
-                        $factor = min($width / $width_old, $height / $height_old);
-                        $final_width = round($width_old * $factor);
-                        $final_height = round($height_old * $factor);
+                        if (array_key_exists( $width . 'x' . $height, $cache)) {
+                            $pngFile = base64_decode($cache[$width . 'x' . $height]);
+                        } else {
+                            $final_width = 0;
+                            $final_height = 0;
+                            list($width_old, $height_old) = $info;
 
-                        $image_resized = imagecreatetruecolor($width, $height);
-                        $silver = imagecolorallocate($image_resized, 233, 236, 239);
-                        imagefill($image_resized, 0, 0, $silver);
+                            $factor = min($width / $width_old, $height / $height_old);
+                            $final_width = round($width_old * $factor);
+                            $final_height = round($height_old * $factor);
 
-                        imagecopyresampled(
-                            $image_resized,
-                            $image,
-                            ($width / 2) - ($final_width / 2),
-                            ($height / 2) - ($final_height / 2),
-                            0,
-                            0,
-                            $final_width,
-                            $final_height,
-                            $width_old,
-                            $height_old
-                        );
+                            $image_resized = imagecreatetruecolor($width, $height);
+                            $silver = imagecolorallocate($image_resized, 233, 236, 239);
+                            imagefill($image_resized, 0, 0, $silver);
 
-                        // Get image as PNG
-                        ob_start();
-                        imagepng($image_resized);
-                        $pngFile = ob_get_contents();
-                        ob_end_clean();
+                            imagecopyresampled(
+                                $image_resized,
+                                $image,
+                                ($width / 2) - ($final_width / 2),
+                                ($height / 2) - ($final_height / 2),
+                                0,
+                                0,
+                                $final_width,
+                                $final_height,
+                                $width_old,
+                                $height_old
+                            );
 
-                        imagedestroy($image_resized);
-                        imagedestroy($image);
+                            // Get image as PNG
+                            ob_start();
+                            imagepng($image_resized);
+                            $pngFile = ob_get_contents();
+                            ob_end_clean();
+
+                            // Save in cache file
+                            $cache[$width . 'x' . $height] = base64_encode($pngFile);
+
+                            // Cleanup
+                            imagedestroy($image_resized);
+                            imagedestroy($image);
+                        }
+
+                        if (is_dir(__DIR__ . '/cache')) {
+                            try {
+                                file_put_contents(
+                                    $cacheFile,
+                                    json_encode($cache, JSON_PRETTY_PRINT)
+                                );
+                            } catch (Exception $e) {
+                                // Ignore
+                            }
+                        }
 
                         $outputImage .= '<div class="imageItemOuter" style="width: ' . $width . ';">';
                         $outputImage .= '    <div class="imageItemImage">';
