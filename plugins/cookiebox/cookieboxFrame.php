@@ -235,7 +235,7 @@ if (!property_exists($configObj, 'cookies')) {
     <script>
 
         /*
-         * Cookie functions
+         * Cookie
          */
 
         function <?php print $beyond->prefix; ?>cookieboxSetCookie(name, value, days) {
@@ -254,32 +254,51 @@ if (!property_exists($configObj, 'cookies')) {
         }
 
         /*
-         * Intro on resize
+         * On resize
          */
 
         function <?php print $beyond->prefix; ?>cookieboxScaleIntro() {
+
+            if (document.getElementById("<?php print $beyond->prefix; ?>cookieBoxStartpage").style.display !== 'none') {
+                // Currently on start page
+
+                buttonsDiv = document.getElementById('<?php print $beyond->prefix; ?>cookieboxIntroButtons')
+                buttonsOffsetHeight = buttonsDiv.offsetHeight;
+
+                buttonsDiv.style.position = 'absolute';
+                buttonsDiv.style.display = 'block';
+                buttonsDiv.style.bottom = '10';
+                buttonsDiv.style.right = '0';
+                buttonsDiv.style.left = '0';
+
+                textDiv = document.getElementById('<?php print $beyond->prefix; ?>cookieboxIntro')
+
+                textDiv.style.position = 'absolute';
+                textDiv.style.display = 'block';
+                textDiv.style.padding = '20px';
+                textDiv.style.top = '0';
+                textDiv.style.bottom = (buttonsDiv.offsetHeight + 30) + 'px';
+                textDiv.style.marginBottom = '0';
+                textDiv.style.right = '0';
+                textDiv.style.left = '0';
+
+                contentDiv = document.getElementById('<?php print $beyond->prefix; ?>cookieboxIntroText')
+
+                parent.postMessage(JSON.stringify({
+                    'kind': 'desiredHeight',
+                    'value': contentDiv.clientHeight+ buttonsDiv.offsetHeight + 70
+                }), "*");
+            } else {
+                // Currently on details page
+                settingsDiv = document.getElementById('<?php print $beyond->prefix; ?>cookieBoxSettings');
+                parent.postMessage(JSON.stringify({
+                    'kind': 'desiredHeight',
+                    'value': settingsDiv.clientHeight + 70
+                }), "*");
+            }
+
+            // Recalculate every second
             setTimeout(<?php print $beyond->prefix; ?>cookieboxScaleIntro, 1000);
-
-            buttonsDiv = document.getElementById('<?php print $beyond->prefix; ?>cookieboxIntroButtons')
-            buttonsOffsetHeight = buttonsDiv.offsetHeight;
-
-            buttonsDiv.style.position = 'absolute';
-            buttonsDiv.style.display = 'block';
-            buttonsDiv.style.bottom = '10';
-            buttonsDiv.style.right = '0';
-            buttonsDiv.style.left = '0';
-
-            textDiv = document.getElementById('<?php print $beyond->prefix; ?>cookieboxIntro')
-
-            textDiv.style.position = 'absolute';
-            textDiv.style.display = 'block';
-            textDiv.style.padding = '20px';
-            textDiv.style.top = '0';
-            textDiv.style.bottom = (buttonsDiv.offsetHeight + 30) + 'px';
-            textDiv.style.marginBottom = '0';
-            textDiv.style.right = '0';
-            textDiv.style.left = '0';
-
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -306,6 +325,10 @@ if (!property_exists($configObj, 'cookies')) {
                 window.parent.location.href = location + (location.indexOf("?") > 0 ? '&' : '?') + 'nocache=' + (new Date().getTime()).toString();
             }
         }
+
+        /*
+         * On button click set cookies
+         */
 
         function <?php print $beyond->prefix; ?>cookieboxAcceptSelected() {
             <?php
@@ -350,7 +373,9 @@ if (!property_exists($configObj, 'cookies')) {
 <!-- Startpage -->
 <div align="center" id="<?php print $beyond->prefix; ?>cookieBoxStartpage">
     <div class="<?php print $beyond->prefix; ?>cookieboxIntro" id="<?php print $beyond->prefix; ?>cookieboxIntro">
-        <?php print $configObj->apperence->box->text; ?>
+        <div id="<?php print $beyond->prefix; ?>cookieboxIntroText">
+            <?php print $configObj->apperence->box->text; ?>
+        </div>
     </div>
     <div align="center" class="<?php print $beyond->prefix; ?>cookieboxIntroButtons"
          id="<?php print $beyond->prefix; ?>cookieboxIntroButtons">

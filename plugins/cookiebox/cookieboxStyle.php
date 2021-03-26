@@ -30,11 +30,6 @@ require_once __DIR__ . '/../../inc/init.php';
         z-index: 9999;
         position: fixed;
 
-        top: 40px;
-        left: 40px;
-        right: 40px;
-        bottom: 40px;
-
         border: 1px solid silver;
         border-radius: 4px;
     }
@@ -46,11 +41,18 @@ require_once __DIR__ . '/../../inc/init.php';
             top: 50%;
             -webkit-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
-            width: 600px;
-            height: 400px;
-
         }
-
+    }
+    /* Mobile */
+    @media only screen and (max-width: 767px) {
+        .<?php print $beyond->prefix; ?>cookieboxWrap {
+            height: inherit!important;
+            width: inherit!important;
+            top: 40px;
+            left: 40px;
+            right: 40px;
+            bottom: 40px;
+        }
     }
 
     /* Fit IFrame into Wrapper */

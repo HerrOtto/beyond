@@ -51,7 +51,7 @@ if (!property_exists($configObj, 'changeCount')) {
 
                 // Cookiebox
                 document.body.innerHTML =
-                    '<div class="<?php print $beyond->prefix; ?>cookieboxWrap">' +
+                    '<div class="<?php print $beyond->prefix; ?>cookieboxWrap" id="<?php print $beyond->prefix; ?>cookieboxWrap" style="width: 600px; height: 400px;">' +
                     '<iframe class="<?php print $beyond->prefix; ?>cookieboxFrame" id="<?php print $beyond->prefix; ?>cookiebox" src="<?php print $beyond->config->get('base', 'server.baseUrl') . '/beyond/plugins/cookiebox/cookieboxFrame.php'; ?>"></iframe>' +
                     '</div>' +
                     document.body.innerHTML;
@@ -63,6 +63,42 @@ if (!property_exists($configObj, 'changeCount')) {
             });
         }
 
+    }
+
+    function <?php print $beyond->prefix; ?>IframeEventHandler(event) {
+        try {
+            console.log(event);
+            data = JSON.parse(event.data);
+            if (data.kind === 'desiredHeight') {
+                var height = 600;
+                const maxHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+
+                // Max 80% Window height
+                if (parseInt(data.value) > maxHeight*0.8) {
+                    console.log('desired > window');
+                    height = maxHeight*0.8;
+                    console.log('desired > window');
+                    console.log('maxHeight: ' + maxHeight);
+                } else {
+                    console.log('desired < window');
+                    height = parseInt(data.value);
+                }
+            height = Math.ceil(height);
+                console.log('height: ' + height);
+
+                // Resize box
+                var boxWrap = document.getElementById('<?php print $beyond->prefix; ?>cookieboxWrap');
+                boxWrap.style.height = height + 'px';
+            }
+        } catch (e) {
+            // Ignore
+        }
+    }
+
+    if (window.addEventListener) {
+        window.addEventListener("message", <?php print $beyond->prefix; ?>IframeEventHandler, false);
+    } else {
+        window.attachEvent("onmessage", <?php print $beyond->prefix; ?>IframeEventHandler);
     }
 
     document.addEventListener("DOMContentLoaded", function () {
