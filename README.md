@@ -111,7 +111,7 @@ To output content field from your PHP code:
 To output global content blocks from your PHP code: 
 
 <pre>&lt;?php
-    $beyond->blocks->get('blockNameHere');
+    $beyond->blocks->output('blockNameHere');
 ?&gt;</pre>
 
 ## Plugin: seo
