@@ -67,7 +67,6 @@ if (!property_exists($configObj, 'changeCount')) {
 
     function <?php print $beyond->prefix; ?>IframeEventHandler(event) {
         try {
-            console.log(event);
             data = JSON.parse(event.data);
             if (data.kind === 'desiredHeight') {
 
