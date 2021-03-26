@@ -597,20 +597,21 @@ $height = 225;
                         $info = getimagesize($dir['absPath'] . DIRECTORY_SEPARATOR . $dirItem);
                         $lastModified = filemtime($dir['absPath'] . DIRECTORY_SEPARATOR . $dirItem);
                         $cacheFile = __DIR__ . '/cache/' . sha1(trim(trim($dir['relPath'], '/') . '/' . $dirItem, '/')) . '.thumb';
+                        $cacheChanged = false;
 
                         // Load cache, init cache
                         try {
                             if (!file_exists($cacheFile)) {
-                                throw Exception('No cache file found');
+                                throw new Exception('No cache file found');
                             }
                             $cache = json_decode(file_get_contents(
                                 $cacheFile
                             ), JSON_OBJECT_AS_ARRAY);
                             if (!is_array($cache)) {
-                                throw Exception('Not an array');
+                                throw new Exception('Not an array');
                             }
                             if ($lastModified !== $cache['lastModified']) {
-                                throw Exception('Original file changed');
+                                throw new Exception('Original file changed');
                             }
                         } catch (Exception $e) {
                             // On failure init new cache
@@ -619,9 +620,10 @@ $height = 225;
                             );
                         }
 
-                        if (array_key_exists( $width . 'x' . $height, $cache)) {
+                        if (array_key_exists($width . 'x' . $height, $cache)) {
                             $pngFile = base64_decode($cache[$width . 'x' . $height]);
                         } else {
+
                             $final_width = 0;
                             $final_height = 0;
                             list($width_old, $height_old) = $info;
@@ -655,13 +657,14 @@ $height = 225;
 
                             // Save in cache file
                             $cache[$width . 'x' . $height] = base64_encode($pngFile);
+                            $cacheChanged = true;
 
                             // Cleanup
                             imagedestroy($image_resized);
                             imagedestroy($image);
                         }
 
-                        if (is_dir(__DIR__ . '/cache')) {
+                        if (($cacheChanged) && (is_dir(__DIR__ . '/cache'))) {
                             try {
                                 file_put_contents(
                                     $cacheFile,
