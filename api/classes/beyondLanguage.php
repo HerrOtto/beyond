@@ -19,13 +19,13 @@ class beyondLanguage extends beyondApiBaseClass
 
         $unknown = false;
         if (array_key_exists($data->language, $this->languages)) {
-            $_SESSION[$prefix . 'data']['language'] = $data->language;
+            $_SESSION[$this->prefix . 'data']['language'] = $data->language;
         } else {
             $unknown = true;
         }
 
         return array(
-            'setLanguage' => $_SESSION[$prefix . 'data']['language'],
+            'setLanguage' => $_SESSION[$this->prefix . 'data']['language'],
             'unknownLanguage' => $unknown
         );
     }
@@ -42,7 +42,7 @@ class beyondLanguage extends beyondApiBaseClass
         // No user input expected
 
         return array(
-            'getLanguage' => $_SESSION[$prefix . 'data']['language']
+            'getLanguage' => $_SESSION[$this->prefix . 'data']['language']
         );
     }
 
