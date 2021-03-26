@@ -70,22 +70,19 @@ if (!property_exists($configObj, 'changeCount')) {
             console.log(event);
             data = JSON.parse(event.data);
             if (data.kind === 'desiredHeight') {
+
+                // Default height
                 var height = 600;
                 const maxHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
 
                 // Max 80% Window height
                 if (parseInt(data.value) > maxHeight*0.8) {
-                    console.log('desired > window');
                     height = maxHeight*0.8;
-                    console.log('desired > window');
-                    console.log('maxHeight: ' + maxHeight);
                 } else {
-                    console.log('desired < window');
                     height = parseInt(data.value);
                 }
-            height = Math.ceil(height);
-                console.log('height: ' + height);
 
+            height = Math.ceil(height);
                 // Resize box
                 var boxWrap = document.getElementById('<?php print $beyond->prefix; ?>cookieboxWrap');
                 boxWrap.style.height = height + 'px';
