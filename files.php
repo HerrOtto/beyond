@@ -596,7 +596,8 @@ $height = 225;
 
                         $info = getimagesize($dir['absPath'] . DIRECTORY_SEPARATOR . $dirItem);
                         $lastModified = filemtime($dir['absPath'] . DIRECTORY_SEPARATOR . $dirItem);
-                        $cacheFile = __DIR__ . '/cache/' . sha1(trim(trim($dir['relPath'], '/') . '/' . $dirItem, '/')) . '.thumb';
+                        $fileNameToHash = trim(trim($dir['relPath'], '/') . '/' . $dirItem, '/');
+                        $cacheFile = __DIR__ . '/cache/' . sha1($fileNameToHash) . '.thumb';
                         $cacheChanged = false;
 
                         // Load cache, init cache
@@ -616,7 +617,8 @@ $height = 225;
                         } catch (Exception $e) {
                             // On failure init new cache
                             $cache = array(
-                                'lastModified' => $lastModified
+                                'lastModified' => $lastModified,
+                                'fileNameToHash' => $fileNameToHash
                             );
                         }
 

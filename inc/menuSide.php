@@ -58,11 +58,16 @@
                     print '    <div class="sb-nav-link-icon"><i class="fas fa-sync"></i></div>' . PHP_EOL;
                     print '    Update' . PHP_EOL;
                     print '</a>' . PHP_EOL;
-                    print '<a class="nav-link ' . (basename($_SERVER["SCRIPT_FILENAME"]) === 'plugins.php' ? 'active' : '') . '"' . PHP_EOL;
-                    print '   href="' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/plugins.php">' . PHP_EOL;
-                    print '     <div class="sb-nav-link-icon"><i class="fas fa-puzzle-piece"></i></div>' . PHP_EOL;
-                    print '    Plugins' . PHP_EOL;
-                    print '</a>' . PHP_EOL;
+                print '<a class="nav-link ' . (basename($_SERVER["SCRIPT_FILENAME"]) === 'plugins.php' ? 'active' : '') . '"' . PHP_EOL;
+                print '   href="' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/plugins.php">' . PHP_EOL;
+                print '     <div class="sb-nav-link-icon"><i class="fas fa-puzzle-piece"></i></div>' . PHP_EOL;
+                print '    Plugins' . PHP_EOL;
+                print '</a>' . PHP_EOL;
+                print '<a class="nav-link ' . (basename($_SERVER["SCRIPT_FILENAME"]) === 'cleanup.php' ? 'active' : '') . '"' . PHP_EOL;
+                print '   href="' . $beyond->config->get('base', 'server.baseUrl') . '/beyond/cleanup.php">' . PHP_EOL;
+                print '     <div class="sb-nav-link-icon"><i class="fas fa-brush"></i></div>' . PHP_EOL;
+                print '    Cleanup' . PHP_EOL;
+                print '</a>' . PHP_EOL;
                     print '</div>' . PHP_EOL;
             }
             ?>

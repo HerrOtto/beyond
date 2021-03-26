@@ -47,14 +47,14 @@ The software is based on the following other OpenSource projects:
 * Rename file
 * Download file
 * Move file
+* Search in files
+* Save old versions
 * Persistent hide/show plugins from editor
-* Plugin: Content delete content when file is getting deleted
-* Plugin: SEO delete content when file is getting deleted
 * Plugin: Menu builder
 * Plugin: Shop
 * Plugin: htaccess
 * Plugin: backup/restore
-* Develop enduser backend from beyond
+* Develop edit users backend from files.php
 * Install/Update plugins from repository
 * Update cleanup, delete unused files, introduce plugin cleanup
 * System compatibility check, permission check (PHP7.3, modules, ...)
