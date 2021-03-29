@@ -396,8 +396,8 @@ if (!property_exists($configObj, 'cookies')) {
     <div class="<?php print $beyond->prefix; ?>cookieboxIntro" id="<?php print $beyond->prefix; ?>cookieboxIntro">
         <div id="<?php print $beyond->prefix; ?>cookieboxIntroText">
             <?php
-            if ((property_exists($configObj->apperence->box->text, $beyond->language)) && (trim($configObj->apperence->box->text->{$beyond->language}) !== '')) {
-                print $configObj->apperence->box->text->{$beyond->language};
+            if ((property_exists($configObj->apperence->box->text, $_SESSION[$beyond->prefix . 'data']['language'])) && (trim($configObj->apperence->box->text->{$_SESSION[$beyond->prefix . 'data']['language']}) !== '')) {
+                print $configObj->apperence->box->text->{$_SESSION[$beyond->prefix . 'data']['language']};
             } else {
                 print $configObj->apperence->box->text->default;
             }
@@ -409,8 +409,8 @@ if (!property_exists($configObj, 'cookies')) {
         <span class="<?php print $beyond->prefix; ?>cookieboxPreferedButton"
               onclick="<?php print $beyond->prefix; ?>cookieboxAcceptAll();">
             <?php
-            if ((property_exists($configObj->apperence->preferedButton->text, $beyond->language)) && (trim($configObj->apperence->preferedButton->text->{$beyond->language}) !== '')) {
-                print $configObj->apperence->preferedButton->text->{$beyond->language};
+            if ((property_exists($configObj->apperence->preferedButton->text, $_SESSION[$beyond->prefix . 'data']['language'])) && (trim($configObj->apperence->preferedButton->text->{$_SESSION[$beyond->prefix . 'data']['language']}) !== '')) {
+                print $configObj->apperence->preferedButton->text->{$_SESSION[$beyond->prefix . 'data']['language']};
             } else {
                 print $configObj->apperence->preferedButton->text->default;
             }
@@ -419,8 +419,8 @@ if (!property_exists($configObj, 'cookies')) {
         <span class="<?php print $beyond->prefix; ?>cookieboxButton"
               onclick="<?php print $beyond->prefix; ?>cookieboxAcceptMinimal();">
             <?php
-            if ((property_exists($configObj->apperence->button->text, $beyond->language)) && (trim($configObj->apperence->button->text->{$beyond->language}) !== '')) {
-                print $configObj->apperence->button->text->{$beyond->language};
+            if ((property_exists($configObj->apperence->button->text, $_SESSION[$beyond->prefix . 'data']['language'])) && (trim($configObj->apperence->button->text->{$_SESSION[$beyond->prefix . 'data']['language']}) !== '')) {
+                print $configObj->apperence->button->text->{$_SESSION[$beyond->prefix . 'data']['language']};
             } else {
                 print $configObj->apperence->button->text->default;
             }
@@ -429,8 +429,8 @@ if (!property_exists($configObj, 'cookies')) {
         <span class="<?php print $beyond->prefix; ?>cookieboxSettings"
               onclick="<?php print $beyond->prefix; ?>cookieboxOpenSettings();">
             <?php
-            if ((property_exists($configObj->apperence->settingsLink->text, $beyond->language)) && (trim($configObj->apperence->settingsLink->text->{$beyond->language}) !== '')) {
-                print $configObj->apperence->settingsLink->text->{$beyond->language};
+            if ((property_exists($configObj->apperence->settingsLink->text, $_SESSION[$beyond->prefix . 'data']['language'])) && (trim($configObj->apperence->settingsLink->text->{$_SESSION[$beyond->prefix . 'data']['language']}) !== '')) {
+                print $configObj->apperence->settingsLink->text->{$_SESSION[$beyond->prefix . 'data']['language']};
             } else {
                 print $configObj->apperence->settingsLink->text->default;
             }
@@ -443,8 +443,8 @@ if (!property_exists($configObj, 'cookies')) {
 <div align="center" id="<?php print $beyond->prefix; ?>cookieBoxSettings" style="display:none;">
     <div align="left" class="<?php print $beyond->prefix; ?>cookieboxSettingsIntro">
         <?php
-        if ((property_exists($configObj->apperence->box->detailsText, $beyond->language)) && (trim($configObj->apperence->box->detailsText->{$beyond->language}) !== '')) {
-            print $configObj->apperence->box->detailsText->{$beyond->language};
+        if ((property_exists($configObj->apperence->box->detailsText, $_SESSION[$beyond->prefix . 'data']['language'])) && (trim($configObj->apperence->box->detailsText->{$_SESSION[$beyond->prefix . 'data']['language']}) !== '')) {
+            print $configObj->apperence->box->detailsText->{$_SESSION[$beyond->prefix . 'data']['language']};
         } else {
             print $configObj->apperence->box->detailsText->default;
         }
@@ -473,21 +473,21 @@ if (!property_exists($configObj, 'cookies')) {
             print '<div class="' . $beyond->prefix . 'cookieBoxDetails" align="justify">';
 
             print '<strong style="display:block;">';
-            if ((property_exists($configObj->cookies->{$cookieName}->title, $beyond->language)) && (trim($configObj->cookies->{$cookieName}->title->{$beyond->language}) !== '')) {
-                print $configObj->cookies->{$cookieName}->title->{$beyond->language};
+            if ((property_exists($configObj->cookies->{$cookieName}->title, $_SESSION[$beyond->prefix . 'data']['language'])) && (trim($configObj->cookies->{$cookieName}->title->{$_SESSION[$beyond->prefix . 'data']['language']}) !== '')) {
+                print $configObj->cookies->{$cookieName}->title->{$_SESSION[$beyond->prefix . 'data']['language']};
             } else {
                 print $configObj->cookies->{$cookieName}->title->default;
             }
             print '</strong>';
 
-            if ((property_exists($configObj->cookies->{$cookieName}->info, $beyond->language)) && (trim($configObj->cookies->{$cookieName}->info->{$beyond->language}) !== '')) {
-                print $configObj->cookies->{$cookieName}->info->{$beyond->language};
+            if ((property_exists($configObj->cookies->{$cookieName}->info, $_SESSION[$beyond->prefix . 'data']['language'])) && (trim($configObj->cookies->{$cookieName}->info->{$_SESSION[$beyond->prefix . 'data']['language']}) !== '')) {
+                print $configObj->cookies->{$cookieName}->info->{$_SESSION[$beyond->prefix . 'data']['language']};
             } else {
                 print $configObj->cookies->{$cookieName}->info->default;
             }
 
-            if (trim($configObj->cookies->{$cookieName}->privacyURL->{$beyond->language}) !== '') {
-                $link = $configObj->cookies->{$cookieName}->privacyURL->{$beyond->language};
+            if (trim($configObj->cookies->{$cookieName}->privacyURL->{$_SESSION[$beyond->prefix . 'data']['language']}) !== '') {
+                $link = $configObj->cookies->{$cookieName}->privacyURL->{$_SESSION[$beyond->prefix . 'data']['language']};
             } else if (trim($configObj->cookies->{$cookieName}->privacyURL->default) !== '') {
                 $link = $configObj->cookies->{$cookieName}->privacyURL->default;
             } else {
@@ -495,8 +495,8 @@ if (!property_exists($configObj, 'cookies')) {
             }
             if ($link !== '') {
                 print '<a style="display:block;" target="_blank" style="color:' . $configObj->apperence->privacyLink->textColor . ';" href="' . $link . '" class="' . $beyond->prefix . 'cookieBoxLink">';
-                if ((property_exists($configObj->apperence->privacyLink->text, $beyond->language)) && (trim($configObj->apperence->privacyLink->text->{$beyond->language}) !== '')) {
-                    print $configObj->apperence->privacyLink->text->{$beyond->language};
+                if ((property_exists($configObj->apperence->privacyLink->text, $_SESSION[$beyond->prefix . 'data']['language'])) && (trim($configObj->apperence->privacyLink->text->{$_SESSION[$beyond->prefix . 'data']['language']}) !== '')) {
+                    print $configObj->apperence->privacyLink->text->{$_SESSION[$beyond->prefix . 'data']['language']};
                 } else {
                     print $configObj->apperence->privacyLink->text->default;
                 }
