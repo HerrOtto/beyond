@@ -95,7 +95,7 @@ Javascript call to an API function:
 Add beyond functionality to your PHP files by adding this lines in the very beginning:
 
 <pre>&lt;?php
-    include_once \_\_DIR\_\_ . '/beyond/inc/init.php';
+    include_once __DIR__ . '/beyond/inc/init.php';
 ?&gt;</pre>
 
 ## Plugin: content
