@@ -33,6 +33,20 @@ if (!property_exists($configObj->apperence->box, 'text')) {
 if (!property_exists($configObj->apperence->box, 'detailsText')) {
     $configObj->apperence->box->detailsText = new stdClass();
 }
+if (is_string($configObj->apperence->box->detailsText)) {
+    $temp = $configObj->apperence->box->detailsText;
+    $configObj->apperence->box->detailsText = new stdClass();
+    foreach ($this->languages as $language => $languageName) {
+        $configObj->apperence->box->detailsText->{$language} = $temp;
+    }
+}
+if (is_string($configObj->apperence->box->text)) {
+    $temp = $configObj->apperence->box->text;
+    $configObj->apperence->box->text = new stdClass();
+    foreach ($this->languages as $language => $languageName) {
+        $configObj->apperence->box->text->{$language} = $temp;
+    }
+}
 
 if (!property_exists($configObj->apperence, 'preferedButton')) {
     $configObj->apperence->preferedButton = new stdClass();
@@ -41,6 +55,13 @@ if (!property_exists($configObj->apperence, 'preferedButton')) {
 }
 if (!property_exists($configObj->apperence->preferedButton, 'text')) {
     $configObj->apperence->preferedButton->text = new stdClass();
+}
+if (is_string($configObj->apperence->preferedButton->text)) {
+    $temp = $configObj->apperence->preferedButton->text;
+    $configObj->apperence->preferedButton->text = new stdClass();
+    foreach ($this->languages as $language => $languageName) {
+        $configObj->apperence->preferedButton->text->{$language} = $temp;
+    }
 }
 
 if (!property_exists($configObj->apperence, 'button')) {
@@ -52,6 +73,13 @@ if (!property_exists($configObj->apperence, 'button')) {
 if (!property_exists($configObj->apperence->button, 'text')) {
     $configObj->apperence->button->text = new stdClass();
 }
+if (is_string($configObj->apperence->button->text)) {
+    $temp = $configObj->apperence->button->text;
+    $configObj->apperence->button->text = new stdClass();
+    foreach ($this->languages as $language => $languageName) {
+        $configObj->apperence->button->text->{$language} = $temp;
+    }
+}
 
 if (!property_exists($configObj->apperence, 'detailsButton')) {
     $configObj->apperence->detailsButton = new stdClass();
@@ -61,6 +89,13 @@ if (!property_exists($configObj->apperence, 'detailsButton')) {
 if (!property_exists($configObj->apperence->detailsButton, 'text')) {
     $configObj->apperence->detailsButton->text = new stdClass();
 }
+if (is_string($configObj->detailsButton->button->text)) {
+    $temp = $configObj->detailsButton->button->text;
+    $configObj->detailsButton->button->text = new stdClass();
+    foreach ($this->languages as $language => $languageName) {
+        $configObj->detailsButton->button->text->{$language} = $temp;
+    }
+}
 
 if (!property_exists($configObj->apperence, 'settingsLink')) {
     $configObj->apperence->settingsLink = new stdClass();
@@ -69,6 +104,13 @@ if (!property_exists($configObj->apperence, 'settingsLink')) {
 if (!property_exists($configObj->apperence->settingsLink, 'text')) {
     $configObj->apperence->settingsLink->text = new stdClass();
 }
+if (is_string($configObj->settingsLink->button->text)) {
+    $temp = $configObj->settingsLink->button->text;
+    $configObj->settingsLink->button->text = new stdClass();
+    foreach ($this->languages as $language => $languageName) {
+        $configObj->settingsLink->button->text->{$language} = $temp;
+    }
+}
 
 if (!property_exists($configObj->apperence, 'privacyLink')) {
     $configObj->apperence->privacyLink = new stdClass();
@@ -76,6 +118,13 @@ if (!property_exists($configObj->apperence, 'privacyLink')) {
 }
 if (!property_exists($configObj->apperence->privacyLink, 'text')) {
     $configObj->apperence->privacyLink->text = new stdClass();
+}
+if (is_string($configObj->privacyLink->button->text)) {
+    $temp = $configObj->privacyLink->button->text;
+    $configObj->privacyLink->button->text = new stdClass();
+    foreach ($this->languages as $language => $languageName) {
+        $configObj->privacyLink->button->text->{$language} = $temp;
+    }
 }
 
 if (!property_exists($configObj, 'cookies')) {
