@@ -36,38 +36,106 @@ class cookiebox_config extends beyondApiBaseClass
 
         if (!property_exists($config->apperence, 'box')) {
             $config->apperence->box = new stdClass();
-            $config->apperence->box->detailsText = '';
-            $config->apperence->box->text = '';
+            foreach ($this->languages as $language => $languageName) {
+                $config->apperence->box->detailsText->{$language} = '';
+                $config->apperence->box->text->{$language} = '';
+            }
             $config->apperence->box->backgroundColor = '#ffffff';
             $config->apperence->box->fontColor = '#000000';
             $config->apperence->box->linkColor = '#0000ff';
         }
+        if (is_string($config->apperence->box->detailsText)) {
+            $temp = $config->apperence->box->detailsText;
+            $config->apperence->box->detailsText = new stdClass();
+            foreach ($this->languages as $language => $languageName) {
+                $config->apperence->box->detailsText->{$language} = $temp;
+            }
+        }
+        if (is_string($config->apperence->box->text)) {
+            $temp = $config->apperence->box->text;
+            $config->apperence->box->text = new stdClass();
+            foreach ($this->languages as $language => $languageName) {
+                $config->apperence->box->text->{$language} = $temp;
+            }
+        }
 
         if (!property_exists($config->apperence, 'preferedButton')) {
             $config->apperence->preferedButton = new stdClass();
-            $config->apperence->preferedButton->text = '';
+            $config->apperence->preferedButton->text = new stdClass();
+            foreach ($this->languages as $language => $languageName) {
+                $config->apperence->preferedButton->text->{$language} = '';
+            }
             $config->apperence->preferedButton->backgroundColor = '#000000';
             $config->apperence->preferedButton->textColor = '#ffffff';
+        }
+        if (is_string($config->apperence->preferedButton->text)) {
+            $temp = $config->apperence->preferedButton->text;
+            $config->apperence->preferedButton->text = new stdClass();
+            foreach ($this->languages as $language => $languageName) {
+                $config->apperence->preferedButton->text->{$language} = $temp;
+            }
         }
 
         if (!property_exists($config->apperence, 'button')) {
             $config->apperence->button = new stdClass();
-            $config->apperence->button->text = '';
+            foreach ($this->languages as $language => $languageName) {
+                $config->apperence->button->text->{$language} = '';
+            }
             $config->apperence->button->backgroundColor = '#f0f0f0';
             $config->apperence->button->textColor = '#909090';
+        }
+        if (is_string($config->apperence->button->text)) {
+            $temp = $config->apperence->button->text;
+            $config->apperence->button->text = new stdClass();
+            foreach ($this->languages as $language => $languageName) {
+                $config->apperence->button->text->{$language} = $temp;
+            }
         }
 
         if (!property_exists($config->apperence, 'detailsButton')) {
             $config->apperence->detailsButton = new stdClass();
-            $config->apperence->detailsButton->text = '';
+            foreach ($this->languages as $language => $languageName) {
+                $config->apperence->detailsButton->text->{$language} = '';
+            }
             $config->apperence->detailsButton->backgroundColor = '#000000';
             $config->apperence->detailsButton->textColor = '#ffffff';
+        }
+        if (is_string($config->apperence->detailsButton->text)) {
+            $temp = $config->apperence->detailsButton->text;
+            $config->apperence->detailsButton->text = new stdClass();
+            foreach ($this->languages as $language => $languageName) {
+                $config->apperence->detailsButton->text->{$language} = $temp;
+            }
         }
 
         if (!property_exists($config->apperence, 'settingsLink')) {
             $config->apperence->settingsLink = new stdClass();
-            $config->apperence->settingsLink->text = '';
+            foreach ($this->languages as $language => $languageName) {
+                $config->apperence->settingsLink->text->{$language} = '';
+            }
             $config->apperence->settingsLink->textColor = '#c0c0c0';
+        }
+        if (is_string($config->apperence->settingsLink->text)) {
+            $temp = $config->apperence->settingsLink->text;
+            $config->apperence->settingsLink->text = new stdClass();
+            foreach ($this->languages as $language => $languageName) {
+                $config->apperence->settingsLink->text->{$language} = $temp;
+            }
+        }
+
+        if (!property_exists($config->apperence, 'privacyLink')) {
+            $config->apperence->privacyLink = new stdClass();
+            foreach ($this->languages as $language => $languageName) {
+                $config->apperence->privacyLink->text->{$language} = '';
+            }
+            $config->apperence->privacyLink->textColor = '#000000';
+        }
+        if (is_string($config->apperence->privacyLink->text)) {
+            $temp = $config->apperence->privacyLink->text;
+            $config->apperence->privacyLink->text = new stdClass();
+            foreach ($this->languages as $language => $languageName) {
+                $config->apperence->privacyLink->text->{$language} = $temp;
+            }
         }
 
         // Get cookies
@@ -133,8 +201,18 @@ class cookiebox_config extends beyondApiBaseClass
         if (!property_exists($config->apperence, 'box')) {
             $config->apperence->box = new stdClass();
         }
-        $config->apperence->box->text = $data->apperence->box->text;
-        $config->apperence->box->detailsText = $data->apperence->box->detailsText;
+        if (!property_exists($config->apperence, 'text')) {
+            $config->apperence->box->text = new stdClass();
+        }
+        foreach ($this->languages as $language => $languageName) {
+            $config->apperence->box->text->{$language} = $data->apperence->box->text->{$language};
+        }
+        if (!property_exists($config->apperence, 'detailsText')) {
+            $config->apperence->box->detailsText = new stdClass();
+        }
+        foreach ($this->languages as $language => $languageName) {
+            $config->apperence->box->detailsText->{$language} = $data->apperence->box->detailsText->{$language};
+        }
         $config->apperence->box->backgroundColor = $data->apperence->box->backgroundColor;
         $config->apperence->box->fontColor = $data->apperence->box->fontColor;
         $config->apperence->box->linkColor = $data->apperence->box->linkColor;
@@ -142,29 +220,60 @@ class cookiebox_config extends beyondApiBaseClass
         if (!property_exists($config->apperence, 'preferedButton')) {
             $config->apperence->preferedButton = new stdClass();
         }
-        $config->apperence->preferedButton->text = $data->apperence->preferedButton->text;
+        if (!property_exists($config->apperence->preferedButton, 'text')) {
+            $config->apperence->preferedButton->text = new stdClass();
+        }
+        foreach ($this->languages as $language => $languageName) {
+            $config->apperence->preferedButton->text->{$language} = $data->apperence->preferedButton->text->{$language};
+        }
         $config->apperence->preferedButton->backgroundColor = $data->apperence->preferedButton->backgroundColor;
         $config->apperence->preferedButton->textColor = $data->apperence->preferedButton->textColor;
 
         if (!property_exists($config->apperence, 'button')) {
             $config->apperence->button = new stdClass();
         }
-        $config->apperence->button->text = $data->apperence->button->text;
+        if (!property_exists($config->apperence->button, 'text')) {
+            $config->apperence->button->text = new stdClass();
+        }
+        foreach ($this->languages as $language => $languageName) {
+            $config->apperence->button->text->{$language} = $data->apperence->button->text->{$language};
+        }
         $config->apperence->button->backgroundColor = $data->apperence->button->backgroundColor;
         $config->apperence->button->textColor = $data->apperence->button->textColor;
 
         if (!property_exists($config->apperence, 'detailsButton')) {
             $config->apperence->detailsButton = new stdClass();
         }
-        $config->apperence->detailsButton->text = $data->apperence->detailsButton->text;
+        if (!property_exists($config->apperence->detailsButton, 'text')) {
+            $config->apperence->detailsButton->text = new stdClass();
+        }
+        foreach ($this->languages as $language => $languageName) {
+            $config->apperence->detailsButton->text->{$language} = $data->apperence->detailsButton->text->{$language};
+        }
         $config->apperence->detailsButton->backgroundColor = $data->apperence->detailsButton->backgroundColor;
         $config->apperence->detailsButton->textColor = $data->apperence->detailsButton->textColor;
 
         if (!property_exists($config->apperence, 'settingsLink')) {
             $config->apperence->settingsLink = new stdClass();
         }
-        $config->apperence->settingsLink->text = $data->apperence->settingsLink->text;
+        if (!property_exists($config->apperence->settingsLink, 'text')) {
+            $config->apperence->settingsLink->text = new stdClass();
+        }
+        foreach ($this->languages as $language => $languageName) {
+            $config->apperence->settingsLink->text->{$language} = $data->apperence->settingsLink->text->{$language};
+        }
         $config->apperence->settingsLink->textColor = $data->apperence->settingsLink->textColor;
+
+        if (!property_exists($config->apperence, 'privacyLink')) {
+            $config->apperence->privacyLink = new stdClass();
+        }
+        if (!property_exists($config->apperence->privacyLink, 'text')) {
+            $config->apperence->privacyLink->text = new stdClass();
+        }
+        foreach ($this->languages as $language => $languageName) {
+            $config->apperence->privacyLink->text->{$language} = $data->apperence->privacyLink->text->{$language};
+        }
+        $config->apperence->privacyLink->textColor = $data->apperence->privacyLink->textColor;
 
         // Update cookies
         $config->cookies = new stdClass(); // Always init to ensure removal of removed cookies

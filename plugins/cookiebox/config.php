@@ -83,30 +83,229 @@
                     $('#cookieBoxLinkColor').removeAttr('readonly');
 
                     // Introduction
-                    $('#cookieBoxText').val(data.load.apperence.box.text);
-                    $('#cookieBoxText').removeAttr('readonly');
-                    $('#cookieBoxButtonPreferedText').val(data.load.apperence.preferedButton.text);
-                    $('#cookieBoxButtonPreferedText').removeAttr('readonly');
+
+                    var introduction =
+                        '<strong>Head</strong>';
+
+                    for (language in <?php print $beyond->prefix; ?>languages) {
+                        introduction +=
+                            '<div class="form-group">' +
+                            '<label class="small mb-1" for="cookieBoxText_' + language + '">Text [' + <?php print $beyond->prefix; ?>languages[language] + ']</label>' +
+                            '<textarea rows=4 class="form-control" id="cookieBoxText_' + language + '" placeholder="Enter text for language: ' + <?php print $beyond->prefix; ?>languages[language] + '"></textarea>' +
+                            '</div>';
+                    }
+
+                    introduction +=
+                        '<strong>Preferd button</strong>';
+
+                    for (language in <?php print $beyond->prefix; ?>languages) {
+                        introduction +=
+                            '<div class="form-group">' +
+                            '<label class="small mb-1" for="cookieBoxButtonPreferedText_' + language + '">Prefered button text [' + <?php print $beyond->prefix; ?>languages[language] + ']</label>' +
+                            '<input class="form-control py-4" id="cookieBoxButtonPreferedText_' + language + '" type="text" placeholder="Enter prefered button text for language: ' + <?php print $beyond->prefix; ?>languages[language] + '" value="" readonly/>' +
+                            '</div>';
+                    }
+
+                    introduction +=
+                        '<div class="form-group">' +
+                        '<label class="small mb-1" for="cookieBoxButtonPreferedBackgroundColor">Prefered button background color</label>' +
+                        '<input class="form-control py-4" id="cookieBoxButtonPreferedBackgroundColor" type="text" placeholder="Enter prefered button background color like #000000" value="" readonly/>' +
+                        '</div>' +
+                        '' +
+                        '<div class="form-group">' +
+                        '<label class="small mb-1" for="cookieBoxButtonPreferedTextColor">Prefered button text color</label>' +
+                        '<input class="form-control py-4" id="cookieBoxButtonPreferedTextColor" type="text" placeholder="Enter prefered button text color like #ffffff" value="" readonly/>' +
+                        '</div>' +
+                        '' +
+                        '<strong>Button</strong>';
+
+                    for (language in <?php print $beyond->prefix; ?>languages) {
+                        introduction +=
+                            '<div class="form-group">' +
+                            '<label class="small mb-1" for="cookieBoxButtonText_' + language + '">Button text [' + <?php print $beyond->prefix; ?>languages[language] + ']</label>' +
+                            '<input class="form-control py-4" id="cookieBoxButtonText_' + language + '" type="text" placeholder="Enter button text for language: ' + <?php print $beyond->prefix; ?>languages[language] + '" value="" readonly/>' +
+                            '</div>';
+                    }
+
+                    introduction +=
+                        '<div class="form-group">' +
+                        '<label class="small mb-1" for="cookieBoxButtonBackgroundColor">Button background color</label>' +
+                        '<input class="form-control py-4" id="cookieBoxButtonBackgroundColor" type="text" placeholder="Enter button background color like #f0f0f0" value="" readonly/>' +
+                        '</div>' +
+                        '' +
+                        '<div class="form-group">' +
+                        '<label class="small mb-1" for="cookieBoxButtonTextColor">Button text color</label>' +
+                        '<input class="form-control py-4" id="cookieBoxButtonTextColor" type="text" placeholder="Enter button text color like #909090" value="" readonly/>' +
+                        '</div>' +
+                        '' +
+                        '<strong>Settings link</strong>';
+
+                    for (language in <?php print $beyond->prefix; ?>languages) {
+                        introduction +=
+                            '<div class="form-group">' +
+                            '<label class="small mb-1" for="cookieSettingsLinkText_' + language + '">Settings link text [' + <?php print $beyond->prefix; ?>languages[language] + ']</label>' +
+                            '<input class="form-control py-4" id="cookieSettingsLinkText_' + language + '" type="text" placeholder="Enter setting link text for language: ' + <?php print $beyond->prefix; ?>languages[language] + '" value="" readonly/>' +
+                            '</div>';
+                    }
+
+                    introduction +=
+                        '<div class="form-group">' +
+                        '<label class="small mb-1" for="cookieSettingsLinkTextColor">Settings link text color</label>' +
+                        '<input class="form-control py-4" id="cookieSettingsLinkTextColor" type="text" placeholder="Enter settings link text color like #c0c0c0" value="" readonly/>' +
+                        '</div>' +
+                        '<strong>Privacy link</strong>';
+
+                    for (language in <?php print $beyond->prefix; ?>languages) {
+                        introduction +=
+                            '<div class="form-group">' +
+                            '<label class="small mb-1" for="cookiePrivacyLinkText_' + language + '">Privacy link text [' + <?php print $beyond->prefix; ?>languages[language] + ']</label>' +
+                            '<input class="form-control py-4" id="cookiePrivacyLinkText_' + language + '" type="text" placeholder="Enter privacy link text for language: ' + <?php print $beyond->prefix; ?>languages[language] + '" value="" readonly/>' +
+                            '</div>';
+                    }
+
+                    introduction +=
+                        '<div class="form-group">' +
+                        '<label class="small mb-1" for="cookiePrivacyLinkTextColor">Privacy link text color</label>' +
+                        '<input class="form-control py-4" id="cookiePrivacyLinkTextColor" type="text" placeholder="Enter privacy link text color like #c0c0c0" value="" readonly/>' +
+                        '</div>';
+
+                    $('#introduction').html(introduction);
+
+                    if (typeof data.load.apperence.box.text === 'object') {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookieBoxText_' + language).val(data.load.apperence.box.text[language]);
+                            $('#cookieBoxText_' + language).removeAttr('readonly');
+                        }
+                    } else {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookieBoxText_' + language).val(data.load.apperence.box.text);
+                            $('#cookieBoxText_' + language).removeAttr('readonly');
+                        }
+                    }
+
+                    if (typeof data.load.apperence.preferedButton.text === 'object') {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookieBoxButtonPreferedText_' + language).val(data.load.apperence.preferedButton.text[language]);
+                            $('#cookieBoxButtonPreferedText_' + language).removeAttr('readonly');
+                        }
+                    } else {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookieBoxButtonPreferedText_' + language).val(data.load.apperence.preferedButton.text);
+                            $('#cookieBoxButtonPreferedText_' + language).removeAttr('readonly');
+                        }
+                    }
+
                     $('#cookieBoxButtonPreferedBackgroundColor').val(data.load.apperence.preferedButton.backgroundColor);
                     $('#cookieBoxButtonPreferedBackgroundColor').removeAttr('readonly');
                     $('#cookieBoxButtonPreferedTextColor').val(data.load.apperence.preferedButton.textColor);
                     $('#cookieBoxButtonPreferedTextColor').removeAttr('readonly');
-                    $('#cookieBoxButtonText').val(data.load.apperence.button.text);
-                    $('#cookieBoxButtonText').removeAttr('readonly');
+
+                    if (typeof data.load.apperence.button.text === 'object') {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookieBoxButtonText_' + language).val(data.load.apperence.button.text[language]);
+                            $('#cookieBoxButtonText_' + language).removeAttr('readonly');
+                        }
+                    } else {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookieBoxButtonText_' + language).val(data.load.apperence.button.text);
+                            $('#cookieBoxButtonText_' + language).removeAttr('readonly');
+                        }
+                    }
+
                     $('#cookieBoxButtonBackgroundColor').val(data.load.apperence.button.backgroundColor);
                     $('#cookieBoxButtonBackgroundColor').removeAttr('readonly');
                     $('#cookieBoxButtonTextColor').val(data.load.apperence.button.textColor);
                     $('#cookieBoxButtonTextColor').removeAttr('readonly');
-                    $('#cookieSettingsLinkText').val(data.load.apperence.settingsLink.text);
-                    $('#cookieSettingsLinkText').removeAttr('readonly');
+
+                    if (typeof data.load.apperence.settingsLink.text === 'object') {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookieSettingsLinkText_' + language).val(data.load.apperence.settingsLink.text[language]);
+                            $('#cookieSettingsLinkText_' + language).removeAttr('readonly');
+                        }
+                    } else {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookieSettingsLinkText_' + language).val(data.load.apperence.settingsLink.text);
+                            $('#cookieSettingsLinkText_' + language).removeAttr('readonly');
+                        }
+                    }
+
                     $('#cookieSettingsLinkTextColor').val(data.load.apperence.settingsLink.textColor);
                     $('#cookieSettingsLinkTextColor').removeAttr('readonly');
 
+                    if (typeof data.load.apperence.privacyLink.text === 'object') {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookiePrivacyLinkText_' + language).val(data.load.apperence.privacyLink.text[language]);
+                            $('#cookiePrivacyLinkText_' + language).removeAttr('readonly');
+                        }
+                    } else {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookiePrivacyLinkText_' + language).val(data.load.apperence.privacyLink.text);
+                            $('#cookiePrivacyLinkText_' + language).removeAttr('readonly');
+                        }
+                    }
+
+                    $('#cookiePrivacyLinkTextColor').val(data.load.apperence.privacyLink.textColor);
+                    $('#cookiePrivacyLinkTextColor').removeAttr('readonly');
+
                     // Details
-                    $('#cookieBoxDetailsText').val(data.load.apperence.box.detailsText);
-                    $('#cookieBoxDetailsText').removeAttr('readonly');
-                    $('#cookieBoxDetailsButtonText').val(data.load.apperence.detailsButton.text);
-                    $('#cookieBoxDetailsButtonText').removeAttr('readonly');
+                    var details =
+                        ' <strong>Head</strong>';
+
+                    for (language in <?php print $beyond->prefix; ?>languages) {
+                        details +=
+                            '<div class="form-group">' +
+                            '<label class="small mb-1" for="cookieBoxDetailsText_' + language + '">Text [' + <?php print $beyond->prefix; ?>languages[language] + ']</label>' +
+                            '<textarea rows=4 class="form-control" id="cookieBoxDetailsText_' + language + '" placeholder="Enter text for language: ' + <?php print $beyond->prefix; ?>languages[language] + '"></textarea>' +
+                            '</div>';
+                    }
+
+                    details +=
+                        '<strong>Button</strong>';
+
+                    for (language in <?php print $beyond->prefix; ?>languages) {
+                        details +=
+                            '<div class="form-group">' +
+                            '<label class="small mb-1" for="cookieBoxDetailsButtonText_' + language + '">Button text [' + <?php print $beyond->prefix; ?>languages[language] + ']</label>' +
+                            '<input class="form-control py-4" id="cookieBoxDetailsButtonText_' + language + '" type="text" placeholder="Enter button text for language: ' + <?php print $beyond->prefix; ?>languages[language] + '" value="" readonly/>' +
+                            '</div>';
+                    }
+
+                    details +=
+                        '<div class="form-group">' +
+                        '<label class="small mb-1" for="cookieBoxDetailsButtonBackgroundColor">Button background color</label>' +
+                        '<input class="form-control py-4" id="cookieBoxDetailsButtonBackgroundColor" type="text" placeholder="Enter button background color like #000000" value="" readonly/>' +
+                        '</div>' +
+                        '' +
+                        '<div class="form-group">' +
+                        '<label class="small mb-1" for="cookieBoxDetailsButtonTextColor">Button text color</label>' +
+                        '<input class="form-control py-4" id="cookieBoxDetailsButtonTextColor" type="text" placeholder="Enter button text color like #ffffff" value="" readonly/>' +
+                        '</div>'
+                    $('#details').html(details);
+
+                    if (typeof data.load.apperence.box.detailsText === 'object') {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookieBoxDetailsText_' + language).val(data.load.apperence.box.detailsText[language]);
+                            $('#cookieBoxDetailsText_' + language).removeAttr('readonly');
+                        }
+                    } else {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookieBoxDetailsText_' + language).val(data.load.apperence.box.detailsText);
+                            $('#cookieBoxDetailsText_' + language).removeAttr('readonly');
+                        }
+                    }
+
+                    if (typeof data.load.apperence.detailsButton.text === 'object') {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookieBoxDetailsButtonText_' + language).val(data.load.apperence.detailsButton.text[language]);
+                            $('#cookieBoxDetailsButtonText_' + language).removeAttr('readonly');
+                        }
+                    } else {
+                        for (language in <?php print $beyond->prefix; ?>languages) {
+                            $('#cookieBoxDetailsButtonText_' + language).val(data.load.apperence.detailsButton.text);
+                            $('#cookieBoxDetailsButtonText_' + language).removeAttr('readonly');
+                        }
+                    }
+
                     $('#cookieBoxDetailsButtonBackgroundColor').val(data.load.apperence.detailsButton.backgroundColor);
                     $('#cookieBoxDetailsButtonBackgroundColor').removeAttr('readonly');
                     $('#cookieBoxDetailsButtonTextColor').val(data.load.apperence.detailsButton.textColor);
@@ -133,33 +332,46 @@
         var data = {
             'apperence': {
                 'box': {
-                    'text': $('#cookieBoxText').val(),
-                    'detailsText': $('#cookieBoxDetailsText').val(),
                     'backgroundColor': $('#cookieBoxBackgroundColor').val(),
                     'fontColor': $('#cookieBoxFontColor').val(),
                     'linkColor': $('#cookieBoxLinkColor').val()
                 },
                 'preferedButton': {
-                    'text': $('#cookieBoxButtonPreferedText').val(),
                     'backgroundColor': $('#cookieBoxButtonPreferedBackgroundColor').val(),
                     'textColor': $('#cookieBoxButtonPreferedTextColor').val()
                 },
                 'button': {
-                    'text': $('#cookieBoxButtonText').val(),
                     'backgroundColor': $('#cookieBoxButtonBackgroundColor').val(),
                     'textColor': $('#cookieBoxButtonTextColor').val()
                 },
                 'detailsButton': {
-                    'text': $('#cookieBoxDetailsButtonText').val(),
                     'backgroundColor': $('#cookieBoxDetailsButtonBackgroundColor').val(),
                     'textColor': $('#cookieBoxDetailsButtonTextColor').val()
                 },
                 'settingsLink': {
-                    'text': $('#cookieSettingsLinkText').val(),
                     'textColor': $('#cookieSettingsLinkTextColor').val()
+                },
+                'privacyLink': {
+                    'textColor': $('#cookiePrivacyLinkTextColor').val()
                 }
             }
         };
+        data.apperence.box.text = {};
+        data.apperence.box.detailsText = {};
+        data.apperence.preferedButton.text = {};
+        data.apperence.button.text = {};
+        data.apperence.detailsButton.text = {};
+        data.apperence.settingsLink.text = {};
+        data.apperence.privacyLink.text = {};
+        for (language in <?php print $beyond->prefix; ?>languages) {
+            data.apperence.box.text[language] = $('#cookieBoxText_' + language).val();
+            data.apperence.box.detailsText[language] = $('#cookieBoxDetailsText_' + language).val();
+            data.apperence.preferedButton.text[language] = $('#cookieBoxButtonPreferedText_' + language).val();
+            data.apperence.button.text[language] = $('#cookieBoxButtonText_' + language).val();
+            data.apperence.detailsButton.text[language] = $('#cookieBoxDetailsButtonText_' + language).val();
+            data.apperence.settingsLink.text[language] = $('#cookieSettingsLinkText_' + language).val();
+            data.apperence.privacyLink.text[language] = $('#cookiePrivacyLinkText_' + language).val();
+        }
 
         // Get cookie information
         data.cookies = {};
@@ -340,70 +552,8 @@
     <div class="card-header">
         <strong>Introduction</strong>
     </div>
-    <div class="card-body">
+    <div class="card-body" id="introduction">
 
-        <strong>Head</strong>
-
-        <div class="form-group">
-            <label class="small mb-1" for="cookieBoxText">Text</label>
-            <textarea rows=4 class="form-control" id="cookieBoxText" placeholder="Enter text for language"></textarea>
-        </div>
-
-        <strong>Preferd button</strong>
-
-        <div class="form-group">
-            <label class="small mb-1" for="cookieBoxButtonPreferedText">Prefered button text
-                color</label>
-            <input class="form-control py-4" id="cookieBoxButtonPreferedText" type="text"
-                   placeholder="Enter prefered button text" value="" readonly/>
-        </div>
-
-        <div class="form-group">
-            <label class="small mb-1" for="cookieBoxButtonPreferedBackgroundColor">Prefered button background
-                color</label>
-            <input class="form-control py-4" id="cookieBoxButtonPreferedBackgroundColor" type="text"
-                   placeholder="Enter prefered button background color like #000000" value="" readonly/>
-        </div>
-
-        <div class="form-group">
-            <label class="small mb-1" for="cookieBoxButtonPreferedTextColor">Prefered button text color</label>
-            <input class="form-control py-4" id="cookieBoxButtonPreferedTextColor" type="text"
-                   placeholder="Enter prefered button text color like #ffffff" value="" readonly/>
-        </div>
-
-        <strong>Button</strong>
-
-        <div class="form-group">
-            <label class="small mb-1" for="cookieBoxButtonText">Button text</label>
-            <input class="form-control py-4" id="cookieBoxButtonText" type="text"
-                   placeholder="Enter button text" value="" readonly/>
-        </div>
-
-        <div class="form-group">
-            <label class="small mb-1" for="cookieBoxButtonBackgroundColor">Button background color</label>
-            <input class="form-control py-4" id="cookieBoxButtonBackgroundColor" type="text"
-                   placeholder="Enter button background color like #f0f0f0" value="" readonly/>
-        </div>
-
-        <div class="form-group">
-            <label class="small mb-1" for="cookieBoxButtonTextColor">Button text color</label>
-            <input class="form-control py-4" id="cookieBoxButtonTextColor" type="text"
-                   placeholder="Enter button text color like #909090" value="" readonly/>
-        </div>
-
-        <strong>Settings link</strong>
-
-        <div class="form-group">
-            <label class="small mb-1" for="cookieSettingsLinkText">Settings link text</label>
-            <input class="form-control py-4" id="cookieSettingsLinkText" type="text"
-                   placeholder="Enter setting link text" value="" readonly/>
-        </div>
-
-        <div class="form-group">
-            <label class="small mb-1" for="cookieSettingsLinkTextColor">Settings link text color</label>
-            <input class="form-control py-4" id="cookieSettingsLinkTextColor" type="text"
-                   placeholder="Enter setting link text color like #c0c0c0" value="" readonly/>
-        </div>
 
     </div>
 </div>
@@ -413,34 +563,8 @@
     <div class="card-header">
         <strong>Details</strong>
     </div>
-    <div class="card-body">
+    <div class="card-body" id="details">
 
-        <strong>Head</strong>
-
-        <div class="form-group">
-            <label class="small mb-1" for="cookieBoxDetailsText">Text</label>
-            <textarea rows=4 class="form-control" id="cookieBoxDetailsText" placeholder="Enter text for language"></textarea>
-        </div>
-
-        <strong>Button</strong>
-
-        <div class="form-group">
-            <label class="small mb-1" for="cookieBoxDetailsButtonText">Button text</label>
-            <input class="form-control py-4" id="cookieBoxDetailsButtonText" type="text"
-                   placeholder="Enter button text" value="" readonly/>
-        </div>
-
-        <div class="form-group">
-            <label class="small mb-1" for="cookieBoxDetailsButtonBackgroundColor">Button background color</label>
-            <input class="form-control py-4" id="cookieBoxDetailsButtonBackgroundColor" type="text"
-                   placeholder="Enter button background color like #000000" value="" readonly/>
-        </div>
-
-        <div class="form-group">
-            <label class="small mb-1" for="cookieBoxDetailsButtonTextColor">Button text color</label>
-            <input class="form-control py-4" id="cookieBoxDetailsButtonTextColor" type="text"
-                   placeholder="Enter button text color like #ffffff" value="" readonly/>
-        </div>
 
     </div>
 </div>

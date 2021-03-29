@@ -71,8 +71,9 @@ try {
         );
     }
     if (!array_key_exists('language', $_SESSION[$beyond->prefix . 'data'])) {
-       $_SESSION[$beyond->prefix . 'data']['language'] = 'default';
+        $_SESSION[$beyond->prefix . 'data']['language'] = 'default';
     }
+    $beyond->language = $_SESSION[$beyond->prefix . 'data']['language'];
 
     // Initialize Database connections
     $beyond->db = new beyondDatabaseConnection($beyond->config, $beyond->prefix);

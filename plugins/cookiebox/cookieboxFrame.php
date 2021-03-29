@@ -23,18 +23,24 @@ if (!property_exists($configObj, 'apperence')) {
 
 if (!property_exists($configObj->apperence, 'box')) {
     $configObj->apperence->box = new stdClass();
-    $configObj->apperence->box->text = '';
-    $configObj->apperence->box->detailsText = '';
     $configObj->apperence->box->backgroundColor = '#ffffff';
     $configObj->apperence->box->fontColor = '#000000';
     $configObj->apperence->box->linkColor = '#0000ff';
 }
+if (!property_exists($configObj->apperence->box, 'text')) {
+    $configObj->apperence->box->text = new stdClass();
+}
+if (!property_exists($configObj->apperence->box, 'detailsText')) {
+    $configObj->apperence->box->detailsText = new stdClass();
+}
 
 if (!property_exists($configObj->apperence, 'preferedButton')) {
     $configObj->apperence->preferedButton = new stdClass();
-    $configObj->apperence->preferedButton->text = '';
     $configObj->apperence->preferedButton->backgroundColor = '#000000';
     $configObj->apperence->preferedButton->textColor = '#ffffff';
+}
+if (!property_exists($configObj->apperence->preferedButton, 'text')) {
+    $configObj->apperence->preferedButton->text = new stdClass();
 }
 
 if (!property_exists($configObj->apperence, 'button')) {
@@ -43,18 +49,33 @@ if (!property_exists($configObj->apperence, 'button')) {
     $configObj->apperence->button->backgroundColor = '#f0f0f0';
     $configObj->apperence->button->textColor = '#909090';
 }
+if (!property_exists($configObj->apperence->button, 'text')) {
+    $configObj->apperence->button->text = new stdClass();
+}
 
 if (!property_exists($configObj->apperence, 'detailsButton')) {
     $configObj->apperence->detailsButton = new stdClass();
-    $configObj->apperence->detailsButton->text = '';
     $configObj->apperence->detailsButton->backgroundColor = '#000000';
     $configObj->apperence->detailsButton->textColor = '#ffffff';
+}
+if (!property_exists($configObj->apperence->detailsButton, 'text')) {
+    $configObj->apperence->detailsButton->text = new stdClass();
 }
 
 if (!property_exists($configObj->apperence, 'settingsLink')) {
     $configObj->apperence->settingsLink = new stdClass();
-    $configObj->apperence->settingsLink->text = '';
     $configObj->apperence->settingsLink->textColor = '#c0c0c0';
+}
+if (!property_exists($configObj->apperence->settingsLink, 'text')) {
+    $configObj->apperence->settingsLink->text = new stdClass();
+}
+
+if (!property_exists($configObj->apperence, 'privacyLink')) {
+    $configObj->apperence->privacyLink = new stdClass();
+    $configObj->apperence->privacyLink->textColor = '#000000';
+}
+if (!property_exists($configObj->apperence->privacyLink, 'text')) {
+    $configObj->apperence->privacyLink->text = new stdClass();
 }
 
 if (!property_exists($configObj, 'cookies')) {
@@ -286,7 +307,7 @@ if (!property_exists($configObj, 'cookies')) {
 
                 parent.postMessage(JSON.stringify({
                     'kind': 'desiredHeight',
-                    'value': contentDiv.clientHeight+ buttonsDiv.offsetHeight + 70
+                    'value': contentDiv.clientHeight + buttonsDiv.offsetHeight + 70
                 }), "*");
             } else {
                 // Currently on details page
@@ -374,24 +395,60 @@ if (!property_exists($configObj, 'cookies')) {
 <div align="center" id="<?php print $beyond->prefix; ?>cookieBoxStartpage">
     <div class="<?php print $beyond->prefix; ?>cookieboxIntro" id="<?php print $beyond->prefix; ?>cookieboxIntro">
         <div id="<?php print $beyond->prefix; ?>cookieboxIntroText">
-            <?php print $configObj->apperence->box->text; ?>
+            <?php
+            if ((property_exists($configObj->apperence->box->text, $beyond->language)) && (trim($configObj->apperence->box->text->{$beyond->language}) !== '')) {
+                print $configObj->apperence->box->text->{$beyond->language};
+            } else {
+                print $configObj->apperence->box->text->default;
+            }
+            ?>
         </div>
     </div>
     <div align="center" class="<?php print $beyond->prefix; ?>cookieboxIntroButtons"
          id="<?php print $beyond->prefix; ?>cookieboxIntroButtons">
         <span class="<?php print $beyond->prefix; ?>cookieboxPreferedButton"
-              onclick="<?php print $beyond->prefix; ?>cookieboxAcceptAll();"><?php print $configObj->apperence->preferedButton->text; ?></span>
+              onclick="<?php print $beyond->prefix; ?>cookieboxAcceptAll();">
+            <?php
+            if ((property_exists($configObj->apperence->preferedButton->text, $beyond->language)) && (trim($configObj->apperence->preferedButton->text->{$beyond->language}) !== '')) {
+                print $configObj->apperence->preferedButton->text->{$beyond->language};
+            } else {
+                print $configObj->apperence->preferedButton->text->default;
+            }
+            ?>
+        </span>
         <span class="<?php print $beyond->prefix; ?>cookieboxButton"
-              onclick="<?php print $beyond->prefix; ?>cookieboxAcceptMinimal();"><?php print $configObj->apperence->button->text; ?></span>
+              onclick="<?php print $beyond->prefix; ?>cookieboxAcceptMinimal();">
+            <?php
+            if ((property_exists($configObj->apperence->button->text, $beyond->language)) && (trim($configObj->apperence->button->text->{$beyond->language}) !== '')) {
+                print $configObj->apperence->button->text->{$beyond->language};
+            } else {
+                print $configObj->apperence->button->text->default;
+            }
+            ?>
+        </span>
         <span class="<?php print $beyond->prefix; ?>cookieboxSettings"
-              onclick="<?php print $beyond->prefix; ?>cookieboxOpenSettings();"><?php print $configObj->apperence->settingsLink->text; ?></span>
+              onclick="<?php print $beyond->prefix; ?>cookieboxOpenSettings();">
+            <?php
+            if ((property_exists($configObj->apperence->settingsLink->text, $beyond->language)) && (trim($configObj->apperence->settingsLink->text->{$beyond->language}) !== '')) {
+                print $configObj->apperence->settingsLink->text->{$beyond->language};
+            } else {
+                print $configObj->apperence->settingsLink->text->default;
+            }
+            ?>
+        </span>
     </div>
 </div>
 
 <!-- Settings -->
 <div align="center" id="<?php print $beyond->prefix; ?>cookieBoxSettings" style="display:none;">
     <div align="left" class="<?php print $beyond->prefix; ?>cookieboxSettingsIntro">
-        <?php print $configObj->apperence->box->detailsText; ?>
+        <?php
+        if ((property_exists($configObj->apperence->box->detailsText, $beyond->language)) && (trim($configObj->apperence->box->detailsText->{$beyond->language}) !== '')) {
+            print $configObj->apperence->box->detailsText->{$beyond->language};
+        } else {
+            print $configObj->apperence->box->detailsText->default;
+        }
+        ?>
     </div>
     <div id="<?php print $beyond->prefix; ?>cookieBoxItems" align="left">
 
@@ -414,11 +471,35 @@ if (!property_exists($configObj, 'cookies')) {
 
             // Details & Link
             print '<div class="' . $beyond->prefix . 'cookieBoxDetails" align="justify">';
-            print '<strong style="display:block;">' . $configObj->cookies->{$cookieName}->title->{$_SESSION[$beyond->prefix . 'data']['language']} . '</strong>';
-            print $configObj->cookies->{$cookieName}->info->{$_SESSION[$beyond->prefix . 'data']['language']};
-            if ($configObj->cookies->{$cookieName}->privacyURL->{$_SESSION[$beyond->prefix . 'data']['language']} !== '') {
-                print '<a style="display:block;" target="_blank" href="' . $configObj->cookies->{$cookieName}->privacyURL->{$_SESSION[$beyond->prefix . 'data']['language']} . '" class="' . $beyond->prefix . 'cookieBoxLink">';
-                print '  Datenschutzbedingungen des Anbieters';
+
+            print '<strong style="display:block;">';
+            if ((property_exists($configObj->cookies->{$cookieName}->title, $beyond->language)) && (trim($configObj->cookies->{$cookieName}->title->{$beyond->language}) !== '')) {
+                print $configObj->cookies->{$cookieName}->title->{$beyond->language};
+            } else {
+                print $configObj->cookies->{$cookieName}->title->default;
+            }
+            print '</strong>';
+
+            if ((property_exists($configObj->cookies->{$cookieName}->info, $beyond->language)) && (trim($configObj->cookies->{$cookieName}->info->{$beyond->language}) !== '')) {
+                print $configObj->cookies->{$cookieName}->info->{$beyond->language};
+            } else {
+                print $configObj->cookies->{$cookieName}->info->default;
+            }
+
+            if (trim($configObj->cookies->{$cookieName}->privacyURL->{$beyond->language}) !== '') {
+                $link = $configObj->cookies->{$cookieName}->privacyURL->{$beyond->language};
+            } else if (trim($configObj->cookies->{$cookieName}->privacyURL->default) !== '') {
+                $link = $configObj->cookies->{$cookieName}->privacyURL->default;
+            } else {
+                $link = "";
+            }
+            if ($link !== '') {
+                print '<a style="display:block;" target="_blank" style="color:' . $configObj->apperence->privacyLink->textColor . ';" href="' . $link . '" class="' . $beyond->prefix . 'cookieBoxLink">';
+                if ((property_exists($configObj->apperence->privacyLink->text, $beyond->language)) && (trim($configObj->apperence->privacyLink->text->{$beyond->language}) !== '')) {
+                    print $configObj->apperence->privacyLink->text->{$beyond->language};
+                } else {
+                    print $configObj->apperence->privacyLink->text->default;
+                }
                 print '</a>';
             }
             print '</div>';
