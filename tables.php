@@ -764,7 +764,7 @@ foreach (range(0, 100000) as $i) {
                     <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
                     <button class="btn btn-success" type="button"
                             onclick="tablesCreate(
-                                base64encode($('#dialogTablesCreate').data('database')),
+                            <?php print $beyond->prefix; ?>base64encode($('#dialogTablesCreate').data('database')),
                                 true,
                                 $('#addTableName').val(),
                                 $('#addTableColumnName').val(),
@@ -863,7 +863,7 @@ foreach (range(0, 100000) as $i) {
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button"
-                            onclick="tablesColumnDrop(base64encode($('#dialogTablesDropField').data('fieldName')), true);">
+                            onclick="tablesColumnDrop(<?php print $beyond->prefix; ?>base64encode($('#dialogTablesDropField').data('fieldName')), true);">
                         Drop column
                     </button>
                     <button class="btn btn-success" type="button" data-dismiss="modal">Cancel</button>
@@ -883,7 +883,7 @@ foreach (range(0, 100000) as $i) {
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button"
-                            onclick="tablesDrop(base64encode($('#dialogTablesDrop').data('database')), base64encode($('#dialogTablesDrop').data('table')), true);">
+                            onclick="tablesDrop(<?php print $beyond->prefix; ?>base64encode($('#dialogTablesDrop').data('database')), base64encode($('#dialogTablesDrop').data('table')), true);">
                         Drop table
                     </button>
                     <button class="btn btn-success" type="button" data-dismiss="modal">Cancel</button>
@@ -925,7 +925,7 @@ foreach (range(0, 100000) as $i) {
                     <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
                     <button class="btn btn-success" type="button"
                             onclick="tablesViewRowEdit(
-                                base64encode($('#dialogViewRowEdit').data('primaryValue')),
+                            <?php print $beyond->prefix; ?>base64encode($('#dialogViewRowEdit').data('primaryValue')),
                                 false
                                 );">
                         Save row
@@ -947,7 +947,7 @@ foreach (range(0, 100000) as $i) {
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button"
                             onclick="tablesViewRowDelete(
-                                base64encode($('#dialogViewRowDelete').data('primaryValue')),
+                            <?php print $beyond->prefix; ?>base64encode($('#dialogViewRowDelete').data('primaryValue')),
                                 true
                                 );">
                         Delete row

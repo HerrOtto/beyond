@@ -338,7 +338,7 @@ $height = 225;
             print 'var editExtension = ' . json_encode(strtolower(pathinfo($editFile, PATHINFO_EXTENSION))) . ';' . PHP_EOL;
             ?>
             if (editFile != '') {
-                fileEdit(base64encode(editFile), base64encode(editExtension));
+                fileEdit(<?php print $beyond->prefix; ?>base64encode(editFile), base64encode(editExtension));
             }
 
             // TODO - Splitter: dragElement(document.getElementById("separator"), "H");

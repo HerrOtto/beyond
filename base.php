@@ -20,6 +20,16 @@ try {
     print 'var ' . $beyond->prefix . 'language = "' . $_SESSION[$beyond->prefix . 'data']['language'] . '";' . PHP_EOL;
     print PHP_EOL;
 
+    print 'function ' . $beyond->prefix . 'base64encode(str) { // btoa with unicode support' . PHP_EOL;
+    print '    return window.btoa(unescape(encodeURIComponent(str)));' . PHP_EOL;
+    print '}' . PHP_EOL;
+    print PHP_EOL;
+
+    print 'function ' . $beyond->prefix . 'base64decode(str) { // atob with unicode support' . PHP_EOL;
+    print '    return decodeURIComponent(escape(window.atob(str)));' . PHP_EOL;
+    print '}' . PHP_EOL;
+    print PHP_EOL;
+
     print 'function ' . $beyond->prefix . 'apiAjax(request, callBack, method) {' . PHP_EOL;
     print '    var parameters = \'\';' . PHP_EOL;
     print '    for (key in request.data) {' . PHP_EOL;

@@ -389,7 +389,7 @@ $height = 225;
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button"
-                            onclick="directoryDelete(base64encode($('#dialogDirectoryDelete').data('directory')), true);">
+                            onclick="directoryDelete(<?php print $beyond->prefix; ?>base64encode($('#dialogDirectoryDelete').data('directory')), true);">
                         Delete directory
                     </button>
                     <button class="btn btn-success" type="button" data-dismiss="modal">Cancel</button>
@@ -430,7 +430,7 @@ $height = 225;
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button"
-                            onclick="fileDelete(base64encode($('#dialogFileDelete').data('fileName')), true);">
+                            onclick="fileDelete(<?php print $beyond->prefix; ?>base64encode($('#dialogFileDelete').data('fileName')), true);">
                         Delete file
                     </button>
                     <button class="btn btn-success" type="button" data-dismiss="modal">Cancel</button>

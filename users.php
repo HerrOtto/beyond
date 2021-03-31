@@ -208,7 +208,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button"
-                            onclick="usersDelete(base64encode($('#dialogUsersDelete').data('userName')), true);">
+                            onclick="usersDelete(<?php print $beyond->prefix; ?>base64encode($('#dialogUsersDelete').data('userName')), true);">
                         Delete user
                     </button>
                     <button class="btn btn-success" type="button" data-dismiss="modal">Cancel</button>

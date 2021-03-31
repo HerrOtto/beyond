@@ -7,7 +7,7 @@ class shop_cart extends beyondApiBaseClass
 {
 
     /**
-     * Fetch cart
+     * Fetch cart items
      * @param string $data Parameters
      * @return array with result
      */
@@ -26,7 +26,7 @@ class shop_cart extends beyondApiBaseClass
     }
 
     /**
-     * Add article to cart
+     * Add item to cart
      * @param string $data Parameters
      * @return array with result
      */
@@ -87,8 +87,35 @@ class shop_cart extends beyondApiBaseClass
             $_SESSION[$beyond->prefix . 'data']['plugin_shop']['cart'][$data->articleNo]->amount = $amount + $data->amount;
         }
 
+        $this->calculate();
+
         return array(
             'addItem' => true
+        );
+
+    }
+
+    /**
+     * Remove item from cart
+     * @param string $data Parameters
+     * @return array with result
+     */
+
+    public function removeItem($data)
+    {
+
+        // Check permissions - No permissions required
+        // Check user input
+        $this->checkString($data, 'articleNo', true, false);
+
+        if (array_key_exists($data->articleNo, $_SESSION[$beyond->prefix . 'data']['plugin_shop']['cart'])) {
+            unset($_SESSION[$beyond->prefix . 'data']['plugin_shop']['cart'][$data->articleNo]);
+        }
+
+        $this->calculate();
+
+        return array(
+            'removeItem' => true
         );
 
     }
