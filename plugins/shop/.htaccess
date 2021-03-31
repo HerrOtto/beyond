@@ -1,13 +1,5 @@
 Deny from all
 
-<FilesMatch "^cookieboxScript\.php$">
-Allow From All
-</FilesMatch>
-
-<FilesMatch "^cookieboxStyle\.php$">
-Allow From All
-</FilesMatch>
-
-<FilesMatch "^cookieboxFrame\.php$">
+<FilesMatch "^shopHeadScript\.php$">
 Allow From All
 </FilesMatch>

@@ -73,24 +73,37 @@ class beyondDatabaseDriverSqlite3 extends beyondDatabaseDriver
         $where = "";
         foreach ($whereArray as $whereIndex => $whereItem) {
             //$whereItem = array(
-            //    "field != field",
-            //    "field != 'value'",
-            //    "field = field",
-            //    "field = 'value'",
-            //    "field > field",
-            //    "field > 'value'",
-            //    "field < field",
-            //    "field < 'value'",
-            //    "field LIKE field",
-            //    "field LIKE '%value%'",
-            //    "field NOT LIKE field",
-            //    "field NOT LIKE '%value%'"
+            //    "field != -0.0",
+            //    "field = +0.0",
+            //    "field > -0",
+            //    "field < 0",
             //);
-            if (preg_match('/([^\s]*)\s*(!=|=|<|>|like|not like)\s*(\w+|\'[^\']*\')/i', $whereItem, $matches)) { //
+            if (preg_match('/([^\s]*)\s*(!=|=|<|>)\s*([\-\+]?[0-9]+(\.[0-9]*)?)/i', $whereItem, $matches)) { //
                 $where .= ($where === '' ? 'WHERE ' : 'AND ') .
-                    $matches[1] . ' ' . $matches[2] . ' ' . $matches[3];
+                    $matches[1] . ' ' . $matches[2] . ' ' . $matches[3] . ' ';
             } else {
-                throw new Exception('Can not parse WHERE [' . $whereItem . '] condition');
+
+                //$whereItem = array(
+                //    "field != field",
+                //    "field != 'value'",
+                //    "field = field",
+                //    "field = 'value'",
+                //    "field > field",
+                //    "field > 'value'",
+                //    "field < field",
+                //    "field < 'value'",
+                //    "field LIKE field",
+                //    "field LIKE '%value%'",
+                //    "field NOT LIKE field",
+                //    "field NOT LIKE '%value%'"
+                //);
+                if (preg_match('/([^\s]*)\s*(!=|=|<|>|like|not like)\s*(\w+|\'[^\']*\')/i', $whereItem, $matches)) { //
+                    $where .= ($where === '' ? 'WHERE ' : 'AND ') .
+                        $matches[1] . ' ' . $matches[2] . ' ' . $matches[3] . ' ';
+                } else {
+                    throw new Exception('Can not parse WHERE [' . $whereItem . '] condition');
+                }
+
             }
         }
         return $where;

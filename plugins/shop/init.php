@@ -39,3 +39,13 @@ $beyond->shop = new shopHandler(
     $beyond->tools,
     $beyond->config
 );
+
+// Initialize session variables
+if (!array_key_exists('plugin_shop', $_SESSION[$beyond->prefix . 'data'])) {
+    $_SESSION[$beyond->prefix . 'data']['plugin_shop'] = array(
+    );
+}
+if (!array_key_exists('cart', $_SESSION[$beyond->prefix . 'data']['plugin_shop'])) {
+    $_SESSION[$beyond->prefix . 'data']['plugin_shop']['cart'] = array(
+    );
+}

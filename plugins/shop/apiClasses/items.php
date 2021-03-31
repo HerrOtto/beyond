@@ -7,7 +7,7 @@ class shop_items extends beyondApiBaseClass
 {
 
     /**
-     * Load items from database
+     * Load item list from database
      * @param string $data Parameters
      * @return array with result
      */
@@ -27,9 +27,6 @@ class shop_items extends beyondApiBaseClass
         // Current Database
         $databaseCurrent = $this->db->databases[$configObj->database];
 
-        // Init result
-        $shop = new stdClass();
-
         // Load data from current database
         $query = $databaseCurrent->select(
             $this->prefix . 'shop_items',
@@ -41,17 +38,71 @@ class shop_items extends beyondApiBaseClass
         if ($query === false) {
             throw new Exception('Can not query table [' . $this->prefix . 'shop_items]');
         }
+
+        // Init result
+        $list = new stdClass();
         while ($row = $query->fetch()) {
             $id = $row['id'];
             unset($row['id']);
             $row['name'] = json_decode($row['name']);
             $row['description'] = json_decode($row['description']);
             $row['disabled'] = intval($row['disabled']) === 1;
-            $shop->{$id} = $row;
+            $list->{$id} = $row;
         }
 
         return array(
-            'fetch' => $shop
+            'fetch' => $list
+        );
+    }
+
+    /**
+     * Load single item from database
+     * @param string $data Parameters
+     * @return array with result
+     */
+    public function fetchArticle($data)
+    {
+        // Check permissions - No permissions required
+
+        // Check user input - No input
+
+        // Load config
+        $shopTools = new shopTools();
+        $configObj = $shopTools->getConfig();
+
+        // Current Database
+        $databaseCurrent = $this->db->databases[$configObj->database];
+
+        // WHERE limit
+        $where = array();
+        $where = array_merge($where, array('disabled = 0'));
+        if (property_exists($data, 'articleNo')) {
+            $where = array_merge($where, array('articleNo = \'' . $databaseCurrent->escape($data->articleNo) . '\''));
+        }
+
+        // Load data from current database
+        $query = $databaseCurrent->select(
+            $this->prefix . 'shop_items',
+            array(
+                '*'
+            ),
+            $where
+        );
+        if ($query === false) {
+            throw new Exception('Can not query table [' . $this->prefix . 'shop_items]');
+        }
+
+        $item = false;
+        if ($row = $query->fetch()) {
+            unset($row['disabled']);
+            $row['name'] = json_decode($row['name']);
+            $row['description'] = json_decode($row['description']);
+            $row['disabled'] = intval($row['disabled']) === 1;
+            $item = (object)$row;
+        }
+
+        return array(
+            'fetchArticle' => $item
         );
     }
 
