@@ -46,14 +46,4 @@ foreach (glob(__DIR__ . '/../plugins/*') as $pluginDir) {
 }
 unset($pluginDir);
 
-?><script>
-
-    function base64encode(str) { // btoa with unicode support
-        return window.btoa(unescape(encodeURIComponent(str)));
-    }
-
-    function base64decode(str) { // atob with unicode support
-        return decodeURIComponent(escape(window.atob(str)));
-    }
-
-</script>
+?>

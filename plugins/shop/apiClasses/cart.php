@@ -107,7 +107,6 @@ class shop_cart extends beyondApiBaseClass
         // Check permissions - No permissions required
         // Check user input
         $this->checkString($data, 'articleNo', true, false);
-
         if (array_key_exists($data->articleNo, $_SESSION[$beyond->prefix . 'data']['plugin_shop']['cart'])) {
             unset($_SESSION[$beyond->prefix . 'data']['plugin_shop']['cart'][$data->articleNo]);
         }
@@ -121,83 +120,6 @@ class shop_cart extends beyondApiBaseClass
     }
 
     private function calculate()
-    {
-
-        //
-
-    }
-
-    public function getCartHtml($data)
-    {
-
-        //
-
-    }
-
-    public function getAddressMask($data)
-    {
-
-        //
-
-    }
-
-    public function getCheckoutMask($data)
-    {
-
-        //
-
-    }
-
-    public function getPayMask($data)
-    {
-
-        //
-
-    }
-
-    public function getPayNowMask($data)
-    {
-
-        //
-
-    }
-
-    public function getSentMask($data)
-    {
-
-        //
-
-    }
-
-    public function updateItem($data)
-    {
-
-        //
-
-    }
-
-    public function removeItem($data)
-    {
-
-        //
-
-    }
-
-    public function checkout($data)
-    {
-
-        //
-
-    }
-
-    public function pay($data)
-    {
-
-        //
-
-    }
-
-    public function send($data)
     {
 
         //
