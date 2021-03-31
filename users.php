@@ -40,10 +40,10 @@ if (!$beyond->tools->checkRole('admin,view')) {
                         for (userName in data.fetch) {
                             $('#userTable').append(
                                 '<tr>' +
-                                '<td class="userCell" value="' + base64encode(userName) + '">' + userName + '</td>' +
-                                '<td class="rolesCell" value="' + base64encode(data.fetch[userName].roles) + '">' + data.fetch[userName].roles + '</td>' +
+                                '<td class="userCell" value="' + <?php print $beyond->prefix; ?>base64encode(userName) + '">' + userName + '</td>' +
+                                '<td class="rolesCell" value="' + <?php print $beyond->prefix; ?>base64encode(data.fetch[userName].roles) + '">' + data.fetch[userName].roles + '</td>' +
                                 '<td>' +
-                                '  <span style="cursor:pointer;" onclick="usersDelete(\'' + base64encode(userName) + '\');"><i class="fas fa-trash"></i></span>' +
+                                '  <span style="cursor:pointer;" onclick="usersDelete(\'' + <?php print $beyond->prefix; ?>base64encode(userName) + '\');"><i class="fas fa-trash"></i></span>' +
                                 '</td>' +
                                 '</tr>'
                             );
@@ -53,8 +53,8 @@ if (!$beyond->tools->checkRole('admin,view')) {
                         }
                         $('.userCell,.rolesCell').on('click', function() {
                             var tr = $(this).closest('tr');
-                            var userName = base64decode(tr.children('.userCell').attr('value'));
-                            var roles = base64decode(tr.children('.rolesCell').attr('value'));
+                            var userName = <?php print $beyond->prefix; ?>base64decode(tr.children('.userCell').attr('value'));
+                            var roles = <?php print $beyond->prefix; ?>base64decode(tr.children('.rolesCell').attr('value'));
                             usersEdit(userName, roles, '', '', false);
                         })
 
@@ -118,12 +118,12 @@ if (!$beyond->tools->checkRole('admin,view')) {
 
         function usersDelete(userNameBase64, fromModal = false) {
             if (fromModal === false) {
-                $('#dialogUsersDelete .modal-body').html('Delete user: <b>' + base64decode(userNameBase64) + '</b>');
-                $('#dialogUsersDelete').data('userName', base64decode(userNameBase64)).modal('show');
+                $('#dialogUsersDelete .modal-body').html('Delete user: <b>' + <?php print $beyond->prefix; ?>base64decode(userNameBase64) + '</b>');
+                $('#dialogUsersDelete').data('userName', <?php print $beyond->prefix; ?>base64decode(userNameBase64)).modal('show');
                 return false;
             }
             <?php print $beyond->prefix; ?>api.beyondUsers.delete({
-                'userName': base64decode(userNameBase64)
+                'userName': <?php print $beyond->prefix; ?>base64decode(userNameBase64)
             }, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
@@ -132,7 +132,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                         $('#dialogUsersDelete').modal('hide');
                         usersFetch();
                     } else {
-                        message('User [' + base64decode(userNameBase64) + '] deletion failed');
+                        message('User [' + <?php print $beyond->prefix; ?>base64decode(userNameBase64) + '] deletion failed');
                     }
                 }
             });

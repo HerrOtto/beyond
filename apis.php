@@ -96,12 +96,12 @@ if (!$beyond->tools->checkRole('admin,view')) {
 
         function apiDelete(apiNameBase64, fromModal = false) {
             if (fromModal === false) {
-                $('#dialogApiDelete .modal-body').html('Delete API file: <b>' + atob(apiNameBase64) + '</b>');
-                $('#dialogApiDelete').data('apiName', atob(apiNameBase64)).modal('show');
+                $('#dialogApiDelete .modal-body').html('Delete API file: <b>' + <?php print $beyond->prefix; ?>base64decode(apiNameBase64) + '</b>');
+                $('#dialogApiDelete').data('apiName', <?php print $beyond->prefix; ?>base64decode(apiNameBase64)).modal('show');
                 return false;
             }
             <?php print $beyond->prefix; ?>api.beyondApis.apiDelete({
-                'apiName': atob(apiNameBase64)
+                'apiName': <?php print $beyond->prefix; ?>base64decode(apiNameBase64)
             }, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
@@ -109,7 +109,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                     if (data.apiDelete === true) {
                         location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/apis.php<?php print urlencode($dir) . '?nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
                     } else {
-                        message('API file [' + atob(apiNameBase64) + '] deletion failed');
+                        message('API file [' + <?php print $beyond->prefix; ?>base64decode(apiNameBase64) + '] deletion failed');
                     }
                 }
             });
@@ -120,7 +120,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
 
         function apiEdit(apiNameBase64, kind) {
             <?php print $beyond->prefix; ?>api.beyondApis.apiLoad({
-                'apiName': atob(apiNameBase64),
+                'apiName': <?php print $beyond->prefix; ?>base64decode(apiNameBase64),
                 'kind': kind
             }, function (error, data) {
                 if (error !== false) {
@@ -138,7 +138,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                             $('#saveButton').show();
                         }
 
-                        editorApiName = atob(apiNameBase64);
+                        editorApiName = <?php print $beyond->prefix; ?>base64decode(apiNameBase64);
 
                         editor = editor = ace.edit("aceEditor");
                         editor.setTheme("ace/theme/chrome");
@@ -160,7 +160,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
 
                         editorResize();
                     } else {
-                        message('API file [' + atob(apiNameBase64) + '] loading failed');
+                        message('API file [' + <?php print $beyond->prefix; ?>base64decode(apiNameBase64) + '] loading failed');
                     }
                 }
             });
@@ -242,7 +242,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
             print 'var editApiName = ' . json_encode($editApiName) . ';' . PHP_EOL;
             ?>
             if (editApiName != '') {
-                apiEdit(btoa(editApiName), 'site');
+                apiEdit(<?php print $beyond->prefix; ?>base64encode(editApiName), 'site');
             }
 
         });
@@ -287,7 +287,7 @@ if (!$beyond->tools->checkRole('admin,view')) {
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-danger" type="button"
-                            onclick="apiDelete(btoa($('#dialogApiDelete').data('apiName')), true);">
+                            onclick="apiDelete(<?php print $beyond->prefix; ?>base64encode($('#dialogApiDelete').data('apiName')), true);">
                         Delete file
                     </button>
                     <button class="btn btn-success" type="button" data-dismiss="modal">Cancel</button>

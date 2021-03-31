@@ -119,7 +119,7 @@ $height = 225;
         function fileEdit(fileBase64, fileExtensionBase64) {
 
             <?php print $beyond->prefix; ?>api.beyondFiles.fileLoad({
-                'file': base64decode(fileBase64),
+                'file': <?php print $beyond->prefix; ?>base64decode(fileBase64),
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {
                 if (error !== false) {
@@ -129,7 +129,7 @@ $height = 225;
                         $('#list').hide();
                         $('#editor').show();
 
-                        editorFileName = base64decode(fileBase64);
+                        editorFileName = <?php print $beyond->prefix; ?>base64decode(fileBase64);
 
                         editor = editor = ace.edit("aceEditor");
                         editor.setTheme("ace/theme/chrome");
@@ -139,28 +139,28 @@ $height = 225;
                             mergeUndoDeltas: "always"
                         });
 
-                        if (base64decode(fileExtensionBase64) === 'js') {
+                        if (<?php print $beyond->prefix; ?>base64decode(fileExtensionBase64) === 'js') {
                             var javascriptMode = ace.require("ace/mode/javascript").Mode;
                             editor.session.setMode(new javascriptMode());
-                        } else if (base64decode(fileExtensionBase64) === 'php') {
+                        } else if (<?php print $beyond->prefix; ?>base64decode(fileExtensionBase64) === 'php') {
                             var phpMode = ace.require("ace/mode/php").Mode;
                             editor.session.setMode(new phpMode());
-                        } else if (base64decode(fileExtensionBase64) === 'css') {
+                        } else if (<?php print $beyond->prefix; ?>base64decode(fileExtensionBase64) === 'css') {
                             var cssMode = ace.require("ace/mode/css").Mode;
                             editor.session.setMode(new cssMode());
-                        } else if (base64decode(fileExtensionBase64) === 'html') {
+                        } else if (<?php print $beyond->prefix; ?>base64decode(fileExtensionBase64) === 'html') {
                             var htmlMode = ace.require("ace/mode/html").Mode;
                             editor.session.setMode(new htmlMode());
-                        } else if (base64decode(fileExtensionBase64) === 'htm') {
+                        } else if (<?php print $beyond->prefix; ?>base64decode(fileExtensionBase64) === 'htm') {
                             var htmlMode = ace.require("ace/mode/html").Mode;
                             editor.session.setMode(new htmlMode());
-                        } else if (base64decode(fileExtensionBase64) === 'sql') {
+                        } else if (<?php print $beyond->prefix; ?>base64decode(fileExtensionBase64) === 'sql') {
                             var sqlMode = ace.require("ace/mode/sql").Mode;
                             editor.session.setMode(new sqlMode());
-                        } else if (base64decode(fileExtensionBase64) === 'sh') {
+                        } else if (<?php print $beyond->prefix; ?>base64decode(fileExtensionBase64) === 'sh') {
                             var shMode = ace.require("ace/mode/sh").Mode;
                             editor.session.setMode(new shMode());
-                        } else if (base64decode(fileExtensionBase64) == 'xml') {
+                        } else if (<?php print $beyond->prefix; ?>base64decode(fileExtensionBase64) == 'xml') {
                             var xmlMode = ace.require("ace/mode/xml").Mode;
                             editor.session.setMode(new xmlMode());
                         }
@@ -174,7 +174,7 @@ $height = 225;
 
                         editorResize();
                     } else {
-                        message('Loading file [' + base64decode(fileBase64) + '] failed');
+                        message('Loading file [' + <?php print $beyond->prefix; ?>base64decode(fileBase64) + '] failed');
                     }
                 }
             });
@@ -338,7 +338,7 @@ $height = 225;
             print 'var editExtension = ' . json_encode(strtolower(pathinfo($editFile, PATHINFO_EXTENSION))) . ';' . PHP_EOL;
             ?>
             if (editFile != '') {
-                fileEdit(<?php print $beyond->prefix; ?>base64encode(editFile), base64encode(editExtension));
+                fileEdit(<?php print $beyond->prefix; ?>base64encode(editFile), <?php print $beyond->prefix; ?>base64encode(editExtension));
             }
 
             // TODO - Splitter: dragElement(document.getElementById("separator"), "H");

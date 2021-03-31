@@ -155,12 +155,12 @@ $height = 225;
 
         function directoryDelete(dirBase64, fromModal = false) {
             if (fromModal === false) {
-                $('#dialogDirectoryDelete .modal-body').html('Delete directory: <b>' + base64decode(dirBase64) + '</b>');
-                $('#dialogDirectoryDelete').data('directory', base64decode(dirBase64)).modal('show');
+                $('#dialogDirectoryDelete .modal-body').html('Delete directory: <b>' + <?php print $beyond->prefix; ?>base64decode(dirBase64) + '</b>');
+                $('#dialogDirectoryDelete').data('directory', <?php print $beyond->prefix; ?>base64decode(dirBase64)).modal('show');
                 return false;
             }
             <?php print $beyond->prefix; ?>api.beyondFiles.directoryDelete({
-                'directory': base64decode(dirBase64),
+                'directory': <?php print $beyond->prefix; ?>base64decode(dirBase64),
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {
                 if (error !== false) {
@@ -172,7 +172,7 @@ $height = 225;
                             '&nocache=<?php print urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
                     } else {
                         $('#dialogDirectoryDelete').modal('hide');
-                        message('Directory [' + base64decode(dirBase64) + '] deletion failed');
+                        message('Directory [' + <?php print $beyond->prefix; ?>base64decode(dirBase64) + '] deletion failed');
                     }
                 }
             });
@@ -197,12 +197,12 @@ $height = 225;
 
         function fileDelete(fileBase64, fromModal = false) {
             if (fromModal === false) {
-                $('#dialogFileDelete .modal-body').html('Delete file: <b>' + base64decode(fileBase64) + '</b>');
-                $('#dialogFileDelete').data('fileName', base64decode(fileBase64)).modal('show');
+                $('#dialogFileDelete .modal-body').html('Delete file: <b>' + <?php print $beyond->prefix; ?>base64decode(fileBase64) + '</b>');
+                $('#dialogFileDelete').data('fileName', <?php print $beyond->prefix; ?>base64decode(fileBase64)).modal('show');
                 return false;
             }
             <?php print $beyond->prefix; ?>api.beyondFiles.fileDelete({
-                'file': base64decode(fileBase64),
+                'file': <?php print $beyond->prefix; ?>base64decode(fileBase64),
                 'currentPath': <?php print json_encode($dir['relPath']); ?>
             }, function (error, data) {
                 if (error !== false) {
@@ -211,7 +211,7 @@ $height = 225;
                     if (data.fileDelete === true) {
                         location.href = '<?php print $beyond->config->get('base', 'server.baseUrl'); ?>/beyond/files.php?dir=<?php print urlencode($dir['relPath']) . '&nocache=' . urlencode(microtime(true) . bin2hex(random_bytes(10))); ?>';
                     } else {
-                        message('File [' + base64decode(fileBase64) + '] deletion failed');
+                        message('File [' + <?php print $beyond->prefix; ?>base64decode(fileBase64) + '] deletion failed');
                     }
                 }
             });
@@ -508,7 +508,7 @@ $height = 225;
                             $output .= '<span class="fileItemName" onclick="location.href=\'' . $location . '\';">';
                             $output .= $dirItem;
                             $output .= '</span>';
-                            $output .= '<span class="fileItemAction" onclick="directoryDelete(\'' . base64_encode($dirItem) . '\');">';
+                            $output .= '<span class="fileItemAction" onclick="directoryDelete(\'' .  base64_encode($dirItem) . '\');">';
                             $output .= '<i class="fas fa-trash"></i>';
                             $output .= '</span>';
                             $output .= '</div>' . PHP_EOL;
