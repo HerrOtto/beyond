@@ -25,11 +25,11 @@
                         out += '<span class="blockItemIcon">';
                         out += '<i class="fas fa-square"></i>';
                         out += '</span>';
-                        out += '<span class="blockItemName" onclick="editBlock(\'' + base64encode(blockName) + '\', false);">';
+                        out += '<span class="blockItemName" onclick="editBlock(\'' + <?php print $beyond->prefix; ?>base64encode(blockName) + '\', false);">';
                         out += blockName;
                         out += '</span>';
                         out += '<span class="blockItemAction text-nowrap">';
-                        out += '  <i class="fas fa-trash ml-1" onclick="deleteBlock(\'' + base64encode(blockName) + '\', false);"></i>';
+                        out += '  <i class="fas fa-trash ml-1" onclick="deleteBlock(\'' + <?php print $beyond->prefix; ?>base64encode(blockName) + '\', false);"></i>';
                         out += '</span>';
                         out += '</div>'
 
@@ -109,13 +109,13 @@
 
     function deleteBlock(blockNameBase64 = '', fromModal = false) {
         if (fromModal === false) {
-            $('#dialogDeleteBlock .modal-body').html('<div class="mb-4">Delete block <b>' + base64decode(blockNameBase64) + '</b> from database</div>');
-            $('#dialogDeleteBlock').data('name', base64decode(blockNameBase64)).modal('show');
+            $('#dialogDeleteBlock .modal-body').html('<div class="mb-4">Delete block <b>' + <?php print $beyond->prefix; ?>base64decode(blockNameBase64) + '</b> from database</div>');
+            $('#dialogDeleteBlock').data('name', <?php print $beyond->prefix; ?>base64decode(blockNameBase64)).modal('show');
             return false;
         }
 
         var data = {
-            'name': base64decode(blockNameBase64),
+            'name': <?php print $beyond->prefix; ?>base64decode(blockNameBase64),
         };
 
         <?php print $beyond->prefix; ?>api.blocks_config.deleteBlock(
@@ -158,10 +158,10 @@
         }
 
         $('#dialogEditBlock form').html(fields);
-        $('#editBlockName').val(base64decode(nameBase64));
+        $('#editBlockName').val(<?php print $beyond->prefix; ?>base64decode(nameBase64));
         for (language in <?php print $beyond->prefix; ?>languages) {
-            if ((blocks[base64decode(nameBase64)].content !== null) && (language in blocks[base64decode(nameBase64)].content)) {
-                $('#editBlockValue_' + language).val(blocks[base64decode(nameBase64)].content[language]);
+            if ((blocks[<?php print $beyond->prefix; ?>base64decode(nameBase64)].content !== null) && (language in blocks[<?php print $beyond->prefix; ?>base64decode(nameBase64)].content)) {
+                $('#editBlockValue_' + language).val(blocks[<?php print $beyond->prefix; ?>base64decode(nameBase64)].content[language]);
             } else {
                 $('#editBlockValue_' + language).val('');
             }
@@ -250,7 +250,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-danger" type="button"
-                        onclick="deleteBlock(base64encode($('#dialogDeleteBlock').data('name')), true);">
+                        onclick="deleteBlock(<?php print $beyond->prefix; ?>base64encode($('#dialogDeleteBlock').data('name')), true);">
                     Delete block
                 </button>
                 <button class="btn btn-success" type="button" data-dismiss="modal">Cancel</button>

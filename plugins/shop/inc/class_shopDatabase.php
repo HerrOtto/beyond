@@ -274,6 +274,33 @@ class shopDatabase
             );
         }
 
+        // Init "shop_countries" table
+        if (!array_key_exists($this->prefix . 'shop_countries', $tableVersions)) {
+            $database->tableCreate(
+                $this->prefix . 'shop_countries',
+                array(
+                    'id' => array(
+                        'kind' => 'number',
+                        'index' => 'auto'
+                    ),
+                    'code' => array(
+                        'kind' => 'string',
+                        'index' => 'unique'
+                    ),
+                    'value' => array(
+                        'kind' => 'string'
+                    )
+                )
+            );
+            $database->insert(
+                $this->prefix . 'shop_tableVersionInfo',
+                array(
+                    'tableName' => $this->prefix . 'shop_countries',
+                    'tableVersion' => 1
+                )
+            );
+        }
+
     }
 
     /*

@@ -59,7 +59,7 @@ abstract class beyondApiBaseClass
             throw new Exception('Parameter [' . $propertyName . '] value [' . $value . '] is a decimal value not a number');
         }
 
-        if (($min !== false) && (intval($value) > $min)) {
+        if (($min !== false) && (intval($value) < $min)) {
             throw new Exception('Parameter [' . $propertyName . '] value [' . $value . '] exceeds expected min. value [' . $min . ']');
         }
 

@@ -62,7 +62,7 @@ class shop_coupons extends beyondApiBaseClass
     public function add($data)
     {
         // Check permissions
-        if ($this->tools->checkRole('admin,view') === false) {
+        if ($this->tools->checkRole('admin') === false) {
             throw new Exception('Permission denied');
         }
 

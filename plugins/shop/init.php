@@ -49,3 +49,8 @@ if (!array_key_exists('cart', $_SESSION[$beyond->prefix . 'data']['plugin_shop']
     $_SESSION[$beyond->prefix . 'data']['plugin_shop']['cart'] = array(
     );
 }
+if (!array_key_exists('coupon', $_SESSION[$beyond->prefix . 'data']['plugin_shop'])) {
+    $_SESSION[$beyond->prefix . 'data']['plugin_shop']['coupon'] = false;
+}
+
+
