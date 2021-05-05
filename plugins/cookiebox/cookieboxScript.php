@@ -3,6 +3,11 @@
 header("Content-type: text/javascript; Charset=UTF-8");
 require_once __DIR__ . '/../../inc/init.php';
 
+$displayLanguage = $_SESSION[$beyond->prefix . 'data']['language'];
+if ($beyond->variable->get('lang', '') !== '') {
+    $displayLanguage = $beyond->variable->get('lang');
+}
+
 $configJson = file_get_contents(__DIR__ . '/../../config/cookiebox_settings.json');
 $configObj = json_decode($configJson); // , JSON_OBJECT_AS_ARRAY);
 
@@ -52,7 +57,7 @@ if (!property_exists($configObj, 'changeCount')) {
                 // Cookiebox
                 document.body.innerHTML =
                     '<div class="<?php print $beyond->prefix; ?>cookieboxWrap" id="<?php print $beyond->prefix; ?>cookieboxWrap" style="width: 600px; height: 400px;">' +
-                    '<iframe class="<?php print $beyond->prefix; ?>cookieboxFrame" id="<?php print $beyond->prefix; ?>cookiebox" src="<?php print $beyond->config->get('base', 'server.baseUrl') . '/beyond/plugins/cookiebox/cookieboxFrame.php'; ?>"></iframe>' +
+                    '<iframe class="<?php print $beyond->prefix; ?>cookieboxFrame" id="<?php print $beyond->prefix; ?>cookiebox" src="<?php print $beyond->config->get('base', 'server.baseUrl') . '/beyond/plugins/cookiebox/cookieboxFrame.php?lang=' . urlencode($displayLanguage); ?>"></iframe>' +
                     '</div>' +
                     document.body.innerHTML;
 
