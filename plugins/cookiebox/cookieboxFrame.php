@@ -368,7 +368,7 @@ if (!property_exists($configObj, 'cookies')) {
                 settingsDiv = document.getElementById('<?php print $beyond->prefix; ?>cookieBoxSettings');
                 parent.postMessage(JSON.stringify({
                     'kind': 'desiredHeight',
-                    'value': settingsDiv.clientHeight + 70
+                    'value': settingsDiv.clientHeight + 90
                 }), "*");
             }
 
@@ -516,8 +516,13 @@ if (!property_exists($configObj, 'cookies')) {
             print '<div style="width:60px; float:left; margin-right: -60px;">';
 
             // Checkbox
-            print '<input class="apple-switch" type="checkbox" id="' . $beyond->prefix . 'cookieBoxCheckbox_' . $cookieName . '" ' . ($configObj->cookies->{$cookieName}->required ? 'checked disabled' : '') . '>';
-
+            if ($configObj->cookies->{$cookieName}->required) {
+                print '<input class="apple-switch" type="checkbox" id="' . $beyond->prefix . 'cookieBoxCheckbox_' . $cookieName . '" checked disabled>';
+            } else if ($_COOKIE['cookiebox_' . $cookieName] == 1) {
+                print '<input class="apple-switch" type="checkbox" id="' . $beyond->prefix . 'cookieBoxCheckbox_' . $cookieName . '" checked>';
+            } else {
+                print '<input class="apple-switch" type="checkbox" id="' . $beyond->prefix . 'cookieBoxCheckbox_' . $cookieName . '">';
+            }
 
             // --- Right --
             print '</div>';

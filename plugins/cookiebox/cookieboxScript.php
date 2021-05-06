@@ -44,30 +44,26 @@ if (!property_exists($configObj, 'changeCount')) {
      * Add IFrame to body
      */
 
-    function <?php print $beyond->prefix; ?>cookieboxInit() {
-        if (<?php print $beyond->prefix; ?>cookieboxGetCookie('cookieboxDone') !== '<?php print $configObj->changeCount; ?>') {
+    function <?php print $beyond->prefix; ?>cookieboxOpen() {
+        // Add cookiebox
+        beyond_api.cookiebox_config.load({}, function (error, data) {
+            if (error !== false) {
+                alert('Error loading cookiebox: ' + error);
+                return;
+            }
 
-            // Add cookiebox
-            beyond_api.cookiebox_config.load({}, function (error, data) {
-                if (error !== false) {
-                    alert('Error loading cookiebox: ' + error);
-                    return;
-                }
+            // Cookiebox
+            document.body.innerHTML =
+                '<div class="<?php print $beyond->prefix; ?>cookieboxWrap" id="<?php print $beyond->prefix; ?>cookieboxWrap" style="width: 600px; height: 400px;">' +
+                '<iframe class="<?php print $beyond->prefix; ?>cookieboxFrame" id="<?php print $beyond->prefix; ?>cookiebox" src="<?php print $beyond->config->get('base', 'server.baseUrl') . '/beyond/plugins/cookiebox/cookieboxFrame.php?lang=' . urlencode($displayLanguage); ?>"></iframe>' +
+                '</div>' +
+                document.body.innerHTML;
 
-                // Cookiebox
-                document.body.innerHTML =
-                    '<div class="<?php print $beyond->prefix; ?>cookieboxWrap" id="<?php print $beyond->prefix; ?>cookieboxWrap" style="width: 600px; height: 400px;">' +
-                    '<iframe class="<?php print $beyond->prefix; ?>cookieboxFrame" id="<?php print $beyond->prefix; ?>cookiebox" src="<?php print $beyond->config->get('base', 'server.baseUrl') . '/beyond/plugins/cookiebox/cookieboxFrame.php?lang=' . urlencode($displayLanguage); ?>"></iframe>' +
-                    '</div>' +
-                    document.body.innerHTML;
-
-                // Background
-                document.body.innerHTML =
-                    '<div class="<?php print $beyond->prefix; ?>cookieboxBackground">' +
-                    '</div>' + document.body.innerHTML;
-            });
-        }
-
+            // Background
+            document.body.innerHTML =
+                '<div class="<?php print $beyond->prefix; ?>cookieboxBackground">' +
+                '</div>' + document.body.innerHTML;
+        });
     }
 
     function <?php print $beyond->prefix; ?>IframeEventHandler(event) {
@@ -103,6 +99,8 @@ if (!property_exists($configObj, 'changeCount')) {
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        <?php print $beyond->prefix; ?>cookieboxInit();
+        if (<?php print $beyond->prefix; ?>cookieboxGetCookie('cookieboxDone') !== '<?php print $configObj->changeCount; ?>') {
+            <?php print $beyond->prefix; ?>cookieboxOpen();
+        }
     });
 
