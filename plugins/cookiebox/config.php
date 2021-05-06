@@ -3,7 +3,7 @@
 // Called from: ../../pluginConfig.php
 
 ?>
-<script>
+<script xmlns="http://www.w3.org/1999/html">
 
     function addCookieToHtml(cookieName, cookieObj) {
         cookieName = cookieName.replace(/[^a-zA-Z]/g, '');
@@ -81,6 +81,8 @@
                     $('#cookieBoxFontColor').removeAttr('readonly');
                     $('#cookieBoxLinkColor').val(data.load.apperence.box.linkColor);
                     $('#cookieBoxLinkColor').removeAttr('readonly');
+                    $('#cookieBoxCustomCSS').val(data.load.apperence.css);
+                    $('#cookieBoxCustomCSS').removeAttr('readonly');
 
                     // Introduction
 
@@ -336,6 +338,7 @@
                     'fontColor': $('#cookieBoxFontColor').val(),
                     'linkColor': $('#cookieBoxLinkColor').val()
                 },
+                'css': $('#cookieBoxCustomCSS').val(),
                 'preferedButton': {
                     'backgroundColor': $('#cookieBoxButtonPreferedBackgroundColor').val(),
                     'textColor': $('#cookieBoxButtonPreferedTextColor').val()
@@ -543,6 +546,11 @@
             <label class="small mb-1" for="cookieBoxLinkColor">Link color</label>
             <input class="form-control py-4" id="cookieBoxLinkColor" type="text"
                    placeholder="Enter link color like #0000ff" value="" readonly/>
+        </div>
+
+        <div class="form-group">
+            <label class="small mb-1" for="cookieBoxCustomCSS">Custom CSS</label>
+            <textarea class="form-control" rows=8 id="cookieBoxCustomCSS" type="text" value="" readonly/></textarea>
         </div>
 
     </div>

@@ -43,6 +43,7 @@ class cookiebox_config extends beyondApiBaseClass
             $config->apperence->box->backgroundColor = '#ffffff';
             $config->apperence->box->fontColor = '#000000';
             $config->apperence->box->linkColor = '#0000ff';
+            $config->apperence->box->css = '';
         }
         if (is_string($config->apperence->box->detailsText)) {
             $temp = $config->apperence->box->detailsText;
@@ -216,6 +217,7 @@ class cookiebox_config extends beyondApiBaseClass
         $config->apperence->box->backgroundColor = $data->apperence->box->backgroundColor;
         $config->apperence->box->fontColor = $data->apperence->box->fontColor;
         $config->apperence->box->linkColor = $data->apperence->box->linkColor;
+        $config->apperence->css = $data->apperence->css;
 
         if (!property_exists($config->apperence, 'preferedButton')) {
             $config->apperence->preferedButton = new stdClass();

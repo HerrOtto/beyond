@@ -142,6 +142,14 @@ if (!property_exists($configObj, 'cookies')) {
 
     <style>
 
+        /* - CUSTOM CSS --------------------------------------------------------------------------------------------- */
+
+        <?php
+                if (property_exists($configObj->apperence, 'css')) {
+                    print $configObj->apperence->css;
+                }
+        ?>
+
         /* ---------------------------------------------------------------------------------------------------------- */
 
         /* Into top */
