@@ -301,6 +301,35 @@ class shopDatabase
             );
         }
 
+        // Init "shop_shipping" table
+        if (!array_key_exists($this->prefix . 'shop_shipping', $tableVersions)) {
+            $database->tableCreate(
+                $this->prefix . 'shop_shipping',
+                array(
+                    'id' => array(
+                        'kind' => 'number',
+                        'index' => 'auto'
+                    ),
+                    'countryCode' => array(
+                        'kind' => 'string'
+                    ),
+                    'weight' => array(
+                        'kind' => 'number'
+                    ),
+                    'value' => array(
+                        'kind' => 'decimal'
+                    )
+                )
+            );
+            $database->insert(
+                $this->prefix . 'shop_tableVersionInfo',
+                array(
+                    'tableName' => $this->prefix . 'shop_shipping',
+                    'tableVersion' => 1
+                )
+            );
+        }
+
     }
 
     /*

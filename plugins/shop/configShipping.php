@@ -6,6 +6,67 @@
 <script>
 
     var countries = {};
+    var shipping = {};
+    var currentCountryId = false;
+    var currentCountryCode = false;
+
+    function load() {
+        $('#countries').empty();
+        $('#shipping').empty();
+
+        <?php print $beyond->prefix; ?>api.shop_shipping.fetch({}, function (error, data) {
+            if (error !== false) {
+                message('Error: ' + error);
+            } else {
+                if ((typeof data.fetch === 'object') && (data.fetch !== null)) {
+                    currentCountryCode = false;
+                    countries = data.fetch;
+                    for (countryId in countries) {
+                        if (currentCountryId = countryId) {
+                            currentCountryCode = countries[countryId].code;
+                        }
+                        var out = '';
+                        out += '<div class="shopItem">';
+                        out += '<span class="shopItemIcon">';
+                        out += '<i class="fas fa-globe"></i>';
+                        out += '</span>';
+                        out += '<span class="shopItemName" onclick="editCountry(\'' + countryId + '\', false);">';
+                        out += countries[countryId].code + ': ' + (
+                            countries[countryId].value[beyond_language] == '' ?
+                                countries[countryId].value['default'] :
+                                countries[countryId].value[beyond_language]
+                        );
+                        out += '</span>';
+                        out += '<span class="shopItemAction text-nowrap">';
+                        out += '  <i class="fas fa-trash ml-1" onclick="deleteCountry(\'' + countryId + '\', false);"></i>';
+                        out += '</span>';
+                        out += '</div>'
+                        $('#countries').append(out);
+                    }
+                    shipping = data.shipping;
+                    for (shippingIndex in shipping[currentCountryCode]) {
+                        var out = '';
+                        out += '<div class="shopItem">';
+                        out += '<span class="shopItemIcon">';
+                        out += '<i class="fas fa-coins"></i>';
+                        out += '</span>';
+                        out += '<span class="shopItemName" onclick="editShipping(\'' + shipping[currentCountryCode][shippingIndex].id + '\', false);">';
+                        out += 'Weight <= ' + shipping[currentCountryCode][shippingIndex].weight + 'g';
+                        out += '</span>';
+                        out += '<span class="shopItemAction text-nowrap">';
+                        out += '  <i class="fas fa-trash ml-1" onclick="deleteShipping(\'' + shipping[currentCountryCode][shippingIndex].id + '\', false);"></i>';
+                        out += '</span>';
+                        out += '</div>'
+                        $('#shipping').append(out);
+                    }
+                } else {
+                    message('Load countries failed');
+                }
+            }
+        });
+    }
+
+    //
 
     function createCountryInputFields(prefix) {
 
@@ -14,7 +75,7 @@
         fields +=
             '<div class="form-group">\n' +
             '  <label class="small mb-1" for="' + prefix + '_code">Code</label>\n' +
-            '  <input class="form-control py-4" id="' + prefix + '_code" type="text" />\n' +
+            '  <input class="form-control py-4" id="' + prefix + '_code" ' + (prefix === 'editCountry' ? 'readonly' : '') + ' type="text" />\n' +
             '</div>';
 
         for (lang in beyond_languages) {
@@ -29,46 +90,6 @@
 
     }
 
-    function loadCountries() {
-        $('#countries').empty();
-        $('#countryList').hide();
-        $('#countryItem').hide();
-
-        <?php print $beyond->prefix; ?>api.shop_shipping.fetch({}, function (error, data) {
-            if (error !== false) {
-                message('Error: ' + error);
-            } else {
-                if ((typeof data.fetch === 'object') && (data.fetch !== null)) {
-
-                    countries = data.fetch;
-
-                    for (countryId in countries) {
-                        var out = '';
-
-                        out += '<div class="shopItem">';
-                        out += '<span class="shopItemIcon">';
-                        out += '<i class="fas fa-globe"></i>';
-                        out += '</span>';
-                        out += '<span class="shopItemName" onclick="editCountry(\'' + countryId + '\', false);">';
-                        out += countries[countryId].code
-                        out += '</span>';
-                        out += '<span class="shopItemAction text-nowrap">';
-                        out += '  <i class="fas fa-trash ml-1" onclick="deleteCountry(\'' + countryId + '\', false);"></i>';
-                        out += '</span>';
-                        out += '</div>'
-
-                        $('#countries').append(out);
-                    }
-
-                    $('#countryList').show();
-
-                } else {
-                    message('Load countries failed');
-                }
-            }
-        });
-    }
-
     function addCountry(fromModal = false) {
         if (fromModal === false) {
             var fields = createCountryInputFields('addCountry');
@@ -81,7 +102,7 @@
 
         var value = {};
         for (lang in beyond_languages) {
-            value[lang] = $('#addCountry_value_'+lang).val()
+            value[lang] = $('#addCountry_value_' + lang).val()
         }
 
         var data = {
@@ -96,7 +117,7 @@
                 } else {
                     if (data.addCountry === true) {
                         $('#dialogAddCountry').modal('hide');
-                        loadCountries();
+                        load();
                     } else {
                         message('Adding country failed');
                     }
@@ -123,7 +144,7 @@
                 } else {
                     if (data.deleteCountry === true) {
                         $('#dialogDeleteCountry').modal('hide');
-                        loadCountries();
+                        load();
                     } else {
                         message('Country deletion failed');
                     }
@@ -132,6 +153,8 @@
     }
 
     function editCountry(countryId) {
+
+        currentCountryId = countryId;
 
         $('#countryList').hide();
         $('#countryItem').show();
@@ -142,17 +165,15 @@
 
         $('#editCountry_code').val(countries[countryId].code);
         for (lang in beyond_languages) {
-            $('#editCountry_value_'+lang).val(countries[countryId].value[lang]);
+            $('#editCountry_value_' + lang).val(countries[countryId].value[lang]);
         }
-
-        $('#editCountry_code').focus();
     }
 
     function saveCountry(countryId) {
 
         var value = {};
         for (lang in beyond_languages) {
-            value[lang] = $('#editCountry_value_'+lang).val()
+            value[lang] = $('#editCountry_value_' + lang).val()
         }
 
         var data = {
@@ -176,10 +197,127 @@
 
     }
 
+    function createShippingInputFields(prefix) {
+
+        var fields = '';
+
+        fields +=
+            '<div class="form-group">\n' +
+            '  <label class="small mb-1" for="' + prefix + '_weight">Weight [g]</label>\n' +
+            '  <input class="form-control py-4" id="' + prefix + '_weight" ' + (prefix === 'editCountry' ? 'readonly' : '') + ' type="text" />\n' +
+            '</div>';
+
+        fields +=
+            '<div class="form-group">\n' +
+            '  <label class="small mb-1" for="' + prefix + '_value">Price</label>\n' +
+            '  <input class="form-control py-4" id="' + prefix + '_value" ' + (prefix === 'editCountry' ? 'readonly' : '') + ' type="text" />\n' +
+            '</div>';
+
+        return fields;
+
+    }
+
+    function addShipping(fromModal = false) {
+        if (fromModal === false) {
+            var fields = createShippingInputFields('addShipping');
+            $('#dialogAddShipping form').html(fields);
+            $('#dialogAddShipping').modal('show').on('shown.bs.modal', function (e) {
+                $('#addShipping_weight').focus();
+            });
+            return false;
+        }
+
+        var data = {
+            'countryCode': countries[currentCountryId].code,
+            'weight': $('#addShipping_weight').val(),
+            'value': $('#addShipping_value').val()
+        };
+
+        <?php print $beyond->prefix; ?>api.shop_shipping.addShipping(
+            data, function (error, data) {
+                if (error !== false) {
+                    message('Error: ' + error);
+                } else {
+                    if (data.addShipping === true) {
+                        $('#dialogAddShipping').modal('hide');
+                        load();
+                    } else {
+                        message('Adding cost failed');
+                    }
+                }
+            });
+
+    }
+
+    function deleteShipping(shippingId, fromModal = false) {
+        if (fromModal === false) {
+            $('#dialogDeleteShipping .modal-body').html('<div class="mb-4">Delete cost from database</div>');
+            $('#dialogDeleteShipping').data('id', shippingId).modal('show');
+            return false;
+        }
+
+        var data = {
+            'id': shippingId,
+        };
+
+        <?php print $beyond->prefix; ?>api.shop_shipping.deleteShipping(
+            data, function (error, data) {
+                if (error !== false) {
+                    message('Error: ' + error);
+                } else {
+                    if (data.deleteShipping === true) {
+                        $('#dialogDeleteShipping').modal('hide');
+                        load();
+                    } else {
+                        message('Cost deletion failed');
+                    }
+                }
+            });
+    }
+
+    function editShipping(shippingId, fromModal) {
+
+        if (fromModal === false) {
+            var fields = createShippingInputFields('editShipping');
+            $('#dialogEditShipping form').html(fields);
+            for (shippingIndex in shipping[currentCountryCode]) {
+                if (shipping[currentCountryCode][shippingIndex].id == shippingId) {
+                    $('#editShipping_weight').val(shipping[currentCountryCode][shippingIndex].weight);
+                    $('#editShipping_value').val(shipping[currentCountryCode][shippingIndex].value);
+                }
+            }
+            $('#dialogEditShipping').data('id', shippingId).modal('show').on('shown.bs.modal', function (e) {
+                $('#addShipping_weight').focus();
+            });
+            return false;
+        }
+
+        var data = {
+            'id': shippingId,
+            'weight': $('#editShipping_weight').val(),
+            'value': $('#editShipping_value').val()
+        };
+
+        <?php print $beyond->prefix; ?>api.shop_shipping.saveShipping(
+            data, function (error, data) {
+                if (error !== false) {
+                    message('Error: ' + error);
+                } else {
+                    if (data.saveShipping === true) {
+                        $('#dialogEditShipping').modal('hide');
+                        load();
+                    } else {
+                        message('Save cost failed');
+                    }
+                }
+            });
+
+    }
+
     //
 
     $(document).ready(function () {
-        loadCountries();
+        load();
     });
 </script>
 
@@ -220,6 +358,63 @@
     </div>
 </div>
 
+<!-- Add shipping -->
+<div class="modal fade" id="dialogAddShipping" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form onsubmit="return false;">
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" type="button" onclick="addShipping(true);">
+                    Add cost
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit shipping -->
+<div class="modal fade" id="dialogEditShipping" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form onsubmit="return false;">
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" type="button"
+                        onclick="editShipping($('#dialogEditShipping').data('id'), true);">
+                    Save cost
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete shipping -->
+<div class="modal fade" id="dialogDeleteShipping" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Delete cost: ...
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button"
+                        onclick="deleteShipping($('#dialogDeleteShipping').data('id'), true);">
+                    Delete cost
+                </button>
+                <button class="btn btn-success" type="button" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- country -->
 
 <div id="countryList">
@@ -236,7 +431,7 @@
         </div>
     </div>
     <div style="clear: both;"></div>
-    <div id="countries"></div>
+    <div id="countries" class="mb-4"></div>
 </div>
 
 <!-- costs -->
@@ -246,12 +441,15 @@
     <div style="width: 100%;">
         <div class="mb-4 float-left">
 
-            <button class="btn btn-secondary" type="button" onclick="loadCountries();">Back to country list</button>
+            <button class="btn btn-secondary" type="button"
+                    onclick="$('#countryItem').hide(); $('#countryList').show();">Back to country list
+            </button>
 
         </div>
         <div class="mb-4 float-right">
 
-            <button class="btn btn-secondary" type="button" onclick="addCountry();">Add cost</button>
+            <button class="btn btn-secondary" type="button" onclick="addShipping();">Add cost</button>
+
 
         </div>
     </div>
@@ -272,8 +470,8 @@
     <p class="pt-4">
         Costs
     </p>
-    <div class="card p-4">
-        <div id="costs"></div>
+    <div class="card p-4 mb-4">
+        <div id="shipping"></div>
     </div>
 
 </div>

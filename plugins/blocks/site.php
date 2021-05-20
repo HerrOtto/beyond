@@ -71,15 +71,15 @@
                 fields +=
                     '<div class="form-group">\n' +
                     '  <label class="small mb-1" for="addBlockValue_' + language + '">Value</label>\n' +
-                    '  <textarea rows=4 class="form-control" id="addBlockValue_' + language + '"></textarea>\n' +
+                    '  <textarea rows=20 class="form-control" id="addBlockValue_' + language + '"></textarea>\n' +
                     '</div>';
 
             }
 
-            $('#dialogAddBlock form').html(fields);
-            $('#dialogAddBlock').modal('show').on('shown.bs.modal', function (e) {
-                $('#addBlockName').focus();
-            });
+            $('#addBlockBody form').html(fields);
+            $('#listBlocks').hide();
+            $('#addBlock').show();
+            $('#addBlockName').focus();
             return false;
         }
 
@@ -97,7 +97,8 @@
                     message('Error: ' + error);
                 } else {
                     if (data.addBlock === true) {
-                        $('#dialogAddBlock').modal('hide');
+                        $('#addBlock').hide();
+                        $('#listBlocks').show();
                         loadBlocks();
                     } else {
                         message('Adding block failed');
@@ -109,16 +110,16 @@
 
     function deleteBlock(blockNameBase64 = '', fromModal = false) {
         if (fromModal === false) {
-            $('#dialogDeleteBlock .modal-body').html('<div class="mb-4">Delete block <b>' + <?php print $beyond->prefix; ?>base64decode(blockNameBase64) + '</b> from database</div>');
-            $('#dialogDeleteBlock').data('name', <?php print $beyond->prefix; ?>base64decode(blockNameBase64)).modal('show');
+            $('#dialogDeleteBlock .modal-body').html('<div class="mb-4">Delete block <b>' + beyond_base64decode(blockNameBase64) + '</b> from database</div>');
+            $('#dialogDeleteBlock').data('name', beyond_base64decode(blockNameBase64)).modal('show');
             return false;
         }
 
         var data = {
-            'name': <?php print $beyond->prefix; ?>base64decode(blockNameBase64),
+            'name': beyond_base64decode(blockNameBase64),
         };
 
-        <?php print $beyond->prefix; ?>api.blocks_config.deleteBlock(
+        beyond_api.blocks_config.deleteBlock(
             data, function (error, data) {
                 if (error !== false) {
                     message('Error: ' + error);
@@ -152,12 +153,12 @@
             fields +=
                 '<div class="form-group">\n' +
                 '  <label class="small mb-1" for="editBlockValue_' + language + '">Value</label>\n' +
-                '  <textarea rows=4 class="form-control" id="editBlockValue_' + language + '"></textarea>\n' +
+                '  <textarea rows=20 class="form-control" id="editBlockValue_' + language + '"></textarea>\n' +
                 '</div>';
 
         }
 
-        $('#dialogEditBlock form').html(fields);
+        $('#editBlockBody form').html(fields);
         $('#editBlockName').val(<?php print $beyond->prefix; ?>base64decode(nameBase64));
         for (language in <?php print $beyond->prefix; ?>languages) {
             if ((blocks[<?php print $beyond->prefix; ?>base64decode(nameBase64)].content !== null) && (language in blocks[<?php print $beyond->prefix; ?>base64decode(nameBase64)].content)) {
@@ -166,9 +167,9 @@
                 $('#editBlockValue_' + language).val('');
             }
         }
-        $('#dialogEditBlock').modal('show').on('shown.bs.modal', function (e) {
-            $('#editBlockValue_default').focus();
-        });
+        $('#listBlocks').hide();
+        $('#editBlock').show();
+        $('#editBlockValue_default').focus();
 
     }
 
@@ -187,7 +188,8 @@
                     message('Error: ' + error);
                 } else {
                     if (data.saveBlock === true) {
-                        $('#dialogEditBlock').modal('hide');
+                        $('#editBlock').hide();
+                        $('#listBlocks').show();
                     } else {
                         message('Save block failed');
                     }
@@ -202,44 +204,6 @@
         loadBlocks();
     });
 </script>
-
-<!-- Add block -->
-<div class="modal fade" id="dialogAddBlock" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form onsubmit="return false;">
-
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-success" type="button" onclick="addBlock(true);">
-                    Add block
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Edit block -->
-<div class="modal fade" id="dialogEditBlock" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form onsubmit="return false;">
-
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
-                <button class="btn btn-success" type="button" onclick="saveBlock();">
-                    Save block
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Delete block -->
 <div class="modal fade" id="dialogDeleteBlock" tabindex="-1" role="dialog">
@@ -259,16 +223,60 @@
     </div>
 </div>
 
+<!--Dialog list blocks -->
+<div id="listBlocks">
+    <div style="width: 100%;">
+        <div class="mb-4 float-right">
 
-<div style="width: 100%;">
-    <div class="mb-4 float-right">
+            <button class="btn btn-secondary" type="button" onclick="addBlock();">Add block</button>
 
-        <button class="btn btn-secondary" type="button" onclick="addBlock();">Add block</button>
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+
+    <div id="blocks">
 
     </div>
 </div>
-<div style="clear: both;"></div>
 
-<div id="blocks">
+<!-- Add block -->
+<div id="addBlock" style="display:none;">
+    <div style="width: 100%;">
+        <div class="mb-4 float-right">
 
+            <button class="btn btn-danger" type="button" onclick="$('#addBlock').hide(); $('#listBlocks').show();">Cancel</button>
+            <button class="btn btn-success" type="button" onclick="addBlock(true);">
+                Add block
+            </button>
+
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+
+    <div id="addBlockBody">
+        <form onsubmit="return false;">
+
+        </form>
+    </div>
+</div>
+
+<!-- Edit block -->
+<div id="editBlock" style="display:none;">
+    <div style="width: 100%;">
+        <div class="mb-4 float-right">
+
+            <button class="btn btn-danger" type="button" onclick="$('#editBlock').hide(); $('#listBlocks').show();">Cancel</button>
+            <button class="btn btn-success" type="button" onclick="saveBlock();">
+                Save block
+            </button>
+
+        </div>
+    </div>
+    <div style="clear: both;"></div>
+
+    <div id="editBlockBody">
+        <form onsubmit="return false;">
+
+        </form>
+    </div>
 </div>

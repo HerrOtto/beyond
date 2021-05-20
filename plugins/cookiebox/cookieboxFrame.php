@@ -369,7 +369,7 @@ if (!property_exists($configObj, 'cookies')) {
 
                 parent.postMessage(JSON.stringify({
                     'kind': 'desiredHeight',
-                    'value': contentDiv.clientHeight + buttonsDiv.offsetHeight + 70
+                    'value': contentDiv.clientHeight + buttonsDiv.offsetHeight + 90
                 }), "*");
             } else {
                 // Currently on details page
