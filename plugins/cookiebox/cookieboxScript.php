@@ -9,7 +9,7 @@ if ($beyond->variable->get('lang', '') !== '') {
 }
 
 $doNotOpenFrameOnLoad = false;
-if ($beyond->variable->get('nodisplay', '') !== '1') {
+if ($beyond->variable->get('nodisplay', '0') === '1') {
     $doNotOpenFrameOnLoad = true;
 }
 
