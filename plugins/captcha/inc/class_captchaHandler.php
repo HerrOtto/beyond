@@ -33,13 +33,6 @@ class captchaHandler
     */
     public function check($id, $text)
     {
-        // Public function no auth reuired
-
-        // Check user input
-        $this->checkString($data, 'id', true, false);
-        $this->checkString($data, 'text', true, false);
-
-        //
         if (! array_key_exists('captcha', $_SESSION[$this->prefix . 'data'])) {
             return false;
         }
