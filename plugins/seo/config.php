@@ -14,6 +14,8 @@
                     $('#seoDatabase').val(data.load.database).change();
                     $('#seoDatabase').removeAttr('readonly');
 
+                    $('#defaults').html('');
+
                     for (lang in beyond_languages) {
 
                         var out = '';
