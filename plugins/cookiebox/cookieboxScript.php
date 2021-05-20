@@ -104,9 +104,9 @@ if (!property_exists($configObj, 'changeCount')) {
     }
 
     <?php
+    print PHP_EOL;
+    print 'var ' . $beyond->prefix . 'cookieBoxChangeCount = ' . $configObj->changeCount . ';' . PHP_EOL;
     if (!$doNotOpenFrameOnLoad) {
-        print PHP_EOL;
-        print 'var ' . $beyond->prefix . 'cookieBoxChangeCount = ' . $configObj->changeCount . ';' . PHP_EOL;
         print 'document.addEventListener("DOMContentLoaded", function () {' . PHP_EOL;
         print '    if (' . $beyond->prefix . 'cookieboxGetCookie(\'cookieboxDone\') !== \'' . $configObj->changeCount . '\') {' . PHP_EOL;
         print '       ' . $beyond->prefix . 'cookieboxOpen();' . PHP_EOL;
