@@ -209,3 +209,10 @@ Enter captcha text here:&lt;br&gt;
 &lt;/form&gt;</pre>
 
 check.php - Example:
+<pre>
+if (!$beyond->captcha->check($_GET['captchaId'], $_GET['captchaInput'])) {
+    // Entered captcha wrong
+} else {
+    // Entered captcha okay
+} 
+</pre>
