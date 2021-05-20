@@ -13,3 +13,9 @@ $beyond->captcha = new captchaHandler(
     $beyond->tools,
     $beyond->config
 );
+
+// Initialize session variables
+if (!array_key_exists('plugin_captcha', $_SESSION[$beyond->prefix . 'data'])) {
+    $_SESSION[$beyond->prefix . 'data']['plugin_captcha'] = array(
+    );
+}

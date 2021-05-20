@@ -37,10 +37,10 @@ class captcha_base extends beyondApiBaseClass
             $result = $captcha;
             $id = uniqid('', true);
 
-            if (! array_key_exists('captcha', $_SESSION[$this->prefix . 'data'])) {
-                $_SESSION[$this->prefix . 'data']['captcha'] = array();
+            if (! array_key_exists('plugin_captcha', $_SESSION[$this->prefix . 'data'])) {
+                $_SESSION[$this->prefix . 'data']['plugin_captcha'] = array();
             }
-            $_SESSION[$this->prefix . 'data']['captcha'][$id] = $captcha['text'];
+            $_SESSION[$this->prefix . 'data']['plugin_captcha'][$id] = $captcha['text'];
 
             $result = array(
                 'pngBase64' => 'data:image/png;base64,' . base64_encode($captcha['image']),
@@ -68,28 +68,28 @@ class captcha_base extends beyondApiBaseClass
         $this->checkString($data, 'text', true, false);
 
         //
-        if (! array_key_exists('captcha', $_SESSION[$this->prefix . 'data'])) {
+        if (! array_key_exists('plugin_captcha', $_SESSION[$this->prefix . 'data'])) {
             return array(
                 'check' => false
             );
         }
 
-        if (! array_key_exists($data->id, $_SESSION[$this->prefix . 'data']['captcha'])) {
+        if (! array_key_exists($data->id, $_SESSION[$this->prefix . 'data']['plugin_captcha'])) {
             return array(
                 'check' => false
             );
         }
 
-        if ($_SESSION[$this->prefix . 'data']['captcha'][$data->id] !== $data->text) {
+        if ($_SESSION[$this->prefix . 'data']['plugin_captcha'][$data->id] !== $data->text) {
             // Remove used captcha
-            unset($_SESSION[$this->prefix . 'data']['captcha'][$data->id]);
+            unset($_SESSION[$this->prefix . 'data']['plugin_captcha'][$data->id]);
             return array(
                 'check' => false
             );
         }
 
         // Remove used captcha
-        unset($_SESSION[$this->prefix . 'data']['captcha'][$data->id]);
+        unset($_SESSION[$this->prefix . 'data']['plugin_captcha'][$data->id]);
         return array(
             'check' => true
         );
