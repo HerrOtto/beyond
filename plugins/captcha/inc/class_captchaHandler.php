@@ -33,22 +33,22 @@ class captchaHandler
     */
     public function check($id, $text)
     {
-        if (! array_key_exists('captcha', $_SESSION[$this->prefix . 'data'])) {
+        if (! array_key_exists('plugin_captcha', $_SESSION[$this->prefix . 'data'])) {
             return false;
         }
 
-        if (! array_key_exists($id, $_SESSION[$this->prefix . 'data']['captcha'])) {
+        if (! array_key_exists($id, $_SESSION[$this->prefix . 'data']['plugin_captcha'])) {
             return false;
         }
 
-        if ($_SESSION[$this->prefix . 'data']['captcha'][$id] !== $text) {
+        if ($_SESSION[$this->prefix . 'data']['plugin_captcha'][$id] !== $text) {
             // Remove used captcha
-            unset($_SESSION[$this->prefix . 'data']['captcha'][$id]);
+            unset($_SESSION[$this->prefix . 'data']['plugin_captcha'][$id]);
             return false;
         }
 
         // Remove used captcha
-        unset($_SESSION[$this->prefix . 'data']['captcha'][$id]);
+        unset($_SESSION[$this->prefix . 'data']['plugin_captcha'][$id]);
         return true;
     }
 
