@@ -116,7 +116,7 @@ if ((property_exists($configObj, 'database')) && (array_key_exists($configObj->d
             } else {
                 if (data.loadData !== false) {
                     for (rowNo in data.loadData) {
-                        var mailData = base64encode(JSON.stringify(data.loadData[rowNo]));
+                        var mailData = <?php print $beyond->prefix; ?>base64encode(JSON.stringify(data.loadData[rowNo]));
 
                         var cols = '';
                         cols += '<td>' + data.loadData[rowNo]['from'] + '</td>';
@@ -138,7 +138,7 @@ if ((property_exists($configObj, 'database')) && (array_key_exists($configObj->d
 
     function viewMail(jsonData) {
         var out = '';
-        var data = JSON.parse(base64decode(jsonData));
+        var data = JSON.parse(<?php print $beyond->prefix; ?>base64decode(jsonData));
 
         if (data.from != '') {
             out += '<div>';
@@ -198,7 +198,7 @@ if ((property_exists($configObj, 'database')) && (array_key_exists($configObj->d
         }
 
         var out = '';
-        var data = JSON.parse(base64decode(jsonData));
+        var data = JSON.parse(<?php print $beyond->prefix; ?>base64decode(jsonData));
 
         <?php print $beyond->prefix; ?>api.beyondTables.deleteData({
             'database': database,
