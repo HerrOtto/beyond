@@ -581,7 +581,7 @@ if (!property_exists($configObj, 'cookies')) {
     </div>
     <div align="center" style="margin-top:20px;">
         <span class="<?php print $beyond->prefix; ?>cookieboxPreferedButton"
-              onclick="<?php print $beyond->prefix; ?>cookieboxAcceptSelected();"><?php print $configObj->apperence->detailsButton->text; ?></span>
+              onclick="<?php print $beyond->prefix; ?>cookieboxAcceptSelected();"><?php print $configObj->apperence->detailsButton->text->{$displayLanguage}; ?></span>
     </div>
 </div>
 
