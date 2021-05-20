@@ -8,6 +8,11 @@ if ($beyond->variable->get('lang', '') !== '') {
     $displayLanguage = $beyond->variable->get('lang');
 }
 
+$doNotOpenFrameOnLoad = false;
+if ($beyond->variable->get('nodisplay', '') !== '1') {
+    $doNotOpenFrameOnLoad = true;
+}
+
 $configJson = file_get_contents(__DIR__ . '/../../config/cookiebox_settings.json');
 $configObj = json_decode($configJson); // , JSON_OBJECT_AS_ARRAY);
 
@@ -76,13 +81,13 @@ if (!property_exists($configObj, 'changeCount')) {
                 const maxHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
 
                 // Max 80% Window height
-                if (parseInt(data.value) > maxHeight*0.8) {
-                    height = maxHeight*0.8;
+                if (parseInt(data.value) > maxHeight * 0.8) {
+                    height = maxHeight * 0.8;
                 } else {
                     height = parseInt(data.value);
                 }
 
-            height = Math.ceil(height);
+                height = Math.ceil(height);
                 // Resize box
                 var boxWrap = document.getElementById('<?php print $beyond->prefix; ?>cookieboxWrap');
                 boxWrap.style.height = height + 'px';
@@ -98,9 +103,14 @@ if (!property_exists($configObj, 'changeCount')) {
         window.attachEvent("onmessage", <?php print $beyond->prefix; ?>IframeEventHandler);
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        if (<?php print $beyond->prefix; ?>cookieboxGetCookie('cookieboxDone') !== '<?php print $configObj->changeCount; ?>') {
-            <?php print $beyond->prefix; ?>cookieboxOpen();
-        }
-    });
-
+    <?php
+    if (!$doNotOpenFrameOnLoad) {
+        print 'document.addEventListener("DOMContentLoaded", function () {' . PHP_EOL;
+        print '    if (' . $beyond->prefix . 'cookieboxGetCookie(\'cookieboxDone\') !== \'' . $configObj->changeCount . '\') {' . PHP_EOL;
+        print '       ' . $beyond->prefix . 'cookieboxOpen();' . PHP_EOL;
+        print '    }' . PHP_EOL;
+        print '});' . PHP_EOL;
+    } else {
+        print '  // nodisplay=1 detected!' . PHP_EOL;
+    }
+    ?>
