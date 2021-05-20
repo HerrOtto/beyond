@@ -176,4 +176,36 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 }, false);
 &lt;/script&gt;</pre>
-        
+
+## Plugin: captcha
+
+Head Script:
+<pre>&lt;script&gt;
+function getCaptcha() {
+  beyond_api.captcha_base.init({}, function (error, data) {
+    if (error) {
+      document.getElementById('captchaTest').innerHTML = 'Error loading captcha image';
+    } else {
+      document.getElementById('captchaTest').innerHTML = '&lt;img src="' + data.result.init.pngBase64 + '" border=0&gt;';
+      document.getElementById('captchaId').value = data.result.init.id;
+    }
+  });
+}
+document.addEventListener('DOMContentLoaded', function () {
+  getCaptcha();
+}
+&lt;/script&gt;</pre>
+
+Body HTML:
+<pre>Captcha:&lt;br&gt;
+&lt;div id="captchaTest"&gt;&lt;/div&gt;
+
+&lt;form action="check.php" method=get&gt;
+&lt;input type=text value="" id="captchaId" name="captchaId" style="display:none;"&gt;
+... form fields ...
+Enter captcha text here:&lt;br&gt;
+&lt;input type=text value="" name="captchaInput"&gt;
+&lt;input type=submit&gt;Check input&lt;/input&gt;
+&lt;/form&gt;</pre>
+
+check.php - Example:
