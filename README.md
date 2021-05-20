@@ -134,8 +134,8 @@ $beyond->seo->printHead();
 Send an mail:
 
 <pre>&lt;?php
-$beyond->mail->send('Subject', 'Body', 'to@mail.address');
-// send($to, $subject, $body, $kind = 'text', $language = false, $replyTo = false)
+$beyond->mail->send('to@mail.address', 'Subject', 'Body');
+// send($to, $subject, $body, $kind = 'text', $language = false, $replyTo = false, $bcc = false, $from = false, $attachment = false, $attachmentName = false)
 ?&gt;</pre>
 
 ## Plugin: cookiebox
